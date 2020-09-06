@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Guitar",
+        "repositoryURL": "https://github.com/ArtSabintsev/Guitar",
+        "state": {
+          "branch": "master",
+          "revision": "9e7ecf4b84d08016355255f6a7c0443a483f498d",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE29E40825053D33007F4036 /* WidthControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40725053D33007F4036 /* WidthControlView.swift */; };
+		EE29E40A25053EEC007F4036 /* FractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40925053EEC007F4036 /* FractionView.swift */; };
+		EE590E8625045D4200ECCDF1 /* Guitar in Frameworks */ = {isa = PBXBuildFile; productRef = EE590E8525045D4200ECCDF1 /* Guitar */; };
 		EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3525034396003389AB /* AppDelegate.swift */; };
 		EEC7CF3825034396003389AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3725034396003389AB /* ContentView.swift */; };
 		EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3925034396003389AB /* Experience.rcproject */; };
@@ -15,6 +18,9 @@
 		EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF4025034397003389AB /* LaunchScreen.storyboard */; };
 		EEC7CF4D25034397003389AB /* FieldFabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF4C25034397003389AB /* FieldFabTests.swift */; };
 		EEC7CF5825034397003389AB /* FieldFabUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF5725034397003389AB /* FieldFabUITests.swift */; };
+		EEC7CF6625034800003389AB /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF6525034800003389AB /* Controls.swift */; };
+		EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF6C2503E70A003389AB /* Logic.swift */; };
+		EEF45B6B250409FB005BED00 /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF45B6A250409FB005BED00 /* NumberFieldView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE29E40725053D33007F4036 /* WidthControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidthControlView.swift; sourceTree = "<group>"; };
+		EE29E40925053EEC007F4036 /* FractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionView.swift; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3525034396003389AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EEC7CF3725034396003389AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -49,6 +57,9 @@
 		EEC7CF5325034397003389AB /* FieldFabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FieldFabUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF5725034397003389AB /* FieldFabUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldFabUITests.swift; sourceTree = "<group>"; };
 		EEC7CF5925034397003389AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EEC7CF6525034800003389AB /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
+		EEC7CF6C2503E70A003389AB /* Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
+		EEF45B6A250409FB005BED00 /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE590E8625045D4200ECCDF1 /* Guitar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +88,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EE29E40625053CFD007F4036 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				EE29E40725053D33007F4036 /* WidthControlView.swift */,
+				EE29E40925053EEC007F4036 /* FractionView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		EEC7CF2925034396003389AB = {
 			isa = PBXGroup;
 			children = (
@@ -105,7 +126,11 @@
 				EEC7CF3B25034397003389AB /* Assets.xcassets */,
 				EEC7CF4025034397003389AB /* LaunchScreen.storyboard */,
 				EEC7CF4325034397003389AB /* Info.plist */,
+				EE29E40625053CFD007F4036 /* Components */,
 				EEC7CF3D25034397003389AB /* Preview Content */,
+				EEC7CF6825034858003389AB /* Routes */,
+				EEC7CF6C2503E70A003389AB /* Logic.swift */,
+				EEC7CF702503F107003389AB /* Views */,
 			);
 			path = FieldFab;
 			sourceTree = "<group>";
@@ -136,6 +161,22 @@
 			path = FieldFabUITests;
 			sourceTree = "<group>";
 		};
+		EEC7CF6825034858003389AB /* Routes */ = {
+			isa = PBXGroup;
+			children = (
+				EEC7CF6525034800003389AB /* Controls.swift */,
+			);
+			path = Routes;
+			sourceTree = "<group>";
+		};
+		EEC7CF702503F107003389AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EEF45B6A250409FB005BED00 /* NumberFieldView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -152,6 +193,9 @@
 			dependencies = (
 			);
 			name = FieldFab;
+			packageProductDependencies = (
+				EE590E8525045D4200ECCDF1 /* Guitar */,
+			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
 			productType = "com.apple.product-type.application";
@@ -224,6 +268,9 @@
 				Base,
 			);
 			mainGroup = EEC7CF2925034396003389AB;
+			packageReferences = (
+				EE590E8425045D4200ECCDF1 /* XCRemoteSwiftPackageReference "Guitar" */,
+			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -268,8 +315,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEC7CF3825034396003389AB /* ContentView.swift in Sources */,
+				EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */,
+				EEF45B6B250409FB005BED00 /* NumberFieldView.swift in Sources */,
+				EEC7CF6625034800003389AB /* Controls.swift in Sources */,
 				EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */,
 				EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */,
+				EE29E40A25053EEC007F4036 /* FractionView.swift in Sources */,
+				EE29E40825053D33007F4036 /* WidthControlView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +646,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EE590E8425045D4200ECCDF1 /* XCRemoteSwiftPackageReference "Guitar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ArtSabintsev/Guitar";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EE590E8525045D4200ECCDF1 /* Guitar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE590E8425045D4200ECCDF1 /* XCRemoteSwiftPackageReference "Guitar" */;
+			productName = Guitar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EEC7CF2A25034396003389AB /* Project object */;
 }

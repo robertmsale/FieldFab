@@ -8,10 +8,31 @@
 
 import SwiftUI
 import RealityKit
+import UIKit
 
 struct ContentView : View {
     var body: some View {
-        return ARViewContainer().edgesIgnoringSafeArea(.all)
+        TabView {
+            Text("2D")
+                .padding(.top, 5.0)
+                .tabItem {
+                    Image(systemName: "view.2d").font(.title)
+                }
+            Text("3D")
+                .tabItem {
+                    Image(systemName: "view.3d").font(.title)
+                }
+            Text("AR")
+                .tabItem {
+                    Image(systemName: "camera.viewfinder").font(.title)
+                }
+            Controls()
+                .tabItem {
+                    Image(systemName: "gear").font(.title)
+                }
+        }
+        .padding(0)
+            // ARViewContainer().edgesIgnoringSafeArea(.all)
     }
 }
 
