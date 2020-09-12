@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>578233E0-A265-456D-9D8E-025BC94EBAF2</key>
+		<key>6B7F53AC-D5DE-4F4F-B82C-4E196B047E08</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>578233E0-A265-456D-9D8E-025BC94EBAF2.xcactivitylog</string>
+			<string>6B7F53AC-D5DE-4F4F-B82C-4E196B047E08.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -26,15 +26,15 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>621099843.92330003</real>
+			<real>621199762.20703602</real>
 			<key>timeStoppedRecording</key>
-			<real>621099847.01293004</real>
+			<real>621199762.83598304</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>578233E0-A265-456D-9D8E-025BC94EBAF2</string>
+			<string>6B7F53AC-D5DE-4F4F-B82C-4E196B047E08</string>
 		</dict>
-		<key>E5613560-6DBB-4FEC-B280-7E8BF7194A8A</key>
+		<key>D6E97367-0E01-431C-BD48-82471E74CFAD</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -43,7 +43,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>E5613560-6DBB-4FEC-B280-7E8BF7194A8A.xcactivitylog</string>
+			<string>D6E97367-0E01-431C-BD48-82471E74CFAD.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -54,13 +54,13 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>621060210.02411902</real>
+			<real>621635576.61993897</real>
 			<key>timeStoppedRecording</key>
-			<real>621060211.92996204</real>
+			<real>621635577.21012604</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>E5613560-6DBB-4FEC-B280-7E8BF7194A8A</string>
+			<string>D6E97367-0E01-431C-BD48-82471E74CFAD</string>
 		</dict>
 	</dict>
 </dict>

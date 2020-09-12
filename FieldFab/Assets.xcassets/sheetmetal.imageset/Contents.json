@@ -1,14 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "iu-4.jpeg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "iu-2.jpeg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "iu-3.jpeg",
       "idiom" : "universal",
       "scale" : "3x"
     }

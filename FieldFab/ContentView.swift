@@ -13,16 +13,16 @@ import UIKit
 struct ContentView : View {
     var body: some View {
         TabView {
-            Text("2D")
-                .padding(.top, 5.0)
+            TwoD()
                 .tabItem {
                     Image(systemName: "view.2d").font(.title)
                 }
-            Text("3D")
+            ThreeD()
                 .tabItem {
                     Image(systemName: "view.3d").font(.title)
                 }
-            Text("AR")
+            
+            ARViewContainer().edgesIgnoringSafeArea(.all)
                 .tabItem {
                     Image(systemName: "camera.viewfinder").font(.title)
                 }
@@ -32,7 +32,7 @@ struct ContentView : View {
                 }
         }
         .padding(0)
-            // ARViewContainer().edgesIgnoringSafeArea(.all)
+            // 
     }
 }
 
