@@ -87,6 +87,52 @@ struct Quad {
         return Quad( front: f, back: b )
     }
     
+    static func convertToBounding(_ q: inout Quad) {
+        q.front.bl = Vector3(
+            x: min(q.front.tl.x, q.front.bl.x),
+            y: q.front.bl.y,
+            z: max(q.front.bl.z, q.front.tl.z))
+        q.front.br = Vector3(
+            x: max(q.front.br.x, q.front.tr.x),
+            y: q.front.br.y,
+            z: max(q.front.tr.z, q.front.br.z))
+        q.front.tl = Vector3(
+            x: min(q.front.tl.x, q.front.bl.x),
+            y: q.front.tl.y,
+            z: max(q.front.bl.z, q.front.tl.z))
+        q.front.tr = Vector3(
+            x: max(q.front.br.x, q.front.tr.x),
+            y: q.front.tr.y,
+            z: max(q.front.tr.z, q.front.br.z))
+        q.back.bl = Vector3(
+            x: min(q.back.tl.x, q.back.bl.x),
+            y: q.back.bl.y,
+            z: min(q.back.bl.z, q.back.tl.z))
+        q.back.br = Vector3(
+            x: max(q.back.br.x, q.back.tr.x),
+            y: q.back.br.y,
+            z: min(q.back.tr.z, q.back.br.z))
+        q.back.tl = Vector3(
+            x: min(q.back.tl.x, q.back.bl.x),
+            y: q.back.tl.y,
+            z: min(q.back.bl.z, q.back.tl.z))
+        q.back.tr = Vector3(
+            x: max(q.back.br.x, q.back.tr.x),
+            y: q.back.tr.y,
+            z: min(q.back.tr.z, q.back.br.z))
+    }
+    
+    static func convertToAR(_ q: inout Quad) {
+        q.front.bl.multiplyScalar(scale: 0.0254)
+        q.front.br.multiplyScalar(scale: 0.0254)
+        q.front.tl.multiplyScalar(scale: 0.0254)
+        q.front.tr.multiplyScalar(scale: 0.0254)
+        q.back.bl.multiplyScalar(scale: 0.0254)
+        q.back.br.multiplyScalar(scale: 0.0254)
+        q.back.tl.multiplyScalar(scale: 0.0254)
+        q.back.tr.multiplyScalar(scale: 0.0254)
+    }
+    
     static func adjustAxisFor2D (_ q: inout Quad) {
         q.front.tl.x = -q.front.tl.x
         q.front.tr.x = -q.front.tr.x

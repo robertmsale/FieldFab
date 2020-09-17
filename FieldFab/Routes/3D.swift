@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SceneKit
+import UIKit
 
 struct ThreeD: View {
     var body: some View {
@@ -28,6 +29,84 @@ struct SceneView: UIViewRepresentable {
     @EnvironmentObject var aL: AppLogic
     typealias V3 = SCNVector3
     
+    func sideFactory(_ el: [V3]) -> SCNGeometry {
+        let vertices: [V3] = [
+            el[0], el[1], el[2],
+            el[0], el[2], el[3]
+        ]
+        let normalx = V3(
+            (el[1].x - el[0].x) * (el[2].x - el[0].x),
+            (el[1].y - el[0].y) * (el[2].y - el[0].y),
+            (el[1].z - el[0].z) * (el[2].z - el[0].z))
+        let normaly = V3(
+            (el[0].x - el[2].x) * (el[1].x - el[2].x),
+            (el[0].y - el[2].y) * (el[1].y - el[2].y),
+            (el[0].z - el[2].z) * (el[1].z - el[2].z))
+        let normals: [V3] = [
+            normalx,
+            normalx,
+            normalx,
+            normalx,
+            normalx,
+            normalx
+        ]
+        let texMap = [
+            CGPoint(x: 0.0, y: 0.0),
+            CGPoint(x: 0.0, y: 1.0),
+            CGPoint(x: 1.0, y: 1.0),
+            CGPoint(x: 1.0, y: 0.0),
+        ]
+        let indices: [UInt16] = [
+            0, 1, 2,
+            3, 4, 5,
+            5, 4, 3,
+            2, 1, 0
+        ]
+        let t = SCNGeometrySource(textureCoordinates: [
+            texMap[0], texMap[1], texMap[2],
+            texMap[0], texMap[2], texMap[3]
+        ])
+        let n = SCNGeometrySource(normals: normals)
+        let source = SCNGeometrySource(vertices: vertices)
+        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+        let geo = SCNGeometry(sources: [source, n, t], elements: [element])
+        let material = SCNMaterial()
+        material.diffuse.contents = UIImage(named: "sheetmetal")
+        material.normal.contents = UIImage(named: "sheetmetal-normal")
+        geo.materials = [material]
+        
+        return geo
+    }
+    
+    func makeSideArray(_ quad: Quad) -> [SCNGeometry] {
+        return [
+            self.sideFactory([
+                quad.front.bl.toSCNV(),
+                quad.front.br.toSCNV(),
+                quad.front.tr.toSCNV(),
+                quad.front.tl.toSCNV()
+            ]),
+            self.sideFactory([
+                quad.back.br.toSCNV(),
+                quad.back.bl.toSCNV(),
+                quad.back.tl.toSCNV(),
+                quad.back.tr.toSCNV()
+            ]),
+            self.sideFactory([
+                quad.front.br.toSCNV(),
+                quad.back.br.toSCNV(),
+                quad.back.tr.toSCNV(),
+                quad.front.tr.toSCNV()
+            ]),
+            self.sideFactory([
+                quad.back.bl.toSCNV(),
+                quad.front.bl.toSCNV(),
+                quad.front.tl.toSCNV(),
+                quad.back.tl.toSCNV()
+            ])
+        ]
+    }
+    
     func makeUIView(context: Context) -> SCNView {
         let bounding = min(self.geo.size.width, self.geo.size.height)
         let sceneView = SCNView(frame: CGRect(x: 0.0, y: 0.0, width: bounding, height: bounding))
@@ -35,7 +114,7 @@ struct SceneView: UIViewRepresentable {
         sceneView.rendersContinuously = true
         guard let scene = SCNScene(named: "ductwork.scn", inDirectory: "main.scnassets")
             else { fatalError("Derp") }
-        let quad = Quad.genQuadFromDimensions(
+        var quad = Quad.genQuadFromDimensions(
             length: self.aL.length.original,
             width: self.aL.width.original,
             depth: self.aL.depth.original,
@@ -44,87 +123,20 @@ struct SceneView: UIViewRepresentable {
             tWidth: self.aL.tWidth.original,
             tDepth: self.aL.tDepth.original)
         
-        let vertices: [V3] = [
-            V3(quad.front.bl.x, quad.front.bl.y, quad.front.bl.z),
-            V3(quad.front.br.x, quad.front.br.y, quad.front.br.z),
-            V3(quad.front.tr.x, quad.front.tr.y, quad.front.tr.z),
-            V3(quad.front.tl.x, quad.front.tl.y, quad.front.tl.z),
-            V3(quad.back.bl.x, quad.back.bl.y, quad.back.bl.z),
-            V3(quad.back.br.x, quad.back.br.y, quad.back.br.z),
-            V3(quad.back.tr.x, quad.back.tr.y, quad.back.tr.z),
-            V3(quad.back.tl.x, quad.back.tl.y, quad.back.tl.z),
-        ]
+        var faces = self.makeSideArray(quad)
         
-        let indices: [UInt16] = [
-            0, 1, 2, // Front
-            0, 2, 3,
-            1, 5, 2, // Right
-            5, 6, 2,
-            5, 4, 7, // Back
-            5, 7, 6,
-            3, 2, 6, // Top
-            3, 6, 7,
-            4, 0, 3, // Left
-            4, 3, 7,
-            4, 5, 1, // Bottom
-            4, 1, 0
-        ]
-        let ductSource = SCNGeometrySource(vertices: vertices)
-        let ductNormals = SCNGeometrySource(normals: [
-            (quad.back.bl * quad.front.tl),  // fbl
-            V3(1.0, -1.0, 1.0),   // fbr
-            V3(1.0, 1.0, 1.0),    // ftr
-            V3(-1.0, 1.0, 1.0),   // ftl
-            V3(-1.0, -1.0, -1.0), // bbl
-            V3(1.0, -1.0, -1.0),  // bbr
-            V3(1.0, 1.0, -1.0),   // btr
-            V3(-1.0, 1.0, -1.0),  // btl
-        ])
-//            0, 1, 2,
-//            2, 3, 0,
-//            3, 4, 0,
-//            4, 1, 0,
-//            1, 5, 2,
-//            2, 5, 3,
-//            3, 5, 4,
-//            4, 5, 1
+        for item in faces {
+            scene.rootNode.addChildNode(SCNNode(geometry: item))
+        }
         
-        let ductElement = SCNGeometryElement(indices: indices, primitiveType: .triangles)
-        let ductGeometry = SCNGeometry(sources: [ductSource, ductNormals], elements: [ductElement])
-//        ductGeometry.firstMaterial?.
+        Quad.convertToBounding(&quad)
+        faces = self.makeSideArray(quad)
         
-//        let vertices: [SCNVector3] = [
-//            SCNVector3(0, 1, 0),
-//            SCNVector3(-0.5, 0, 0.5),
-//            SCNVector3(0.5, 0, 0.5),
-//            SCNVector3(0.5, 0, -0.5),
-//            SCNVector3(-0.5, 0, -0.5),
-//            SCNVector3(0, -1, 0),
-//        ]
-//
-//        let source = SCNGeometrySource(vertices: vertices)
-//
-//         let indices: [UInt16] = [
-//            0, 1, 2,
-//            2, 3, 0,
-//            3, 4, 0,
-//            4, 1, 0,
-//            1, 5, 2,
-//            2, 5, 3,
-//            3, 5, 4,
-//            4, 5, 1
-//        ]
-//
-//        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
-//        let geometry = SCNGeometry(sources: [source], elements: [element])
-        
-        let box = SCNBox(width: 1.0, height: 1.0, length: 1.0, chamferRadius: 0.0)
-        
-        scene.rootNode.addChildNode(
-            SCNNode(geometry:
-                ductGeometry
-            )
-        )
+        for item in faces {
+            item.firstMaterial?.fillMode = .lines
+            item.firstMaterial?.diffuse.contents = Color.red
+            scene.rootNode.addChildNode(SCNNode(geometry: item))
+        }
         
         sceneView.scene = scene
         return sceneView

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "sheetmetal.png",
+      "filename" : "sheetmetal-normal.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "sheetmetal-1.png",
+      "filename" : "sheetmetal-normal-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "sheetmetal-2.png",
+      "filename" : "sheetmetal-normal-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>873AF5F7-F72F-4CF1-B43D-F84B3E2AB35E</key>
+		<key>0A4DE1BC-B526-4E58-B363-19FAAAFAD6E3</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,13 +15,13 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>873AF5F7-F72F-4CF1-B43D-F84B3E2AB35E.xcactivitylog</string>
+			<string>0A4DE1BC-B526-4E58-B363-19FAAAFAD6E3.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>S</string>
+				<string>W</string>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>FieldFab project</string>
@@ -32,15 +32,15 @@
 			<key>signature</key>
 			<string>Build FieldFab</string>
 			<key>timeStartedRecording</key>
-			<real>621636309.24650598</real>
+			<real>621866545.24068797</real>
 			<key>timeStoppedRecording</key>
-			<real>621636310.99487495</real>
+			<real>621866547.16348696</real>
 			<key>title</key>
 			<string>Build FieldFab</string>
 			<key>uniqueIdentifier</key>
-			<string>873AF5F7-F72F-4CF1-B43D-F84B3E2AB35E</string>
+			<string>0A4DE1BC-B526-4E58-B363-19FAAAFAD6E3</string>
 		</dict>
-		<key>B021DA51-E806-4B82-803F-FDAC2AE3E152</key>
+		<key>12D8FA0C-2F01-4D1A-8AD0-2F63DC682837</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -49,13 +49,13 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>B021DA51-E806-4B82-803F-FDAC2AE3E152.xcactivitylog</string>
+			<string>12D8FA0C-2F01-4D1A-8AD0-2F63DC682837.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>S</string>
+				<string>W</string>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>FieldFab project</string>
@@ -66,15 +66,15 @@
 			<key>signature</key>
 			<string>Build FieldFab</string>
 			<key>timeStartedRecording</key>
-			<real>621635401.54687703</real>
+			<real>621779366.23526597</real>
 			<key>timeStoppedRecording</key>
-			<real>621635403.48345006</real>
+			<real>621779366.88715398</real>
 			<key>title</key>
 			<string>Build FieldFab</string>
 			<key>uniqueIdentifier</key>
-			<string>B021DA51-E806-4B82-803F-FDAC2AE3E152</string>
+			<string>12D8FA0C-2F01-4D1A-8AD0-2F63DC682837</string>
 		</dict>
-		<key>E4921EA4-9587-4C66-BF36-11EE87DE16BF</key>
+		<key>18282BB6-4FD8-4E48-AE9D-B8B663F51CEA</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -83,13 +83,13 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>E4921EA4-9587-4C66-BF36-11EE87DE16BF.xcactivitylog</string>
+			<string>18282BB6-4FD8-4E48-AE9D-B8B663F51CEA.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>S</string>
+				<string>W</string>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>FieldFab project</string>
@@ -100,13 +100,727 @@
 			<key>signature</key>
 			<string>Build FieldFab</string>
 			<key>timeStartedRecording</key>
-			<real>621636015.74483097</real>
+			<real>621998321.40165699</real>
 			<key>timeStoppedRecording</key>
-			<real>621636017.781358</real>
+			<real>621998324.36129403</real>
 			<key>title</key>
 			<string>Build FieldFab</string>
 			<key>uniqueIdentifier</key>
-			<string>E4921EA4-9587-4C66-BF36-11EE87DE16BF</string>
+			<string>18282BB6-4FD8-4E48-AE9D-B8B663F51CEA</string>
+		</dict>
+		<key>26972DCE-410F-45E2-A4D6-79A3E480A314</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>26972DCE-410F-45E2-A4D6-79A3E480A314.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866832.96402204</real>
+			<key>timeStoppedRecording</key>
+			<real>621866833.44140399</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>26972DCE-410F-45E2-A4D6-79A3E480A314</string>
+		</dict>
+		<key>296D5612-66BC-40E4-B3C9-E31346479158</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>296D5612-66BC-40E4-B3C9-E31346479158.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621865955.67068994</real>
+			<key>timeStoppedRecording</key>
+			<real>621865956.25562501</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>296D5612-66BC-40E4-B3C9-E31346479158</string>
+		</dict>
+		<key>41325985-F759-40EC-8B07-92C531443498</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>41325985-F759-40EC-8B07-92C531443498.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621865997.42112994</real>
+			<key>timeStoppedRecording</key>
+			<real>621865997.90368605</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>41325985-F759-40EC-8B07-92C531443498</string>
+		</dict>
+		<key>4227AE59-1CC4-480A-95D7-C550BCE2A266</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>4227AE59-1CC4-480A-95D7-C550BCE2A266.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621778691.53989398</real>
+			<key>timeStoppedRecording</key>
+			<real>621778691.59203005</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>4227AE59-1CC4-480A-95D7-C550BCE2A266</string>
+		</dict>
+		<key>490C988D-1AEE-48BC-9993-B42D32EEDC9B</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>490C988D-1AEE-48BC-9993-B42D32EEDC9B.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621779528.28372097</real>
+			<key>timeStoppedRecording</key>
+			<real>621779529.01845396</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>490C988D-1AEE-48BC-9993-B42D32EEDC9B</string>
+		</dict>
+		<key>66260751-2D98-4762-9CCB-6C3CC00CEB01</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>66260751-2D98-4762-9CCB-6C3CC00CEB01.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621865722.01582396</real>
+			<key>timeStoppedRecording</key>
+			<real>621865722.62208295</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>66260751-2D98-4762-9CCB-6C3CC00CEB01</string>
+		</dict>
+		<key>6B3398AE-54D1-4E9C-BA2A-9CFA73D849D9</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>6B3398AE-54D1-4E9C-BA2A-9CFA73D849D9.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621714859.34900796</real>
+			<key>timeStoppedRecording</key>
+			<real>621714862.63224399</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>6B3398AE-54D1-4E9C-BA2A-9CFA73D849D9</string>
+		</dict>
+		<key>6BA8B7B7-5FC0-4BAE-8EC1-5C0DE913D1D9</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>6BA8B7B7-5FC0-4BAE-8EC1-5C0DE913D1D9.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866113.59542203</real>
+			<key>timeStoppedRecording</key>
+			<real>621866114.06377196</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>6BA8B7B7-5FC0-4BAE-8EC1-5C0DE913D1D9</string>
+		</dict>
+		<key>7619EFDA-FEB5-432A-99AA-32FB60B8AA41</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>7619EFDA-FEB5-432A-99AA-32FB60B8AA41.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621825320.23219395</real>
+			<key>timeStoppedRecording</key>
+			<real>621825329.63687599</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>7619EFDA-FEB5-432A-99AA-32FB60B8AA41</string>
+		</dict>
+		<key>859C92B8-7217-46E8-A893-2A89FE97CD87</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>859C92B8-7217-46E8-A893-2A89FE97CD87.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621778756.75890601</real>
+			<key>timeStoppedRecording</key>
+			<real>621778756.80786598</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>859C92B8-7217-46E8-A893-2A89FE97CD87</string>
+		</dict>
+		<key>872BA99B-BD2A-4D37-A02D-30E7037D9867</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>872BA99B-BD2A-4D37-A02D-30E7037D9867.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866075.52252197</real>
+			<key>timeStoppedRecording</key>
+			<real>621866075.98408902</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>872BA99B-BD2A-4D37-A02D-30E7037D9867</string>
+		</dict>
+		<key>8E35C293-6761-4071-9728-072665DB3ED1</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>8E35C293-6761-4071-9728-072665DB3ED1.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621779470.76764596</real>
+			<key>timeStoppedRecording</key>
+			<real>621779470.82591903</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>8E35C293-6761-4071-9728-072665DB3ED1</string>
+		</dict>
+		<key>9B580DDF-2FF4-4506-8C4C-99BEF6EF14E1</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>9B580DDF-2FF4-4506-8C4C-99BEF6EF14E1.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621865636.62187803</real>
+			<key>timeStoppedRecording</key>
+			<real>621865643.98199797</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>9B580DDF-2FF4-4506-8C4C-99BEF6EF14E1</string>
+		</dict>
+		<key>B3D58604-B3F5-44D1-ACD9-79F2739F1EEB</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>B3D58604-B3F5-44D1-ACD9-79F2739F1EEB.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621780569.71683097</real>
+			<key>timeStoppedRecording</key>
+			<real>621780576.80502999</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>B3D58604-B3F5-44D1-ACD9-79F2739F1EEB</string>
+		</dict>
+		<key>CF7CA4FD-96E5-42CB-B9DA-139814C6A64F</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>CF7CA4FD-96E5-42CB-B9DA-139814C6A64F.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866255.57700598</real>
+			<key>timeStoppedRecording</key>
+			<real>621866256.14920104</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>CF7CA4FD-96E5-42CB-B9DA-139814C6A64F</string>
+		</dict>
+		<key>DB59A04F-C282-48AC-BCF6-272111519296</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>DB59A04F-C282-48AC-BCF6-272111519296.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866801.06247604</real>
+			<key>timeStoppedRecording</key>
+			<real>621866802.939412</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>DB59A04F-C282-48AC-BCF6-272111519296</string>
+		</dict>
+		<key>DBBF23E0-DF63-49F4-B0D9-31DC866EB8A2</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>DBBF23E0-DF63-49F4-B0D9-31DC866EB8A2.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866052.03582799</real>
+			<key>timeStoppedRecording</key>
+			<real>621866052.51318395</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>DBBF23E0-DF63-49F4-B0D9-31DC866EB8A2</string>
+		</dict>
+		<key>E1E7835A-1C8D-4800-B2DA-027D97BF840F</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E1E7835A-1C8D-4800-B2DA-027D97BF840F.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621779219.12651002</real>
+			<key>timeStoppedRecording</key>
+			<real>621779219.27095306</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>E1E7835A-1C8D-4800-B2DA-027D97BF840F</string>
+		</dict>
+		<key>E4CB1312-85D8-42E4-886E-C3AFEA6D4CBF</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E4CB1312-85D8-42E4-886E-C3AFEA6D4CBF.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621778739.99376094</real>
+			<key>timeStoppedRecording</key>
+			<real>621778740.05474901</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>E4CB1312-85D8-42E4-886E-C3AFEA6D4CBF</string>
+		</dict>
+		<key>F2AFF3BF-F843-4A6A-8A4D-529366CA5AAC</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>F2AFF3BF-F843-4A6A-8A4D-529366CA5AAC.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621866134.82328904</real>
+			<key>timeStoppedRecording</key>
+			<real>621866135.23522699</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>F2AFF3BF-F843-4A6A-8A4D-529366CA5AAC</string>
+		</dict>
+		<key>F73466F2-A0FB-48EF-919C-FCA693AA6420</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>F73466F2-A0FB-48EF-919C-FCA693AA6420.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>621778621.541026</real>
+			<key>timeStoppedRecording</key>
+			<real>621778622.05349398</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>F73466F2-A0FB-48EF-919C-FCA693AA6420</string>
 		</dict>
 	</dict>
 </dict>

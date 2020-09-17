@@ -79,8 +79,8 @@ struct Vector3 {
         return sqrt(self.distanceSquared(to: v))
     }
     
-    func toSCNV(_ v: Vector3) -> SCNVector3 {
-        return SCNVector3(v.x, v.y, v.z)
+    func toSCNV() -> SCNVector3 {
+        return SCNVector3(self.x, self.y, self.z)
     }
     
     static func + (left: Vector3, right: Vector3) -> Vector3 {

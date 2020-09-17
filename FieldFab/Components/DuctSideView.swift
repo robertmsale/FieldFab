@@ -56,6 +56,7 @@ struct DuctPoints {
 }
 
 struct DuctSideView: View {
+    @EnvironmentObject var aL: AppLogic
     var g: GeometryProxy
     var face: QuadFace
     var side: String
@@ -176,7 +177,8 @@ struct DuctSideView: View {
         let topF = Fraction(self.face.lenTop)
         let leftF = Fraction(self.face.lenLeft)
         let rightF = Fraction(self.face.lenRight)
-        print(tlF)
+        let offsetX = self.aL.offsetX.original
+        
         return ZStack {
             Text("\(bottomF.whole)\(bottomF.textParts)")
                 .position(CGPoint(
@@ -217,13 +219,13 @@ struct DuctSideView: View {
                     x: (d.br.x - d.tr.x.distance(to: 0.0)) / 2,
                     y: d.br.y + 10
                 ))
-            Text(lF.original > 0.0 ? "\(lF.whole)\(lF.textParts)" : "")
+            Text(lF.original > 0.0 && offsetX < 0.0 ? "\(lF.whole)\(lF.textParts)" : "")
                 .rotationEffect(Angle(degrees: 90.0))
                 .position(CGPoint(
                     x: b.bl.x - 10,
                     y: (d.tl.y - d.bl.y.distance(to: 0.0)) / 2
                 ))
-            Text(rF.original > 0.0 ? "\(rF.whole)\(rF.textParts)" : "")
+            Text(rF.original > 0.0 && offsetX > 0.0 ? "\(rF.whole)\(rF.textParts)" : "")
                 .rotationEffect(Angle(degrees: 90.0))
                 .position(CGPoint(
                     x: b.br.x + 10,

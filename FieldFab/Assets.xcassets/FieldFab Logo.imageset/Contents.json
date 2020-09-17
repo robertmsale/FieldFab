@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "sheetmetal.png",
+      "filename" : "FieldFab Logo.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "sheetmetal-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "sheetmetal-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -19,5 +17,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
   }
 }
