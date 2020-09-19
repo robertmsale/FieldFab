@@ -47,9 +47,9 @@ struct ControlViewItem: View {
                 })
                 Spacer()
                 HStack() {
-                    Text(self.data.asStringNumeric).font(.system(size: 20.0))
+                    Text("\(self.data.whole)").font(.system(size: 20.0))
                     if self.data.parts.d != 1 {
-                        Text("\(self.data.parts.sn)/\(self.data.parts.sd)").font(.system(size: 14.0))
+                        Text("\(self.data.parts.n)/\(self.data.parts.d)").font(.system(size: 14.0))
                     }
                 }
                 .padding(.all, 5.0)

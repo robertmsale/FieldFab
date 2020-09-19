@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>D6E97367-0E01-431C-BD48-82471E74CFAD</key>
+		<key>6413CF65-43F1-483B-8E22-9B5514F59133</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>D6E97367-0E01-431C-BD48-82471E74CFAD.xcactivitylog</string>
+			<string>6413CF65-43F1-483B-8E22-9B5514F59133.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -26,15 +26,15 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>621635576.61993897</real>
+			<real>622214253.645859</real>
 			<key>timeStoppedRecording</key>
-			<real>621635577.21012604</real>
+			<real>622214260.26546597</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>D6E97367-0E01-431C-BD48-82471E74CFAD</string>
+			<string>6413CF65-43F1-483B-8E22-9B5514F59133</string>
 		</dict>
-		<key>F356BFC9-5DCA-448D-9FA2-71329A6571DC</key>
+		<key>81BF9845-15F1-46AC-96AA-AB97FD0E4E22</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -43,7 +43,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>F356BFC9-5DCA-448D-9FA2-71329A6571DC.xcactivitylog</string>
+			<string>81BF9845-15F1-46AC-96AA-AB97FD0E4E22.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -54,13 +54,13 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>621778614.42773902</real>
+			<real>622126050.64955103</real>
 			<key>timeStoppedRecording</key>
-			<real>621778615.95192695</real>
+			<real>622126068.07452798</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>F356BFC9-5DCA-448D-9FA2-71329A6571DC</string>
+			<string>81BF9845-15F1-46AC-96AA-AB97FD0E4E22</string>
 		</dict>
 	</dict>
 </dict>

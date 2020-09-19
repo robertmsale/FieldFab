@@ -12,22 +12,6 @@ import Guitar
 struct ND {
     var n: Int
     var d: Int
-    var sn: String {
-        get {
-            "\(self.n)"
-        }
-        set (v) {
-            self.n = Int(v)!
-        }
-    }
-    var sd: String {
-        get {
-            "\(self.d)"
-        }
-        set (v) {
-            self.d = Int(v)!
-        }
-    }
     
     init(_ n: Int, _ d: Int) {
         self.n = n
@@ -35,31 +19,21 @@ struct ND {
     }
 }
 
+enum FractionRound: Int {
+    case thirtySecond = 0
+    case sixteenth = 1
+    case eighth = 2
+    case quarter = 3
+    case half = 4
+}
+
 struct Fraction {
     static private var sm: CGFloat = 0.03125
     private var _original: CGFloat
-    private var _asStringNumeric: String
-    private var _isEditingMode: Bool = false
-    var isEditingMode: Bool {
-        get { return self._isEditingMode }
-        set (v) {
-            self._isEditingMode = v
-            if !v {
-                let reg = Guitar(pattern: "[-]{0,1}[0-9]{1,}[.]{0,1}[0-9]{1,}")
-                if reg.test(string: self.asStringNumeric) {
-                    let num = Double(reg.evaluateForStrings(from: self.asStringNumeric)[0])!
-                    self._original = Fraction.roundNumber(CGFloat(num))
-                    self._asStringNumeric = "\(self.whole)"
-                } else {
-                    self._original = 0.0
-                    self._asStringNumeric = "0"
-                }
-            }
-        }
-    }
+    var roundTo: CGFloat
     var parts: ND {
         get {
-            return Fraction.extractND(self.original)
+            return MathUtils.extractND(self.original)
         }
         set (v) {}
     }
@@ -71,85 +45,46 @@ struct Fraction {
     var original: CGFloat {
         get { return self._original }
         set (v) {
-            self._original = Fraction.roundNumber(v)
-            self._asStringNumeric = "\(self.whole)"
+            self._original = MathUtils.roundNumber(v, roundTo: self.roundTo)
         }
     }
-    var asStringNumeric: String {
-        get { return self._asStringNumeric }
-        set (v) {
-            
-            if v == "" { self._asStringNumeric = "0" }
-            else if Guitar(pattern: "[-]{0,1}[^0-9.]").test(string: v) { return }
-            else { self._asStringNumeric = v }
+    var isFraction: Bool { get { return self.parts.d > 1} }
+    
+    func text(_ fmt: String = "n/d") -> String {
+        var stringBuilder = ""
+        for (_, v) in fmt.enumerated() {
+            switch v {
+                case "n": stringBuilder += "\(self.parts.n)"
+                case "d": stringBuilder += "\(self.parts.d)"
+                case "w": stringBuilder += "\(self.whole)"
+                case "o": stringBuilder += "\(self.original)"
+                default: stringBuilder += "\(v)"
+            }
         }
-    }
-    var isFraction: Bool {
-        get { return self.parts.d > 1}
-    }
-    var textParts: String {
-        get { return self.isFraction ? " \(self.parts.n)/\(self.parts.d)\"" : "\"" }
+        return stringBuilder
     }
     
-    static func roundNumber(_ x: CGFloat) -> CGFloat {
-        let r = abs(x).truncatingRemainder(dividingBy: 0.03125)
-//        print(abs(x))
-//        print(r)
-        if x < 0 {
-            if r < 0.015625 { return -(abs(x) - r) }
-            else { return -(abs(x) + (0.03125 - r))}
-        } else if x == 0.0 {
-            return 0.0
-        } else {
-            if r < 0.015625 { return x - r }
-            else { return x + (0.03125 - r)}
-        }
-    }
-    
-    static func getWhole(_ x: CGFloat) -> Int {
-        return Int(x - x.truncatingRemainder(dividingBy: 1.0))
-    }
-    
-    static func extractND(_ x: CGFloat) -> ND {
-        switch x.truncatingRemainder(dividingBy: 1.0) {
-        case 0.03125: return ND(1, 32)
-        case 0.0625: return ND(1, 16)
-        case 0.09375: return ND(3, 32)
-        case 0.125: return ND(1, 8)
-        case 0.15625: return ND(5, 32)
-        case 0.1875: return ND(3, 16)
-        case 0.21875: return ND(7, 32)
-        case 0.25: return ND(1, 4)
-        case 0.28125: return ND(9, 32)
-        case 0.3125: return ND(5, 16)
-        case 0.34375: return ND(11, 32)
-        case 0.375: return ND(3, 8)
-        case 0.40625: return ND(13, 32)
-        case 0.4375: return ND(7, 16)
-        case 0.46875: return ND(15, 32)
-        case 0.5: return ND(1, 2)
-        case 0.53125: return ND(17, 32)
-        case 0.5625: return ND(9, 16)
-        case 0.59375: return ND(19, 32)
-        case 0.625: return ND(5, 8)
-        case 0.65625: return ND(21, 32)
-        case 0.6875: return ND(11, 16)
-        case 0.71875: return ND(23, 32)
-        case 0.75: return ND(3, 4)
-        case 0.78125: return ND(25, 32)
-        case 0.8125: return ND(13, 16)
-        case 0.84375: return ND(27, 32)
-        case 0.875: return ND(7, 8)
-        case 0.90625: return ND(29, 32)
-        case 0.9375: return ND(15, 16)
-        case 0.96875: return ND(31, 32)
-        default: return ND(1, 1)
-        }
-    }
-    
-    init(_ x: CGFloat) {
-        let rounded = Fraction.roundNumber(x)
+    init(_ x: CGFloat, roundTo: CGFloat = 0.03125) {
+        let rounded = MathUtils.roundNumber(x, roundTo: roundTo)
         self._original = rounded
-        self._asStringNumeric = "\(Fraction.getWhole(rounded))"
+        self.roundTo = roundTo
+    }
+    
+}
+
+struct Fraction_Previews: PreviewProvider {
+    static var previews: some View {
+        let derp = [
+            Fraction(12.5),
+            Fraction(16.25),
+            Fraction(11.0625),
+            Fraction(12.3333333, roundTo: 0.5),
+            Fraction(12.74),
+        ]
+        return VStack {
+            ForEach(Range(0...4), content: { val in
+                Text(derp[val].text("w n/d\""))
+            })
+        }
     }
 }

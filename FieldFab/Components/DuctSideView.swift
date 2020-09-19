@@ -158,74 +158,76 @@ struct DuctSideView: View {
     func makeTextViews() -> some View {
         var d = self.initDuctPoints()
         var b = self.initDuctPoints()
-        let tlF = Fraction(d.bl.x.distance(to: b.tl.x))
-        let trF = Fraction(d.tr.x.distance(to: b.br.x))
-        let blF = Fraction(d.tl.x.distance(to: d.bl.x))
-        let brF = Fraction(d.br.x.distance(to: d.tr.x))
+        let tlF = Fraction(d.bl.x.distance(to: b.tl.x), roundTo: self.aL.roundTo)
+        let trF = Fraction(d.tr.x.distance(to: b.br.x), roundTo: self.aL.roundTo)
+        let blF = Fraction(d.tl.x.distance(to: d.bl.x), roundTo: self.aL.roundTo)
+        let brF = Fraction(d.br.x.distance(to: d.tr.x), roundTo: self.aL.roundTo)
         let lF = Fraction(
-            tlF.original != 0.0 ? sqrt(self.face.lenLeft * self.face.lenLeft - abs(tlF.original) * abs(tlF.original)) : 0.0
+            tlF.original != 0.0 ? sqrt(self.face.lenLeft * self.face.lenLeft - abs(tlF.original) * abs(tlF.original)) : 0.0,
+            roundTo: self.aL.roundTo
         )
         let rF = Fraction(
-            trF.original != 0.0 ? sqrt(self.face.lenRight * self.face.lenRight - abs(trF.original) * abs(trF.original)) : 0.0
+            trF.original != 0.0 ? sqrt(self.face.lenRight * self.face.lenRight - abs(trF.original) * abs(trF.original)) : 0.0,
+            roundTo: self.aL.roundTo
         )
         self.applyDuctScaling(&d)
         self.applyZeroCentering(&d)
         self.initBounding(&b)
         self.applyDuctScaling(&b)
         self.applyZeroCentering(&b)
-        let bottomF = Fraction(self.face.lenBottom)
-        let topF = Fraction(self.face.lenTop)
-        let leftF = Fraction(self.face.lenLeft)
-        let rightF = Fraction(self.face.lenRight)
+        let bottomF = Fraction(self.face.lenBottom, roundTo: self.aL.roundTo)
+        let topF = Fraction(self.face.lenTop, roundTo: self.aL.roundTo)
+        let leftF = Fraction(self.face.lenLeft, roundTo: self.aL.roundTo)
+        let rightF = Fraction(self.face.lenRight, roundTo: self.aL.roundTo)
         let offsetX = self.aL.offsetX.original
         
         return ZStack {
-            Text("\(bottomF.whole)\(bottomF.textParts)")
+            Text("\(bottomF.whole)\(bottomF.isFraction ? bottomF.text(" n/d") : "")\"")
                 .position(CGPoint(
                     x: (d.br.x - d.bl.x.distance(to: 0.0)) / 2,
                     y: d.br.y + 10))
-            Text("\(topF.whole)\(topF.textParts)")
+            Text("\(topF.whole)\(topF.isFraction ? topF.text(" n/d") : "")\"")
                 .position(CGPoint(
                     x: (d.tr.x - d.tl.x.distance(to: 0.0)) / 2,
                     y: d.tr.y - 10
                 ))
-            Text("\(leftF.whole)\(leftF.textParts)")
+            Text("\(leftF.whole)\(leftF.isFraction ? leftF.text(" n/d") : "")\"")
                 .position(CGPoint(
                     x: (d.bl.x - d.tl.x.distance(to: 0.0)) / 2 + 40,
                     y: (d.tl.y - d.bl.y.distance(to: 0.0)) / 2
                 ))
-            Text("\(rightF.whole)\(rightF.textParts)")
+            Text("\(rightF.whole)\(rightF.isFraction ? rightF.text(" n/d") : "")\"")
                 .position(CGPoint(
                     x: (d.br.x - d.tr.x.distance(to: 0.0)) / 2 - 40,
                     y: (d.tr.y - d.br.y.distance(to: 0.0)) / 2
                 ))
-            Text(tlF.original > 0 ? "\(tlF.whole)\(tlF.textParts)" : "")
+            Text(tlF.original > 0 ? "\(tlF.whole)\(tlF.isFraction ? tlF.text(" n/d") : "")\"" : "")
                 .position(CGPoint(
                     x: (d.tl.x - d.bl.x.distance(to: 0.0)) / 2,
                     y: d.tl.y - 10
                 ))
-            Text(trF.original > 0 ? "\(trF.whole)\(trF.textParts)" : "")
+            Text(trF.original > 0 ? "\(trF.whole)\(trF.isFraction ? trF.text(" n/d") : "")\"" : "")
                 .position(CGPoint(
                     x: (d.tr.x - d.br.x.distance(to: 0.0)) / 2,
                     y: d.tr.y - 10
                 ))
-            Text(blF.original > 0.0 ? "\(blF.whole)\(blF.textParts)" : "")
+            Text(blF.original > 0.0 ? "\(blF.whole)\(blF.isFraction ? blF.text(" n/d") : "")\"" : "")
                 .position(CGPoint(
                     x: (d.bl.x - d.tl.x.distance(to: 0.0)) / 2,
                     y: d.bl.y + 10
                 ))
-            Text(brF.original > 0.0 ? "\(brF.whole)\(brF.textParts)" : "")
+            Text(brF.original > 0.0 ? "\(brF.whole)\(brF.isFraction ? brF.text(" n/d") : "")\"" : "")
                 .position(CGPoint(
                     x: (d.br.x - d.tr.x.distance(to: 0.0)) / 2,
                     y: d.br.y + 10
                 ))
-            Text(lF.original > 0.0 && offsetX < 0.0 ? "\(lF.whole)\(lF.textParts)" : "")
+            Text(lF.original > 0.0 && offsetX < 0.0 ? "\(lF.whole)\(lF.isFraction ? lF.text(" n/d") : "")\"" : "")
                 .rotationEffect(Angle(degrees: 90.0))
                 .position(CGPoint(
                     x: b.bl.x - 10,
                     y: (d.tl.y - d.bl.y.distance(to: 0.0)) / 2
                 ))
-            Text(rF.original > 0.0 && offsetX > 0.0 ? "\(rF.whole)\(rF.textParts)" : "")
+            Text(rF.original > 0.0 && offsetX > 0.0 ? "\(rF.whole)\(rF.isFraction ? rF.text(" n/d") : "")\"" : "")
                 .rotationEffect(Angle(degrees: 90.0))
                 .position(CGPoint(
                     x: b.br.x + 10,
