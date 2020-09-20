@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>6413CF65-43F1-483B-8E22-9B5514F59133</key>
+		<key>8E2B7BDC-A841-4C59-960C-9AA904E67AEC</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>6413CF65-43F1-483B-8E22-9B5514F59133.xcactivitylog</string>
+			<string>8E2B7BDC-A841-4C59-960C-9AA904E67AEC.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -26,15 +26,15 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>622214253.645859</real>
+			<real>622301125.70057094</real>
 			<key>timeStoppedRecording</key>
-			<real>622214260.26546597</real>
+			<real>622301131.609676</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>6413CF65-43F1-483B-8E22-9B5514F59133</string>
+			<string>8E2B7BDC-A841-4C59-960C-9AA904E67AEC</string>
 		</dict>
-		<key>81BF9845-15F1-46AC-96AA-AB97FD0E4E22</key>
+		<key>BF6601ED-6C33-4AE5-B771-5FFEBB061470</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -43,7 +43,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>81BF9845-15F1-46AC-96AA-AB97FD0E4E22.xcactivitylog</string>
+			<string>BF6601ED-6C33-4AE5-B771-5FFEBB061470.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -54,13 +54,13 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>622126050.64955103</real>
+			<real>622330847.63613605</real>
 			<key>timeStoppedRecording</key>
-			<real>622126068.07452798</real>
+			<real>622330854.082636</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>81BF9845-15F1-46AC-96AA-AB97FD0E4E22</string>
+			<string>BF6601ED-6C33-4AE5-B771-5FFEBB061470</string>
 		</dict>
 	</dict>
 </dict>

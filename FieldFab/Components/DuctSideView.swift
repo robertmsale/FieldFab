@@ -290,7 +290,8 @@ struct DuctSideView: View {
 struct DuctSideView_Previews: PreviewProvider {
     static var previews: some View {
         let aL = AppLogic()
-        aL.offsetX.original = 3.0
+        aL.offsetX.original = -1.0
+        aL.offsetY.original = 1.0
         return ContentView().environmentObject(aL)
     }
 }

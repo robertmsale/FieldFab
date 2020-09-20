@@ -130,3 +130,9 @@ class MathUtils {
         
     }
 }
+
+extension CGFloat {
+    func toFraction(_ roundTo: CGFloat = 0.03125) -> Fraction {
+        return Fraction(self, roundTo: roundTo)
+    }
+}

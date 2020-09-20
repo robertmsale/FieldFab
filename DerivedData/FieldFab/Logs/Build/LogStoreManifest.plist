@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>4DF2C97D-E36C-43F7-B0A3-C856827F7AE3</key>
+		<key>57BFABEB-9063-4833-A9B7-0E6DB85F7F36</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>4DF2C97D-E36C-43F7-B0A3-C856827F7AE3.xcactivitylog</string>
+			<string>57BFABEB-9063-4833-A9B7-0E6DB85F7F36.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -32,15 +32,15 @@
 			<key>signature</key>
 			<string>Build FieldFab</string>
 			<key>timeStartedRecording</key>
-			<real>622213457.691607</real>
+			<real>622336901.77327096</real>
 			<key>timeStoppedRecording</key>
-			<real>622213472.33408797</real>
+			<real>622336919.72568798</real>
 			<key>title</key>
 			<string>Build FieldFab</string>
 			<key>uniqueIdentifier</key>
-			<string>4DF2C97D-E36C-43F7-B0A3-C856827F7AE3</string>
+			<string>57BFABEB-9063-4833-A9B7-0E6DB85F7F36</string>
 		</dict>
-		<key>4E1752AD-889B-45E3-80C8-CC5D503E6EAA</key>
+		<key>629B8D09-C9B6-4D00-B665-7999AADAA781</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -49,7 +49,41 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>4E1752AD-889B-45E3-80C8-CC5D503E6EAA.xcactivitylog</string>
+			<string>629B8D09-C9B6-4D00-B665-7999AADAA781.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>E</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>FieldFab project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>FieldFab</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Build FieldFab</string>
+			<key>timeStartedRecording</key>
+			<real>622336890.45894599</real>
+			<key>timeStoppedRecording</key>
+			<real>622336901.36085403</real>
+			<key>title</key>
+			<string>Build FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>629B8D09-C9B6-4D00-B665-7999AADAA781</string>
+		</dict>
+		<key>E2759B3E-79AF-4EF1-95BE-62BB36D30083</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E2759B3E-79AF-4EF1-95BE-62BB36D30083.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -64,15 +98,15 @@
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Build FieldFab</string>
+			<string>Build for Previews FieldFab</string>
 			<key>timeStartedRecording</key>
-			<real>622214306.02164805</real>
+			<real>622221717.63930404</real>
 			<key>timeStoppedRecording</key>
-			<real>622214308.49404502</real>
+			<real>622221726.46709597</real>
 			<key>title</key>
-			<string>Build FieldFab</string>
+			<string>Build for Previews FieldFab</string>
 			<key>uniqueIdentifier</key>
-			<string>4E1752AD-889B-45E3-80C8-CC5D503E6EAA</string>
+			<string>E2759B3E-79AF-4EF1-95BE-62BB36D30083</string>
 		</dict>
 	</dict>
 </dict>

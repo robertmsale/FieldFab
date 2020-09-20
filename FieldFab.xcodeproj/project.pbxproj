@@ -20,6 +20,10 @@
 		EE29E429250BAC9D007F4036 /* 3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E428250BAC9D007F4036 /* 3D.swift */; };
 		EE29E432250D2D16007F4036 /* main.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = EE29E431250D2D16007F4036 /* main.scnassets */; };
 		EE590E8625045D4200ECCDF1 /* Guitar in Frameworks */ = {isa = PBXBuildFile; productRef = EE590E8525045D4200ECCDF1 /* Guitar */; };
+		EE97879525179A46003DE8E0 /* Duct2DParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97879425179A46003DE8E0 /* Duct2DParts.swift */; };
+		EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9787992517AC9F003DE8E0 /* Duct.swift */; };
+		EEAF2B332516581F0074A516 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF2B322516581F0074A516 /* Line.swift */; };
+		EEAF2B3825165E650074A516 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF2B3725165E650074A516 /* Polygon.swift */; };
 		EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3525034396003389AB /* AppDelegate.swift */; };
 		EEC7CF3825034396003389AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3725034396003389AB /* ContentView.swift */; };
 		EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3925034396003389AB /* Experience.rcproject */; };
@@ -62,6 +66,10 @@
 		EE29E42725086B01007F4036 /* FieldFab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FieldFab.entitlements; sourceTree = "<group>"; };
 		EE29E428250BAC9D007F4036 /* 3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3D.swift; sourceTree = "<group>"; };
 		EE29E431250D2D16007F4036 /* main.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = main.scnassets; sourceTree = "<group>"; };
+		EE97879425179A46003DE8E0 /* Duct2DParts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct2DParts.swift; sourceTree = "<group>"; };
+		EE9787992517AC9F003DE8E0 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
+		EEAF2B322516581F0074A516 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		EEAF2B3725165E650074A516 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3525034396003389AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EEC7CF3725034396003389AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -112,6 +120,8 @@
 			children = (
 				EE29E40D25057CF1007F4036 /* DuctSideView.swift */,
 				EE29E4182505F6CA007F4036 /* ControlView.swift */,
+				EE97879425179A46003DE8E0 /* Duct2DParts.swift */,
+				EE9787992517AC9F003DE8E0 /* Duct.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -125,6 +135,8 @@
 				EE29E4212506C401007F4036 /* MathUtils.swift */,
 				EE29E4232506CBAD007F4036 /* Quaternion.swift */,
 				EE29E4252506CDE6007F4036 /* Quad.swift */,
+				EEAF2B322516581F0074A516 /* Line.swift */,
+				EEAF2B3725165E650074A516 /* Polygon.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -345,8 +357,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE97879525179A46003DE8E0 /* Duct2DParts.swift in Sources */,
 				EEC7CF3825034396003389AB /* ContentView.swift in Sources */,
 				EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */,
+				EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */,
 				EE29E40E25057CF1007F4036 /* DuctSideView.swift in Sources */,
 				EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */,
 				EE29E40C2505794D007F4036 /* 2D.swift in Sources */,
@@ -358,6 +372,8 @@
 				EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */,
 				EE29E4222506C401007F4036 /* MathUtils.swift in Sources */,
 				EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */,
+				EEAF2B3825165E650074A516 /* Polygon.swift in Sources */,
+				EEAF2B332516581F0074A516 /* Line.swift in Sources */,
 				EE29E4242506CBAD007F4036 /* Quaternion.swift in Sources */,
 				EE29E4202506BFCB007F4036 /* Fraction.swift in Sources */,
 			);
