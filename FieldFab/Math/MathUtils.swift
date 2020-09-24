@@ -99,11 +99,11 @@ class MathUtils {
         return dx * dx * dx * ( dx * ( x * 6.0 - 15.0 ) + 10.0 )
     }
     
-    static func floor(x: CGFloat) -> CGFloat {
+    static func floor<T: BinaryFloatingPoint> (_ x: T) -> T {
         return x - x.truncatingRemainder(dividingBy: 1.0)
     }
     
-    static func ceil(x: CGFloat) -> CGFloat {
+    static func ceil<T: BinaryFloatingPoint>(_ x: T) -> T {
         return x + (1.0 - x.truncatingRemainder(dividingBy: 1.0))
     }
     
@@ -132,7 +132,17 @@ class MathUtils {
 }
 
 extension CGFloat {
+    
     func toFraction(_ roundTo: CGFloat = 0.03125) -> Fraction {
         return Fraction(self, roundTo: roundTo)
     }
+    
+    func isLTZ() -> CGFloat? {
+        if self <= 0.0 { return nil }
+        else { return self }
+    }
+}
+
+extension CGSize {
+    public var center: CGPoint { get { CGPoint(x: self.width / 2, y: self.height / 2) } }
 }

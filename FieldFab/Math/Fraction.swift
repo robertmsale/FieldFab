@@ -54,9 +54,11 @@ struct Fraction {
         var stringBuilder = ""
         for (_, v) in fmt.enumerated() {
             switch v {
-                case "n": stringBuilder += "\(self.parts.n)"
-                case "d": stringBuilder += "\(self.parts.d)"
+                case "n": stringBuilder += "\(self.parts.d > 1 ? self.parts.n.description : "")"
+                case "d": stringBuilder += "\(self.parts.d > 1 ? self.parts.d.description : "")"
                 case "w": stringBuilder += "\(self.whole)"
+                case "/": stringBuilder += "\(self.parts.d > 1 ? "/" : "")"
+                case " ": stringBuilder += "\(self.parts.d > 1 ? " " : "")"
                 case "o": stringBuilder += "\(self.original)"
                 default: stringBuilder += "\(v)"
             }
@@ -64,8 +66,8 @@ struct Fraction {
         return stringBuilder
     }
     
-    init(_ x: CGFloat, roundTo: CGFloat = 0.03125) {
-        let rounded = MathUtils.roundNumber(x, roundTo: roundTo)
+    init<T: BinaryFloatingPoint>(_ x: T, roundTo: CGFloat = 0.03125) {
+        let rounded = MathUtils.roundNumber(CGFloat(x), roundTo: roundTo)
         self._original = rounded
         self.roundTo = roundTo
     }

@@ -15,35 +15,6 @@ struct TwoD: View {
     @State var sidesIndex = 1
     @State var roundToIndex = 1
     
-    func getQuadFace() -> QuadFace {
-        let quad = Quad.genQuadFromDimensions(
-            length: self.aL.length.original,
-            width: self.aL.width.original,
-            depth: self.aL.depth.original,
-            offsetX: self.aL.offsetX.original,
-            offsetY: self.aL.offsetY.original,
-            tWidth: self.aL.tWidth.original,
-            tDepth: self.aL.tDepth.original)
-        switch self.sides[self.sidesIndex] {
-        case "Left":
-            return QuadFace(
-                bl: quad.back.bl,
-                br: quad.front.bl,
-                tl: quad.back.tl,
-                tr: quad.front.tl)
-        case "Right":
-            return QuadFace(
-                bl: quad.front.br,
-                br: quad.back.br,
-                tl: quad.front.tr,
-                tr: quad.back.tr)
-        case "Back":
-            return quad.back
-        default:
-            return quad.front
-        }
-    }
-    
     var body: some View {
         return GeometryReader { g in
             ZStack(content: {
@@ -116,12 +87,40 @@ struct TwoD: View {
                         }
                     }
                 }
-                DuctSideView(g: g, face: self.getQuadFace(), side: self.sides[self.sidesIndex])
+                switch self.sides[self.sidesIndex] {
+                    case "Front": DuctSideView(g: g, side: .front)
+                    case "Left": DuctSideView(g: g, side: .left)
+                    case "Right": DuctSideView(g: g, side: .right)
+                    default: DuctSideView(g: g, side: .back)
+                }
 //                    .zIndex(-1.0)
             })
         }
     }
 }
+
+//struct TwoDSKScene: UIViewRepresentable {
+//    @EnvironmentObject var aL: AppLogic
+//    var g: GeometryProxy
+//    var side: DuctSides
+//
+//    func makeUIView(context: Context) -> SKView {
+//        let skView = SKView(frame: CGRect(x: 0.0, y: 0.0, width: g.size.width, height: g.size.height))
+//        let scene = SKScene(size: skView.bounds.size)
+//        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+//        scene.backgroundColor = .darkGray
+//        let boundsMax = min(skView.bounds.size.width, skView.bounds.size.height)
+//        let d = self.aL.duct[self.side]
+//        let b = self.aL.duct.bounding(side: self.side)
+//        var ductPath = CGMutablePath()
+//        ductPath.move(to: <#T##CGPoint#>)
+//        return skView
+//    }
+//
+//    func updateUIView(_ uiView: SKView, context: Context) {
+//
+//    }
+//}
 
 struct TwoD_Previews: PreviewProvider {
     static var previews: some View {

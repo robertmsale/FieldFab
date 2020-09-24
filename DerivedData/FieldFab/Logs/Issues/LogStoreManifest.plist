@@ -34,7 +34,7 @@
 			<key>uniqueIdentifier</key>
 			<string>25AD751B-EFE9-4152-9785-D3B49B3FD25F</string>
 		</dict>
-		<key>4156755D-4A6D-43D2-8297-56ABDED2820A</key>
+		<key>8D0A0903-29CD-4A0C-AC5F-C5785AF47805</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogMajorGroupSection</string>
@@ -43,7 +43,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.target.product-type.application</string>
 			<key>fileName</key>
-			<string>4156755D-4A6D-43D2-8297-56ABDED2820A.xcactivitylog</string>
+			<string>8D0A0903-29CD-4A0C-AC5F-C5785AF47805.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -54,13 +54,13 @@
 			<key>signature</key>
 			<string>FieldFab-ctzfqjgivesutfazlvjvblvsybdx</string>
 			<key>timeStartedRecording</key>
-			<real>622336901.87042797</real>
+			<real>622583465.49963295</real>
 			<key>timeStoppedRecording</key>
-			<real>622336919.70772195</real>
+			<real>622583467.69931805</real>
 			<key>title</key>
 			<string>Build target FieldFab</string>
 			<key>uniqueIdentifier</key>
-			<string>4156755D-4A6D-43D2-8297-56ABDED2820A</string>
+			<string>8D0A0903-29CD-4A0C-AC5F-C5785AF47805</string>
 		</dict>
 		<key>C05A4291-8BB0-4788-8518-3867D0202F95</key>
 		<dict>

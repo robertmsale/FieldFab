@@ -58,205 +58,156 @@ struct DuctPoints {
 struct DuctSideView: View {
     @EnvironmentObject var aL: AppLogic
     var g: GeometryProxy
-    var face: QuadFace
-    var side: String
+    var side: DuctSides
     @State var shapePos: CGPoint = CGPoint(x: 0.0, y: 0.0)
     @State var shapeScale: CGFloat = 0.8
-    var bottomLength: CGFloat = 0.0
-    var leftLength: CGFloat = 0.0
-    var rightLength: CGFloat = 0.0
-    var topLength: CGFloat = 0.0
     
-    func initDuctPoints() -> DuctPoints {
-        var d = DuctPoints(
-            bl: CGPoint(x: 0.0, y: 0.0),
-            br: CGPoint(x: 0.0, y: 0.0),
-            tl: CGPoint(x: 0.0, y: 0.0),
-            tr: CGPoint(x: 0.0, y: 0.0))
-        switch self.side {
-        case "Left":
-            d.tl = self.face[.tlz]
-            d.tr = self.face[.trz]
-            d.bl = self.face[.blz]
-            d.br = self.face[.brz]
-        case "Right":
-            d.tl = self.face[.tlz]
-            d.tl.x = -d.tl.x
-            d.tr = self.face[.trz]
-            d.tr.x = -d.tr.x
-            d.bl = self.face[.blz]
-            d.bl.x = -d.bl.x
-            d.br = self.face[.brz]
-            d.br.x = -d.br.x
-        case "Back":
-            d.tr = self.face[.tlx]
-            d.tr.x = -d.tr.x
-            d.tl = self.face[.trx]
-            d.tl.x = -d.tl.x
-            d.br = self.face[.blx]
-            d.br.x = -d.br.x
-            d.bl = self.face[.brx]
-            d.bl.x = -d.bl.x
-        default:
-            d.tl = self.face[.tlx]
-            d.tr = self.face[.trx]
-            d.bl = self.face[.blx]
-            d.br = self.face[.brx]
+    func applyTransforms(_ v: [String: CGPoint]) -> [String: CGPoint] {
+        let center = self.g.size.center
+        let shapeW = abs(min(v["bl"]!.x, v["tl"]!.x).distance(to: max(v["br"]!.x, v["tr"]!.x)))
+        let shapeH = v["tl"]!.y.distance(to: v["bl"]!.y)
+        let sMax = max(shapeH, shapeW)
+        let cMin = min(self.g.size.width, self.g.size.height)
+        var b4p = [
+            "bl": v["bl"]!.multiplyScalar(cMin / sMax * self.shapeScale),
+            "br": v["br"]!.multiplyScalar(cMin / sMax * self.shapeScale),
+            "tl": v["tl"]!.multiplyScalar(cMin / sMax * self.shapeScale),
+            "tr": v["tr"]!.multiplyScalar(cMin / sMax * self.shapeScale)
+        ]
+        if self.side == .back {
+            b4p["bl"] = b4p["bl"]!.flip(.x)
+            b4p["br"] = b4p["br"]!.flip(.x)
+            b4p["tl"] = b4p["tl"]!.flip(.x)
+            b4p["tr"] = b4p["tr"]!.flip(.x)
         }
-        d.tl.y = -d.tl.y
-        d.tr.y = -d.tr.y
-        d.bl.y = -d.bl.y
-        d.br.y = -d.br.y
-        return d
+        let p = [
+            "bl": center.translate(b4p["bl"]!).addScalar(cMin / sMax * self.shapeScale),
+//                .translate(self.shapePos),
+            "br": center.translate(b4p["br"]!).addScalar(cMin / sMax * self.shapeScale),
+//                .translate(self.shapePos),
+            "tl": center.translate(b4p["tl"]!).addScalar(cMin / sMax * self.shapeScale),
+//                .translate(self.shapePos),
+            "tr": center.translate(b4p["tr"]!).addScalar(cMin / sMax * self.shapeScale)
+//                .translate(self.shapePos)
+        ]
+        return p
     }
     
-    func applyDuctScaling (_ d: inout DuctPoints) {
-        let sc = self.getScaling(d)
-        d.scale(.x, sc)
-        d.scale(.y, sc)
-    }
-    
-    func getScaling (_ d: DuctPoints) -> CGFloat {
-        let shapeW = min(d.bl.x, d.tl.x).distance(to: max(d.br.x, d.tr.x))
-        let shapeH = d.bl.y.distance(to: d.tl.y)
-        let shapeMax = max(shapeW, shapeH)
-        let containerMin = min(self.g.size.width, self.g.size.height)
-        return containerMin / shapeMax * self.shapeScale
-    }
-    
-    func applyZeroCentering (_ d: inout DuctPoints) {
-        let reduceX = CGFloat(0.0).distance(to: self.g.size.width / 2)
-        let reduceY = CGFloat(0.0).distance(to: self.g.size.height / 2)
-        d.translate(.x, reduceX)
-        d.translate(.y, reduceY)
-    }
-    
-    func initBounding (_ d: inout DuctPoints) {
-        let leftBound = min(d.tl.x, d.bl.x)
-        let rightBound = max(d.tr.x, d.br.x)
-        d.tl.x = leftBound
-        d.bl.x = leftBound
-        d.tr.x = rightBound
-        d.br.x = rightBound
-    }
-    
-    func makeDuctPoints() -> DuctPoints {
-        var d = self.initDuctPoints()
-        self.applyDuctScaling(&d)
-        self.applyZeroCentering(&d)
-        return d
-    }
-    
-    func makeBounding() -> DuctPoints {
-        var d = self.initDuctPoints()
-        self.initBounding(&d)
-        self.applyDuctScaling(&d)
-        self.applyZeroCentering(&d)
-        return d
-    }
-    
-    func makeTextViews() -> some View {
-        var d = self.initDuctPoints()
-        var b = self.initDuctPoints()
-        let tlF = Fraction(d.bl.x.distance(to: b.tl.x), roundTo: self.aL.roundTo)
-        let trF = Fraction(d.tr.x.distance(to: b.br.x), roundTo: self.aL.roundTo)
-        let blF = Fraction(d.tl.x.distance(to: d.bl.x), roundTo: self.aL.roundTo)
-        let brF = Fraction(d.br.x.distance(to: d.tr.x), roundTo: self.aL.roundTo)
-        let lF = Fraction(
-            tlF.original != 0.0 ? sqrt(self.face.lenLeft * self.face.lenLeft - abs(tlF.original) * abs(tlF.original)) : 0.0,
-            roundTo: self.aL.roundTo
-        )
-        let rF = Fraction(
-            trF.original != 0.0 ? sqrt(self.face.lenRight * self.face.lenRight - abs(trF.original) * abs(trF.original)) : 0.0,
-            roundTo: self.aL.roundTo
-        )
-        self.applyDuctScaling(&d)
-        self.applyZeroCentering(&d)
-        self.initBounding(&b)
-        self.applyDuctScaling(&b)
-        self.applyZeroCentering(&b)
-        let bottomF = Fraction(self.face.lenBottom, roundTo: self.aL.roundTo)
-        let topF = Fraction(self.face.lenTop, roundTo: self.aL.roundTo)
-        let leftF = Fraction(self.face.lenLeft, roundTo: self.aL.roundTo)
-        let rightF = Fraction(self.face.lenRight, roundTo: self.aL.roundTo)
-        let offsetX = self.aL.offsetX.original
+    func genDuctPoints() -> [String: CGPoint] {
+        var points: [String: CGPoint] = [:]
+        var sS = ""
+        let sC = ["bl", "br", "tl", "tr"]
         
-        return ZStack {
-            Text("\(bottomF.whole)\(bottomF.isFraction ? bottomF.text(" n/d") : "")\"")
-                .position(CGPoint(
-                    x: (d.br.x - d.bl.x.distance(to: 0.0)) / 2,
-                    y: d.br.y + 10))
-            Text("\(topF.whole)\(topF.isFraction ? topF.text(" n/d") : "")\"")
-                .position(CGPoint(
-                    x: (d.tr.x - d.tl.x.distance(to: 0.0)) / 2,
-                    y: d.tr.y - 10
-                ))
-            Text("\(leftF.whole)\(leftF.isFraction ? leftF.text(" n/d") : "")\"")
-                .position(CGPoint(
-                    x: (d.bl.x - d.tl.x.distance(to: 0.0)) / 2 + 40,
-                    y: (d.tl.y - d.bl.y.distance(to: 0.0)) / 2
-                ))
-            Text("\(rightF.whole)\(rightF.isFraction ? rightF.text(" n/d") : "")\"")
-                .position(CGPoint(
-                    x: (d.br.x - d.tr.x.distance(to: 0.0)) / 2 - 40,
-                    y: (d.tr.y - d.br.y.distance(to: 0.0)) / 2
-                ))
-            Text(tlF.original > 0 ? "\(tlF.whole)\(tlF.isFraction ? tlF.text(" n/d") : "")\"" : "")
-                .position(CGPoint(
-                    x: (d.tl.x - d.bl.x.distance(to: 0.0)) / 2,
-                    y: d.tl.y - 10
-                ))
-            Text(trF.original > 0 ? "\(trF.whole)\(trF.isFraction ? trF.text(" n/d") : "")\"" : "")
-                .position(CGPoint(
-                    x: (d.tr.x - d.br.x.distance(to: 0.0)) / 2,
-                    y: d.tr.y - 10
-                ))
-            Text(blF.original > 0.0 ? "\(blF.whole)\(blF.isFraction ? blF.text(" n/d") : "")\"" : "")
-                .position(CGPoint(
-                    x: (d.bl.x - d.tl.x.distance(to: 0.0)) / 2,
-                    y: d.bl.y + 10
-                ))
-            Text(brF.original > 0.0 ? "\(brF.whole)\(brF.isFraction ? brF.text(" n/d") : "")\"" : "")
-                .position(CGPoint(
-                    x: (d.br.x - d.tr.x.distance(to: 0.0)) / 2,
-                    y: d.br.y + 10
-                ))
-            Text(lF.original > 0.0 && offsetX < 0.0 ? "\(lF.whole)\(lF.isFraction ? lF.text(" n/d") : "")\"" : "")
-                .rotationEffect(Angle(degrees: 90.0))
-                .position(CGPoint(
-                    x: b.bl.x - 10,
-                    y: (d.tl.y - d.bl.y.distance(to: 0.0)) / 2
-                ))
-            Text(rF.original > 0.0 && offsetX > 0.0 ? "\(rF.whole)\(rF.isFraction ? rF.text(" n/d") : "")\"" : "")
-                .rotationEffect(Angle(degrees: 90.0))
-                .position(CGPoint(
-                    x: b.br.x + 10,
-                    y: (d.tr.y - d.br.y.distance(to: 0.0)) / 2
-                ))
+        switch self.side {
+            case .front: sS = "f"
+            case .back: sS = "b"
+            case .left: sS = "l"
+            case .right: sS = "r"
         }
+        for i in sC {
+            points["\(i)"] = self.aL.duct.v2D["\(sS)\(i)"]
+        }
+        return self.applyTransforms(points)
+    }
+    
+    func genBoundingPoints() -> [String: CGPoint] {
+        var points: [String: CGPoint] = [:]
+        var sS = ""
+        let sC = ["bl", "br", "tl", "tr"]
+        
+        switch self.side {
+            case .front: sS = "f"
+            case .back: sS = "b"
+            case .left: sS = "l"
+            case .right: sS = "r"
+        }
+        for i in sC {
+            points["\(i)"] = self.aL.duct.b2D["\(sS)\(i)"]
+        }
+        return self.applyTransforms(points)
+    }
+    
+    func genText() -> [String: Text] {
+        var sS = ""
+        
+        switch self.side {
+            case .front: sS = "front"
+            case .back: sS = "back"
+            case .left: sS = "left"
+            case .right: sS = "right"
+        }
+        
+        return [
+            "bounding-l": Text(self.aL.duct.measurements["\(sS)-bounding-l"]?.text("w n/d\"") ?? ""),
+            "bounding-el": Text(self.aL.duct.measurements["\(sS)-bounding-el"]?.text("w n/d\"") ?? ""),
+            "bounding-er": Text(self.aL.duct.measurements["\(sS)-bounding-er"]?.text("w n/d\"") ?? ""),
+            "duct-l": Text(self.aL.duct.measurements["\(sS)-duct-l"]?.text("w n/d\"") ?? ""),
+            "duct-r": Text(self.aL.duct.measurements["\(sS)-duct-r"]?.text("w n/d\"") ?? ""),
+            "duct-t": Text(self.aL.duct.measurements["\(sS)-duct-t"]?.text("w n/d\"") ?? ""),
+            "duct-b": Text(self.aL.duct.measurements["\(sS)-duct-b"]?.text("w n/d\"") ?? ""),
+        ]
+    }
+    
+    func genTextZStack(_ d: [String: CGPoint], _ b: [String: CGPoint], _ t: [String: Text]) -> some View {
+        let tS: CGFloat = 10.0
+        let el = d["tl"]!.x < d["bl"]!.x ? "t" : "b"
+        let lol = self.side == .back ? "r" : "l"
+        return ZStack {
+            t["bounding-l"]!
+                .rotationEffect(Angle(degrees: 90))
+                .position(b["t\(lol)"]!.translate(y: b["t\(lol)"]!.y.distance(to: b["b\(lol)"]!.y) / 2).translate(x: -tS))
+            if b["\(el)l"]!.x != d["\(el)l"]!.x {
+                t["bounding-el"]!
+                    .position(b["\(el)l"]!.translate(x: b["\(el)l"]!.x.distance(to: d["\(el)l"]!.x) / 2)
+                                .translate(y: el == "t" ? -tS : tS))
+            }
+            if b["\(el)r"]!.x != d["\(el)r"]!.x {
+                t["bounding-er"]!
+                    .position(b["\(el)r"]!.translate(x: -(b["\(el)r"]!.x.distance(to: d["\(el)r"]!.x) / 2))
+                                .translate(y: el == "t" ? -tS : tS))
+            }
+            t["duct-l"]!
+                .position(
+                    d["tl"]!
+                        .translate(x: d["tl"]!.x.distance(to: d["bl"]!.x) / 2 + (self.side == .back ? -25.0 : 25.0))
+                        .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2))
+            t["duct-r"]!
+                .position(
+                    d["tr"]!
+                        .translate(x: d["tr"]!.x.distance(to: d["br"]!.x) / 2 - (self.side == .back ? -30.0 : 25.0))
+                        .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2))
+            t["duct-t"]!
+                .position(b["tl"]!.translate(x: b["tl"]!.x.distance(to: d["tr"]!.x) / 2).translate(y: -tS))
+            t["duct-b"]!
+                .position(b["bl"]!.translate(x: b["bl"]!.x.distance(to: d["br"]!.x) / 2).translate(y: tS))
+            
+        }
+    }
+    
+    func genPath(_ v: [String: CGPoint]) -> Path {
+        let p = CGMutablePath()
+        p.move(to: v["bl"]!)
+        p.addLine(to: v["br"]!)
+        p.addLine(to: v["tr"]!)
+        p.addLine(to: v["tl"]!)
+        p.addLine(to: v["bl"]!)
+        return Path(p)
     }
     
     var body: some View {
-        ZStack() {
-            Path { path in
-                let d = self.makeDuctPoints()
-                path.move(to: d.bl)
-                path.addLine(to: d.br)
-                path.addLine(to: d.tr)
-                path.addLine(to: d.tl)
-                path.addLine(to: d.bl)
-            }
+        let ductPoints = self.genDuctPoints()
+        let bPoints = self.genBoundingPoints()
+        let textEls = self.genText()
+        let textZStack = self.genTextZStack(ductPoints, bPoints, textEls)
+        let ductPath = self.genPath(ductPoints)
+        let bPath = self.genPath(bPoints)
+        return ZStack() {
+            ductPath
             .stroke(lineWidth: 1.0)
             .position(self.shapePos)
+//            .scaleEffect(self.shapeScale)
             
-            Path { path in
-                let d = self.makeDuctPoints()
-                path.move(to: d.bl)
-                path.addLine(to: d.br)
-                path.addLine(to: d.tr)
-                path.addLine(to: d.tl)
-                path.addLine(to: d.bl)
-            }
+            ductPath
             .fill(ImagePaint(image: Image("sheetmetal")))
             .position(self.shapePos)
             .gesture(DragGesture().onChanged({v in
@@ -265,21 +216,17 @@ struct DuctSideView: View {
             .gesture(MagnificationGesture().onChanged({v in
                 self.shapeScale = v
             }))
-                .opacity(/*@START_MENU_TOKEN@*/0.5/*@END_MENU_TOKEN@*/)
+            .opacity(/*@START_MENU_TOKEN@*/0.5/*@END_MENU_TOKEN@*/)
+//            .scaleEffect(self.shapeScale)
             
-            Path { path in
-                let d = self.makeBounding()
-                path.move(to: d.bl)
-                path.addLine(to: d.br)
-                path.addLine(to: d.tr)
-                path.addLine(to: d.tl)
-                path.addLine(to: d.bl)
-            }
+            bPath
             .stroke(style: StrokeStyle(lineWidth: 1.0, lineCap: .round, lineJoin: .bevel, miterLimit: 0.0, dash: [10.0, 10.0, 10.0, 10.0], dashPhase: 5.0))
             .position(self.shapePos)
+//            .scaleEffect(self.shapeScale)
             
-            self.makeTextViews().position(self.shapePos).zIndex(15.0)
-            
+            textZStack
+            .position(self.shapePos)
+//            .scaleEffect(self.shapeScale)
         }
         .onAppear(perform: {
             self.shapePos = CGPoint(x: self.g.size.width / 2, y: self.g.size.height / 2)

@@ -7,14 +7,189 @@
 //
 
 import SwiftUI
+import SceneKit
 
-struct Duct2D {
-    enum DuctSides {
-        case front
-        case left
-        case back
-        case right
+enum DuctSides {
+    case front
+    case left
+    case back
+    case right
+}
+
+struct Ductwork {
+    typealias V3 = SCNVector3
+    public var v2D: [String: CGPoint] = [:]
+    public var v3D: [String: V3] = [:]
+    public var b2D: [String: CGPoint] = [:]
+    public var b3D: [String: V3] = [:]
+    public var measurements: [String: Fraction] = [:]
+    
+    init (
+        _ l: CGFloat,
+        _ w: CGFloat,
+        _ d: CGFloat,
+        _ oX: CGFloat,
+        _ oY: CGFloat,
+        _ tW: CGFloat,
+        _ tD: CGFloat,
+        _ rT: CGFloat) {
+        let v3 = Ductwork.getVertices3D(l, w, d, oX, oY, tW, tD)
+        self.v3D = v3
+        let v2 = Ductwork.getVertices2D(v3)
+        self.v2D = v2
+        let b2 = Ductwork.getBounding2D(v2)
+        self.b2D = b2
+        let b3 = Ductwork.getBounding3D(v3)
+        self.b3D = b3
+        let m = Ductwork.getMeasurements(v3, rT)
+        self.measurements = m
     }
+    
+    mutating func update (
+        _ l: CGFloat,
+        _ w: CGFloat,
+        _ d: CGFloat,
+        _ oX: CGFloat,
+        _ oY: CGFloat,
+        _ tW: CGFloat,
+        _ tD: CGFloat,
+        _ rT: CGFloat) {
+        let v3 = Ductwork.getVertices3D(l, w, d, oX, oY, tW, tD)
+        self.v3D = v3
+        let v2 = Ductwork.getVertices2D(v3)
+        self.v2D = v2
+        let b2 = Ductwork.getBounding2D(v2)
+        self.b2D = b2
+        let b3 = Ductwork.getBounding3D(v3)
+        self.b3D = b3
+        let m = Ductwork.getMeasurements(v3, rT)
+        self.measurements = m
+    }
+    
+    mutating func updateMeasurements(_ rT: CGFloat) {
+        let m = Ductwork.getMeasurements(self.v3D, rT)
+        self.measurements = m
+    }
+    
+    static func getMeasurements(_ v: [String: V3], _ rT: CGFloat) -> [String: Fraction] {
+        var lol: [String: Fraction] = [:]
+        lol["front-bounding-l"] = v["fbl"]!.zero(.x).distance(v["ftl"]!.zero(.x)).toFraction(rT)
+        lol["front-bounding-el"] = v["ftl"]!.zero(.y, .z).distance(v["fbl"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
+        lol["front-bounding-er"] = v["ftr"]!.zero(.y, .z).distance(v["fbr"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
+        lol["front-duct-t"] = v["ftl"]!.distance(v["ftr"]!).toFraction(rT)
+        lol["front-duct-b"] = v["fbl"]!.distance(v["fbr"]!).toFraction(rT)
+        lol["front-duct-l"] = v["fbl"]!.distance(v["ftl"]!).toFraction(rT)
+        lol["front-duct-r"] = v["fbr"]!.distance(v["ftr"]!).toFraction(rT)
+        lol["back-bounding-l"] = v["bbl"]!.zero(.x).distance(v["btl"]!.zero(.x)).isLTZ()?.toFraction(rT)
+        lol["back-bounding-el"] = v["ftl"]!.zero(.y, .z).distance(v["fbl"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
+        lol["back-bounding-er"] = v["ftr"]!.zero(.y, .z).distance(v["fbr"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
+        lol["back-duct-t"] = v["ftr"]!.distance(v["ftl"]!).toFraction(rT)
+        lol["back-duct-b"] = v["fbr"]!.distance(v["fbl"]!).toFraction(rT)
+        lol["back-duct-l"] = v["fbl"]!.distance(v["ftl"]!).toFraction(rT)
+        lol["back-duct-r"] = v["fbr"]!.distance(v["ftr"]!).toFraction(rT)
+        lol["left-bounding-l"] = v["bbl"]!.zero(.z).distance(v["btl"]!.zero(.z)).isLTZ()?.toFraction(rT)
+        lol["left-bounding-el"] = v["btl"]!.zero(.y, .x).distance(v["bbl"]!.zero(.y, .x)).isLTZ()?.toFraction(rT)
+        lol["left-bounding-er"] = v["ftl"]!.zero(.y, .x).distance(v["fbl"]!.zero(.y, .x)).isLTZ()?.toFraction(rT)
+        lol["left-duct-t"] = v["btl"]!.distance(v["ftl"]!).toFraction(rT)
+        lol["left-duct-b"] = v["bbl"]!.distance(v["fbl"]!).toFraction(rT)
+        lol["left-duct-l"] = v["bbl"]!.distance(v["btl"]!).toFraction(rT)
+        lol["left-duct-r"] = v["fbl"]!.distance(v["ftl"]!).toFraction(rT)
+        lol["right-bounding-l"] = v["bbr"]!.zero(.z).distance(v["btr"]!.zero(.z)).isLTZ()?.toFraction(rT)
+        lol["right-bounding-el"] = v["fbr"]!.zero(.y, .x).distance(v["ftr"]!.zero(.y, .x)).isLTZ()?.toFraction(rT)
+        lol["right-bounding-er"] = v["bbr"]!.zero(.y, .x).distance(v["btr"]!.zero(.y, .x)).isLTZ()?.toFraction(rT)
+        lol["right-duct-t"] = v["btr"]!.distance(v["ftr"]!).toFraction(rT)
+        lol["right-duct-b"] = v["bbr"]!.distance(v["fbr"]!).toFraction(rT)
+        lol["right-duct-l"] = v["bbr"]!.distance(v["btr"]!).toFraction(rT)
+        lol["right-duct-r"] = v["fbr"]!.distance(v["ftr"]!).toFraction(rT)
+        return lol
+    }
+    
+    static func getBounding2D (_ v: [String: CGPoint]) -> [String: CGPoint] {
+        var lol: [String: CGPoint] = [:]
+        let iter: [String] = ["f", "b", "l", "r"]
+        for i in iter {
+            let minX: CGFloat = min(min(v["\(i)bl"]!.x, v["\(i)tl"]!.x), min(v["\(i)br"]!.x, v["\(i)tr"]!.x))
+            let maxX: CGFloat = max(max(v["\(i)bl"]!.x, v["\(i)tl"]!.x), max(v["\(i)br"]!.x, v["\(i)tr"]!.x))
+            lol["\(i)bl"] = CGPoint(x: minX, y: v["\(i)bl"]!.y)
+            lol["\(i)br"] = CGPoint(x: maxX, y: v["\(i)br"]!.y)
+            lol["\(i)tl"] = CGPoint(x: minX, y: v["\(i)tl"]!.y)
+            lol["\(i)tr"] = CGPoint(x: maxX, y: v["\(i)tr"]!.y)
+        }
+        return lol
+    }
+    
+    static func getBounding3D (_ v: [String: V3]) -> [String: V3] {
+        var minX: Float = 0.0
+        var minY: Float = 0.0
+        var minZ: Float = 0.0
+        var maxX: Float = 0.0
+        var maxY: Float = 0.0
+        var maxZ: Float = 0.0
+        for (_, v) in v {
+            if v.x < minX { minX = v.x }
+            if v.x > maxX { maxX = v.x }
+            if v.y < minY { minY = v.y }
+            if v.y > maxY { maxY = v.y }
+            if v.z < minZ { minZ = v.z }
+            if v.z > maxZ { maxZ = v.z }
+        }
+        var lol: [String: V3] = [:]
+        lol["fbl"] = V3(minX, minY, maxZ)
+        lol["fbr"] = V3(maxX, minY, maxZ)
+        lol["ftl"] = V3(minX, maxY, maxZ)
+        lol["ftr"] = V3(maxX, maxY, maxZ)
+        lol["bbl"] = V3(minX, minY, minZ)
+        lol["bbr"] = V3(maxX, minY, minZ)
+        lol["btl"] = V3(minX, maxY, minZ)
+        lol["btr"] = V3(maxX, maxY, minZ)
+        return lol
+    }
+    
+    static func getVertices2D (_ v: [String: V3]) -> [String: CGPoint] {
+        var lol: [String: CGPoint] = [:]
+        lol["fbl"] = CGPoint(x: v["fbl"]!.x.cg, y: v["fbl"]!.y.cg).flip(.y)
+        lol["fbr"] = CGPoint(x: v["fbr"]!.x.cg, y: v["fbr"]!.y.cg).flip(.y)
+        lol["ftl"] = CGPoint(x: v["ftl"]!.x.cg, y: v["ftl"]!.y.cg).flip(.y)
+        lol["ftr"] = CGPoint(x: v["ftr"]!.x.cg, y: v["ftr"]!.y.cg).flip(.y)
+        
+        lol["bbl"] = CGPoint(x: v["bbl"]!.x.cg, y: v["bbl"]!.y.cg).flip(.y)
+        lol["bbr"] = CGPoint(x: v["bbr"]!.x.cg, y: v["bbr"]!.y.cg).flip(.y)
+        lol["btl"] = CGPoint(x: v["btl"]!.x.cg, y: v["btl"]!.y.cg).flip(.y)
+        lol["btr"] = CGPoint(x: v["btr"]!.x.cg, y: v["btr"]!.y.cg).flip(.y)
+        
+        lol["lbl"] = CGPoint(x: v["bbl"]!.z.cg, y: v["bbl"]!.y.cg).flip(.y)
+        lol["lbr"] = CGPoint(x: v["fbl"]!.z.cg, y: v["fbl"]!.y.cg).flip(.y)
+        lol["ltl"] = CGPoint(x: v["btl"]!.z.cg, y: v["btl"]!.y.cg).flip(.y)
+        lol["ltr"] = CGPoint(x: v["ftl"]!.z.cg, y: v["ftl"]!.y.cg).flip(.y)
+        
+        lol["rbl"] = CGPoint(x: v["fbr"]!.z.cg, y: v["fbr"]!.y.cg).flip()
+        lol["rbr"] = CGPoint(x: v["bbr"]!.z.cg, y: v["bbr"]!.y.cg).flip()
+        lol["rtl"] = CGPoint(x: v["ftr"]!.z.cg, y: v["ftr"]!.y.cg).flip()
+        lol["rtr"] = CGPoint(x: v["btr"]!.z.cg, y: v["btr"]!.y.cg).flip()
+        return lol
+    }
+    
+    static func getVertices3D (
+        _ l: CGFloat,
+        _ w: CGFloat,
+        _ d: CGFloat,
+        _ oX: CGFloat,
+        _ oY: CGFloat,
+        _ tW: CGFloat,
+        _ tD: CGFloat) -> [String: V3] {
+        var lol: [String: V3] = [ "fbl": V3(-(w / 2), -(l / 2), d / 2) ]
+        lol["fbr"] = V3(w / 2, -(l / 2), d / 2)
+        lol["ftl"] = V3(-(tW / 2) + oX, l / 2, tD / 2 + oY)
+        lol["ftr"] = V3(tW / 2 + oX, l / 2, tD / 2 + oY)
+        lol["bbl"] = V3(-(w / 2), -(l / 2), -(d / 2))
+        lol["bbr"] = V3(w / 2, -(l / 2), -(d / 2))
+        lol["btl"] = V3(-(tW / 2) + oX, l / 2, -(tD / 2 + oY) + (oY * 2))
+        lol["btr"] = V3(tW / 2 + oX, l / 2, -(tD / 2 + oY) + (oY * 2))
+        return lol
+    }
+}
+
+struct Duct {
     enum DuctLines {
         case top
         case bottom
@@ -78,19 +253,36 @@ struct Duct2D {
         self.vertices["btr"] = btr
     }
     
-    func textElements(side: DuctSides, roundTo: CGFloat) -> [BoundingLines: Text] {
+    func textElements(side: DuctSides, roundTo: CGFloat) -> [String: Text] {
         let bounding = self.boundingLen(side: side)
+        let l = Fraction(self[side, .left], roundTo: roundTo)
+        let r = Fraction(self[side, .right], roundTo: roundTo)
+        let t = Fraction(self[side, .top], roundTo: roundTo)
+        let b = Fraction(self[side, .bottom], roundTo: roundTo)
         let lF = Fraction(bounding[.left]!, roundTo: roundTo)
         let tLF = Fraction(bounding[.topLeft]!, roundTo: roundTo)
         let tRF = Fraction(bounding[.topRight]!, roundTo: roundTo)
         let bLF = Fraction(bounding[.bottomLeft]!, roundTo: roundTo)
         let bRF = Fraction(bounding[.bottomRight]!, roundTo: roundTo)
+        func reduce(_ v: Fraction) -> String {
+            if v.original == 0.0 { return "" }
+            else { return "\(v.whole)\(v.parts.d > 1 ? v.text(" n/d") : "")\"" }
+        }
+        print(lF.original)
+        print(tLF.original)
+        print(tRF.original)
+        print(bLF.original)
+        print(bRF.original)
         return [
-            .left: Text("\(lF.whole) \(lF.parts.d > 1 ? lF.text("n/d\"") : "")"),
-            .topLeft: Text("\(tLF.whole) \(tLF.parts.d > 1 ? tLF.text("n/d\"") : "")"),
-            .topRight: Text("\(tRF.whole) \(tRF.parts.d > 1 ? tRF.text("n/d\"") : "")"),
-            .bottomLeft: Text("\(bLF.whole) \(bLF.parts.d > 1 ? bLF.text("n/d\"") : "")"),
-            .bottomRight: Text("\(bRF.whole) \(bRF.parts.d > 1 ? bRF.text("n/d\"") : "")"),
+            "bounding left": Text(reduce(lF)),
+            "bounding topLeft": Text(reduce(tLF)),
+            "bounding topRight": Text(reduce(tRF)),
+            "bounding bottomLeft": Text(reduce(bLF)),
+            "bounding bottomRight": Text(reduce(bRF)),
+            "left": Text(reduce(l)),
+            "right": Text(reduce(r)),
+            "top": Text(reduce(t)),
+            "bottom": Text(reduce(b)),
         ]
     }
     
@@ -120,7 +312,7 @@ struct Duct2D {
         var bd: [String: Vector3] = [:]
         var d: [String: Vector3] = [:]
         var s: [String] = []
-        let axis = side == .left || side == .right ? "x" : "z"
+        let axis = side == .left || side == .right ? "z" : "x"
         switch side {
             case .front: s.append("f")
             case .back: s.append("b")
@@ -130,23 +322,23 @@ struct Duct2D {
         s.append(contentsOf: ["bl", "br", "tl", "tr"])
         var minX = CGFloat(0.0)
         var maxX = CGFloat(0.0)
-        var minY = CGFloat(0.0)
-        var maxY = CGFloat(0.0)
         for i in 1...s.count - 1 {
             bd[s[i]] = self[s[0] + s[i]]
             d[s[i]] = bd[s[i]]
             if bd[s[i]]![axis] < minX { minX = bd[s[i]]![axis] }
             if bd[s[i]]![axis] > maxX { maxX = bd[s[i]]![axis] }
-            if bd[s[i]]!.y < minY { minY = bd[s[i]]!.y }
-            if bd[s[i]]!.y > maxY { maxY = bd[s[i]]!.y }
         }
         let corners = side == .left || side == .back ? ["tr", "tl", "br", "bl"] : ["tl", "tr", "bl", "br"]
+        bd["bl"]![axis] = minX
+        bd["tl"]![axis] = minX
+        bd["br"]![axis] = maxX
+        bd["tr"]![axis] = maxX
         return [
-            .left: abs(bd["bl"]!.distance(to: bd["tl"]!)),
-            .topLeft: abs(bd["\(corners[0])"]!.distance(to: d["\(corners[0])"]!)),
-            .topRight: abs(bd["\(corners[1])"]!.distance(to: d["\(corners[1])"]!)),
-            .bottomLeft: abs(bd["\(corners[2])"]!.distance(to: d["\(corners[2])"]!)),
-            .bottomRight: abs(bd["\(corners[3])"]!.distance(to: d["\(corners[3])"]!))
+            .left: bd["bl"]!.distance(to: bd["tl"]!),
+            .topLeft: bd["\(corners[0])"]!.distance(to: d["\(corners[0])"]!),
+            .topRight: bd["\(corners[1])"]!.distance(to: d["\(corners[1])"]!),
+            .bottomLeft: bd["\(corners[2])"]!.distance(to: d["\(corners[2])"]!),
+            .bottomRight: bd["\(corners[3])"]!.distance(to: d["\(corners[3])"]!)
         ]
         
     }
@@ -202,17 +394,17 @@ struct Duct2D {
         switch side {
             case .front:
                 return [
-                    "bl": Vector2(self["fbl"], .xy),
-                    "br": Vector2(self["fbr"], .xy),
-                    "tl": Vector2(self["ftl"], .xy),
-                    "tr": Vector2(self["ftr"], .xy)
+                    "bl": Vector2(self["fbl"], .xy).flipY(),
+                    "br": Vector2(self["fbr"], .xy).flipY(),
+                    "tl": Vector2(self["ftl"], .xy).flipY(),
+                    "tr": Vector2(self["ftr"], .xy).flipY()
                 ]
             case .left:
                 return [
-                    "bl": Vector2(self["lbl"], .zy),
-                    "br": Vector2(self["lbr"], .zy),
-                    "tl": Vector2(self["ltl"], .zy),
-                    "tr": Vector2(self["ltr"], .zy)
+                    "bl": Vector2(self["lbl"], .zy).flipY(),
+                    "br": Vector2(self["lbr"], .zy).flipY(),
+                    "tl": Vector2(self["ltl"], .zy).flipY(),
+                    "tr": Vector2(self["ltr"], .zy).flipY()
                 ]
             case .right:
                 var bl = self["rbl"]
@@ -224,10 +416,10 @@ struct Duct2D {
                 tl.translate(z: -(tl.z * 2))
                 tr.translate(z: -(tr.z * 2))
                 return [
-                    "bl": Vector2(bl, .zy),
-                    "br": Vector2(br, .zy),
-                    "tl": Vector2(tl, .zy),
-                    "tr": Vector2(tr, .zy)
+                    "bl": Vector2(bl, .zy).flipY(),
+                    "br": Vector2(br, .zy).flipY(),
+                    "tl": Vector2(tl, .zy).flipY(),
+                    "tr": Vector2(tr, .zy).flipY()
                 ]
             case .back:
                 var bl = self["bbl"]
@@ -239,11 +431,12 @@ struct Duct2D {
                 tl.translate(x: -(tl.x * 2))
                 tr.translate(x: -(tr.x * 2))
                 return [
-                    "bl": Vector2(bl, .xy),
-                    "br": Vector2(br, .xy),
-                    "tl": Vector2(tl, .xy),
-                    "tr": Vector2(tr, .xy)
+                    "bl": Vector2(bl, .xy).flipY(),
+                    "br": Vector2(br, .xy).flipY(),
+                    "tl": Vector2(tl, .xy).flipY(),
+                    "tr": Vector2(tr, .xy).flipY()
                 ]
         }
     }
 }
+

@@ -30,6 +30,7 @@ class AppLogic : ObservableObject {
                 UserDefaults.standard.set(self.tWidth.original, forKey: "tWidth")
             }
             UserDefaults.standard.set(self.width.original, forKey: "width")
+            self.updateDuct()
         }
     }
     @Published var depth: Fraction {
@@ -39,32 +40,53 @@ class AppLogic : ObservableObject {
                 UserDefaults.standard.set(self.tDepth.original, forKey: "tDepth")
             }
             UserDefaults.standard.set(self.depth.original, forKey: "depth")
+            self.updateDuct()
         }
     }
     @Published var length: Fraction { didSet {
         UserDefaults.standard.set(self.length.original, forKey: "length")
+        self.updateDuct()
         } }
     @Published var offsetX: Fraction { didSet {
         UserDefaults.standard.set(self.offsetX.original, forKey: "offsetX")
+        self.updateDuct()
         } }
     @Published var offsetY: Fraction { didSet {
         UserDefaults.standard.set(self.offsetY.original, forKey: "offsetY")
+        self.updateDuct()
         } }
     @Published var tWidth: Fraction { didSet {
         UserDefaults.standard.set(self.tWidth.original, forKey: "tWidth")
+        self.updateDuct()
         } }
     @Published var tDepth: Fraction { didSet {
         UserDefaults.standard.set(self.tDepth.original, forKey: "tDepth")
+        self.updateDuct()
         } }
     @Published var isTransition: Bool { didSet {
         UserDefaults.standard.set(self.isTransition, forKey: "isTransition")
+        self.updateDuct()
         } }
     @Published var roundTo: CGFloat { didSet {
         UserDefaults.standard.set(self.roundTo, forKey: "roundTo")
+        self.duct.updateMeasurements(self.roundTo)
         } }
     @Published var increments: CGFloat { didSet {
         UserDefaults.standard.set(self.increments, forKey: "increments")
         } }
+    @Published var duct: Ductwork
+    
+    func updateDuct() {
+        self.duct.update(
+            self.length.original,
+            self.width.original,
+            self.depth.original,
+            self.offsetX.original,
+            self.offsetY.original,
+            self.tWidth.original,
+            self.tDepth.original,
+            self.roundTo)
+    }
 
     
     init() {
@@ -90,6 +112,7 @@ class AppLogic : ObservableObject {
         self.tDepth = Fraction(d.tD, roundTo: d.rT)
         self.isTransition = d.iT
         self.increments = d.i
+        self.duct = Ductwork(d.l, d.w, d.d, d.oX, d.oY, d.tW, d.tD, d.rT)
     }
     
     func toggleTransition() {
