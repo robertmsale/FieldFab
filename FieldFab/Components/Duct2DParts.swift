@@ -91,20 +91,20 @@
 //        var faces3d: [String: Vector3] = [:]
 //
 //
-////        let front = Polygon2([
-////            Vector2(-w / 2, -l / 2),
-////            Vector2(w / 2, -l / 2),
-////            Vector2(tW / 2 + oX, l / 2),
-////            Vector2(-(tW / 2 - oX), l / 2)
-////        ], derivedFrom: [
-////            Vector3(-w / 2, -l / 2, d / 2),
-////            Vector3(w / 2, -l / 2, d / 2),
-////            Vector3(tW / 2 + oX, l / 2, tD / 2 + oY),
-////            Vector3(-(tW / 2 - oX), l / 2, tD / 2 + oY)
-////        ])
-////        let right = Polygon2([
-////            Vector2(d / 2, -l / 2),
-////            Vector2(
-////        ])
+//        let front = Polygon2([
+//            Vector2(-w / 2, -l / 2),
+//            Vector2(w / 2, -l / 2),
+//            Vector2(tW / 2 + oX, l / 2),
+//            Vector2(-(tW / 2 - oX), l / 2)
+//        ], derivedFrom: [
+//            Vector3(-w / 2, -l / 2, d / 2),
+//            Vector3(w / 2, -l / 2, d / 2),
+//            Vector3(tW / 2 + oX, l / 2, tD / 2 + oY),
+//            Vector3(-(tW / 2 - oX), l / 2, tD / 2 + oY)
+//        ])
+//        let right = Polygon2([
+//            Vector2(d / 2, -l / 2),
+//            Vector2(
+//        ])
 //    }
 //}

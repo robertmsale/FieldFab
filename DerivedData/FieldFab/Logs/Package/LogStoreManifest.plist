@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>8E2B7BDC-A841-4C59-960C-9AA904E67AEC</key>
+		<key>709325ED-7B80-40BE-8499-496CE6FBBCE3</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>8E2B7BDC-A841-4C59-960C-9AA904E67AEC.xcactivitylog</string>
+			<string>709325ED-7B80-40BE-8499-496CE6FBBCE3.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -26,15 +26,15 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>622301125.70057094</real>
+			<real>622608385.73895204</real>
 			<key>timeStoppedRecording</key>
-			<real>622301131.609676</real>
+			<real>622608386.35207605</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>8E2B7BDC-A841-4C59-960C-9AA904E67AEC</string>
+			<string>709325ED-7B80-40BE-8499-496CE6FBBCE3</string>
 		</dict>
-		<key>BF6601ED-6C33-4AE5-B771-5FFEBB061470</key>
+		<key>8608BB23-8F2F-4DA9-920C-EBF2CC78C103</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -43,7 +43,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.PackageLog</string>
 			<key>fileName</key>
-			<string>BF6601ED-6C33-4AE5-B771-5FFEBB061470.xcactivitylog</string>
+			<string>8608BB23-8F2F-4DA9-920C-EBF2CC78C103.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -54,13 +54,13 @@
 			<key>signature</key>
 			<string>Resolve Swift Packages</string>
 			<key>timeStartedRecording</key>
-			<real>622330847.63613605</real>
+			<real>622734274.97731602</real>
 			<key>timeStoppedRecording</key>
-			<real>622330854.082636</real>
+			<real>622734280.66128194</real>
 			<key>title</key>
 			<string>Resolve Swift Packages</string>
 			<key>uniqueIdentifier</key>
-			<string>BF6601ED-6C33-4AE5-B771-5FFEBB061470</string>
+			<string>8608BB23-8F2F-4DA9-920C-EBF2CC78C103</string>
 		</dict>
 	</dict>
 </dict>

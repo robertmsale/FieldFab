@@ -159,7 +159,7 @@ struct DuctSideView: View {
             if b["\(el)l"]!.x != d["\(el)l"]!.x {
                 t["bounding-el"]!
                     .position(b["\(el)l"]!.translate(x: b["\(el)l"]!.x.distance(to: d["\(el)l"]!.x) / 2)
-                                .translate(y: el == "t" ? -tS : tS))
+                         .translate(y: el == "t" ? -tS : tS))
             }
             if b["\(el)r"]!.x != d["\(el)r"]!.x {
                 t["bounding-er"]!
@@ -237,8 +237,13 @@ struct DuctSideView: View {
 struct DuctSideView_Previews: PreviewProvider {
     static var previews: some View {
         let aL = AppLogic()
+        aL.width.original = 3.0
+        aL.depth.original = 4.0
+        aL.length.original = 2.0
         aL.offsetX.original = -1.0
         aL.offsetY.original = 1.0
+        aL.tWidth.original = 4.0
+        aL.tDepth.original = 5.0
         return ContentView().environmentObject(aL)
     }
 }

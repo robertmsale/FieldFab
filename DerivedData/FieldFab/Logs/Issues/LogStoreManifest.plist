@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>25AD751B-EFE9-4152-9785-D3B49B3FD25F</key>
+		<key>1F7B070D-0FE6-4102-B29D-4BA6C292FF40</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogMajorGroupSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.target.product-type.target</string>
 			<key>fileName</key>
-			<string>25AD751B-EFE9-4152-9785-D3B49B3FD25F.xcactivitylog</string>
+			<string>1F7B070D-0FE6-4102-B29D-4BA6C292FF40.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -26,43 +26,15 @@
 			<key>signature</key>
 			<string>Carbon-deezzpnkaiajnicapnoitgzcsune</string>
 			<key>timeStartedRecording</key>
-			<real>622221719.39577794</real>
+			<real>622743382.16913605</real>
 			<key>timeStoppedRecording</key>
-			<real>622221719.94645798</real>
+			<real>622743392.50059104</real>
 			<key>title</key>
 			<string>Build target Carbon</string>
 			<key>uniqueIdentifier</key>
-			<string>25AD751B-EFE9-4152-9785-D3B49B3FD25F</string>
+			<string>1F7B070D-0FE6-4102-B29D-4BA6C292FF40</string>
 		</dict>
-		<key>8D0A0903-29CD-4A0C-AC5F-C5785AF47805</key>
-		<dict>
-			<key>className</key>
-			<string>IDEActivityLogMajorGroupSection</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.target.product-type.application</string>
-			<key>fileName</key>
-			<string>8D0A0903-29CD-4A0C-AC5F-C5785AF47805.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>signature</key>
-			<string>FieldFab-ctzfqjgivesutfazlvjvblvsybdx</string>
-			<key>timeStartedRecording</key>
-			<real>622583465.49963295</real>
-			<key>timeStoppedRecording</key>
-			<real>622583467.69931805</real>
-			<key>title</key>
-			<string>Build target FieldFab</string>
-			<key>uniqueIdentifier</key>
-			<string>8D0A0903-29CD-4A0C-AC5F-C5785AF47805</string>
-		</dict>
-		<key>C05A4291-8BB0-4788-8518-3867D0202F95</key>
+		<key>364D863D-B42D-42A1-9E0F-9EABB27BEEDB</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogMajorGroupSection</string>
@@ -71,7 +43,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.target.product-type.target</string>
 			<key>fileName</key>
-			<string>C05A4291-8BB0-4788-8518-3867D0202F95.xcactivitylog</string>
+			<string>364D863D-B42D-42A1-9E0F-9EABB27BEEDB.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,15 +54,15 @@
 			<key>signature</key>
 			<string>DifferenceKit-alvzvampnlqmzedzpsdgjhmjqfnb</string>
 			<key>timeStartedRecording</key>
-			<real>622221719.07646799</real>
+			<real>622743378.709131</real>
 			<key>timeStoppedRecording</key>
-			<real>622221719.39722598</real>
+			<real>622743392.50032198</real>
 			<key>title</key>
 			<string>Build target DifferenceKit</string>
 			<key>uniqueIdentifier</key>
-			<string>C05A4291-8BB0-4788-8518-3867D0202F95</string>
+			<string>364D863D-B42D-42A1-9E0F-9EABB27BEEDB</string>
 		</dict>
-		<key>ECE81A28-1D12-4000-A5C5-F8C98B3EA656</key>
+		<key>69F211F4-69D7-43A1-829E-88AF55D2F1D9</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogMajorGroupSection</string>
@@ -99,7 +71,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.target.product-type.target</string>
 			<key>fileName</key>
-			<string>ECE81A28-1D12-4000-A5C5-F8C98B3EA656.xcactivitylog</string>
+			<string>69F211F4-69D7-43A1-829E-88AF55D2F1D9.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -110,13 +82,41 @@
 			<key>signature</key>
 			<string>Guitar-epezwfbukzpbzrcfgvdopranpzhf</string>
 			<key>timeStartedRecording</key>
-			<real>622221719.10886097</real>
+			<real>622743373.15015495</real>
 			<key>timeStoppedRecording</key>
-			<real>622221719.36588597</real>
+			<real>622743392.50014198</real>
 			<key>title</key>
 			<string>Build target Guitar</string>
 			<key>uniqueIdentifier</key>
-			<string>ECE81A28-1D12-4000-A5C5-F8C98B3EA656</string>
+			<string>69F211F4-69D7-43A1-829E-88AF55D2F1D9</string>
+		</dict>
+		<key>A38CFD69-3378-4E27-A602-1AE4E7E6875D</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogMajorGroupSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.target.product-type.application</string>
+			<key>fileName</key>
+			<string>A38CFD69-3378-4E27-A602-1AE4E7E6875D.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>signature</key>
+			<string>FieldFab-ctzfqjgivesutfazlvjvblvsybdx</string>
+			<key>timeStartedRecording</key>
+			<real>622743437.19702697</real>
+			<key>timeStoppedRecording</key>
+			<real>622743445.25983703</real>
+			<key>title</key>
+			<string>Build target FieldFab</string>
+			<key>uniqueIdentifier</key>
+			<string>A38CFD69-3378-4E27-A602-1AE4E7E6875D</string>
 		</dict>
 	</dict>
 	<key>preserveOldLogs</key>
