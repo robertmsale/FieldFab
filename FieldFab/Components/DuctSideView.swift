@@ -68,26 +68,24 @@ struct DuctSideView: View {
         let shapeH = v["tl"]!.y.distance(to: v["bl"]!.y)
         let sMax = max(shapeH, shapeW)
         let cMin = min(self.g.size.width, self.g.size.height)
-        var b4p = [
-            "bl": v["bl"]!.multiplyScalar(cMin / sMax * self.shapeScale),
-            "br": v["br"]!.multiplyScalar(cMin / sMax * self.shapeScale),
-            "tl": v["tl"]!.multiplyScalar(cMin / sMax * self.shapeScale),
-            "tr": v["tr"]!.multiplyScalar(cMin / sMax * self.shapeScale)
+        let b4p = [
+            "bl": v["bl"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25)),
+            "br": v["br"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25)),
+            "tl": v["tl"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25)),
+            "tr": v["tr"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25))
         ]
-        if self.side == .back {
-            b4p["bl"] = b4p["bl"]!.flip(.x)
-            b4p["br"] = b4p["br"]!.flip(.x)
-            b4p["tl"] = b4p["tl"]!.flip(.x)
-            b4p["tr"] = b4p["tr"]!.flip(.x)
-        }
         let p = [
-            "bl": center.translate(b4p["bl"]!).addScalar(cMin / sMax * self.shapeScale),
+            "bl": center.translate(b4p["bl"]!),
+//                .addScalar(cMin / sMax * self.shapeScale),
 //                .translate(self.shapePos),
-            "br": center.translate(b4p["br"]!).addScalar(cMin / sMax * self.shapeScale),
+            "br": center.translate(b4p["br"]!),
+//                .addScalar(cMin / sMax * self.shapeScale),
 //                .translate(self.shapePos),
-            "tl": center.translate(b4p["tl"]!).addScalar(cMin / sMax * self.shapeScale),
+            "tl": center.translate(b4p["tl"]!),
+//                .addScalar(cMin / sMax * self.shapeScale),
 //                .translate(self.shapePos),
-            "tr": center.translate(b4p["tr"]!).addScalar(cMin / sMax * self.shapeScale)
+            "tr": center.translate(b4p["tr"]!),
+//                .addScalar(cMin / sMax * self.shapeScale)
 //                .translate(self.shapePos)
         ]
         return p
@@ -151,31 +149,55 @@ struct DuctSideView: View {
     func genTextZStack(_ d: [String: CGPoint], _ b: [String: CGPoint], _ t: [String: Text]) -> some View {
         let tS: CGFloat = 10.0
         let el = d["tl"]!.x < d["bl"]!.x ? "t" : "b"
-        let lol = self.side == .back ? "r" : "l"
+        let bl = d["tl"]!.x < d["bl"]!.x ? "b" : "t"
+        let br = d["tr"]!.x < d["br"]!.x ? "t" : "b"
+        let lol = /*self.side == .back ? "r" :*/ "l"
+        let loli = /*lol == "r" ? "l" :*/ "r"
+        let lPreAng: CGFloat = b["t\(lol)"]! == d["t\(lol)"]! ? 90 : -90
+        let rPreAng: CGFloat = b["t\(loli)"]! == d["t\(loli)"]! ? -90 : 90
+        var lAngCalc: CGFloat = 0.0
+        var rAngCalc: CGFloat = 0.0
+        
+        if d["t\(lol)"]! == b["t\(lol)"]! { lAngCalc = cos(d["t\(lol)"]!.x.distance(to: d["b\(lol)"]!.x) / d["t\(lol)"]!.distance(d["b\(lol)"]!)) }
+        else { lAngCalc = cos(d["t\(lol)"]!.y.distance(to: d["b\(lol)"]!.y) / d["t\(lol)"]!.distance(d["b\(lol)"]!)) }
+        
+        if d["t\(loli)"]! == b["t\(loli)"]! { rAngCalc = cos(d["t\(loli)"]!.x.distance(to: d["b\(loli)"]!.x) / d["t\(loli)"]!.distance(d["b\(loli)"]!)) }
+        else { rAngCalc = cos(d["t\(loli)"]!.y.distance(to: d["b\(loli)"]!.y) / d["t\(loli)"]!.distance(d["b\(loli)"]!)) }
+        
+        let dD: CGFloat = 15
+        
+        let lAng = Double(b["t\(lol)"] == d["t\(lol)"] ? lPreAng - lAngCalc.toDeg() + dD - 2 : lPreAng + lAngCalc.toDeg() - dD)
+        let rAng = Double(b["t\(loli)"] == d["t\(loli)"] ? rPreAng + rAngCalc.toDeg() - dD + 2 : rPreAng - rAngCalc.toDeg() + dD)
         return ZStack {
             t["bounding-l"]!
                 .rotationEffect(Angle(degrees: 90))
                 .position(b["t\(lol)"]!.translate(y: b["t\(lol)"]!.y.distance(to: b["b\(lol)"]!.y) / 2).translate(x: -tS))
-            if b["\(el)l"]!.x != d["\(el)l"]!.x {
+            if b["\(bl)l"]!.x != d["\(bl)l"]!.x {
                 t["bounding-el"]!
-                    .position(b["\(el)l"]!.translate(x: b["\(el)l"]!.x.distance(to: d["\(el)l"]!.x) / 2)
-                         .translate(y: el == "t" ? -tS : tS))
+                    .position(b["\(bl)l"]!.translate(y: bl == "t" ? -tS : tS).translate(x: b["\(bl)l"]!.x.distance(to: d["\(bl)l"]!.x) / 2))
             }
-            if b["\(el)r"]!.x != d["\(el)r"]!.x {
+            if b["\(br)r"]!.x != d["\(br)r"]!.x {
                 t["bounding-er"]!
-                    .position(b["\(el)r"]!.translate(x: -(b["\(el)r"]!.x.distance(to: d["\(el)r"]!.x) / 2))
-                                .translate(y: el == "t" ? -tS : tS))
+                    .position(b["\(br)r"]!.translate(y: br == "t" ? -tS : tS).translate(x: -d["\(br)r"]!.x.distance(to: b["\(br)r"]!.x) / 2))
             }
-            t["duct-l"]!
-                .position(
-                    d["tl"]!
-                        .translate(x: d["tl"]!.x.distance(to: d["bl"]!.x) / 2 + (self.side == .back ? -25.0 : 25.0))
-                        .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2))
-            t["duct-r"]!
-                .position(
-                    d["tr"]!
-                        .translate(x: d["tr"]!.x.distance(to: d["br"]!.x) / 2 - (self.side == .back ? -30.0 : 25.0))
-                        .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2))
+            if d["\(bl)l"]!.x != b["\(bl)l"]!.x {
+                t["duct-l"]!
+                    .rotationEffect(Angle(degrees: lAng))
+                    //                .rotationEffect(Angle(degrees: lAng))
+                    .position(
+                        d["tl"]!
+                            .translate(x: d["tl"]!.x.distance(to: d["bl"]!.x) / 2 + 15)
+                            .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2))
+            }
+            if d["\(br)r"]!.x != b["\(br)r"]!.x {
+                t["duct-r"]!
+                    .rotationEffect(Angle(degrees: rAng))
+                    //                .rotationEffect(Angle(degrees: rAng))
+                    .position(
+                        d["tr"]!
+                            .translate(x: d["tr"]!.x.distance(to: d["br"]!.x) / 2 - 15)
+                            .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2))
+            }
             t["duct-t"]!
                 .position(b["tl"]!.translate(x: b["tl"]!.x.distance(to: d["tr"]!.x) / 2).translate(y: -tS))
             t["duct-b"]!
@@ -240,10 +262,10 @@ struct DuctSideView_Previews: PreviewProvider {
         aL.width.original = 3.0
         aL.depth.original = 4.0
         aL.length.original = 2.0
-        aL.offsetX.original = -1.0
-        aL.offsetY.original = 1.0
-        aL.tWidth.original = 4.0
-        aL.tDepth.original = 5.0
+        aL.offsetX.original = 0.5
+        aL.offsetY.original = 0.0
+        aL.tWidth.original = 3.0
+        aL.tDepth.original = 4.0
         return ContentView().environmentObject(aL)
     }
 }

@@ -56,7 +56,7 @@ struct Fraction {
             switch v {
                 case "n": stringBuilder += "\(self.parts.d > 1 ? self.parts.n.description : "")"
                 case "d": stringBuilder += "\(self.parts.d > 1 ? self.parts.d.description : "")"
-                case "w": stringBuilder += "\(self.whole)"
+                case "w": stringBuilder += "\(self.whole == 0 ? "" : self.whole.description)"
                 case "/": stringBuilder += "\(self.parts.d > 1 ? "/" : "")"
                 case " ": stringBuilder += "\(self.parts.d > 1 ? " " : "")"
                 case "o": stringBuilder += "\(self.original)"

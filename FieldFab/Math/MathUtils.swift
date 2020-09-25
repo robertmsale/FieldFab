@@ -115,6 +115,11 @@ class MathUtils {
         return r * MathUtils.RADDEG
     }
     
+    static func invertDeg(_ d: CGFloat) -> CGFloat {
+        if d > 180 { return abs(360 - d) }
+        else { return 180 + d }
+    }
+    
     static func reduce(data: [CGFloat], completionHandler: (_ a: CGFloat, _ b: CGFloat) -> CGFloat) -> CGFloat {
         var reduced: CGFloat = 0.0
         for i in 0...data.count - 1 {
@@ -132,6 +137,14 @@ class MathUtils {
 }
 
 extension CGFloat {
+    
+    func toRad() -> CGFloat { return self * MathUtils.DEGRAD }
+    func toDeg() -> CGFloat { return self * MathUtils.RADDEG }
+    
+    func toDouble() -> Double { return Double(self) }
+    
+    func floor() -> CGFloat { return MathUtils.floor(self) }
+    func ceil() -> CGFloat { return MathUtils.ceil(self) }
     
     func toFraction(_ roundTo: CGFloat = 0.03125) -> Fraction {
         return Fraction(self, roundTo: roundTo)

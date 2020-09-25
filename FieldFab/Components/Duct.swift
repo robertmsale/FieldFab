@@ -18,24 +18,26 @@ enum DuctSides {
 
 struct Ductwork {
     typealias V3 = SCNVector3
-    public var v2D: [String: CGPoint] = [:]
+    typealias V2 = CGPoint
+    typealias F = CGFloat
+    public var v2D: [String: V2] = [:]
     public var v3D: [String: V3] = [:]
-    public var b2D: [String: CGPoint] = [:]
+    public var b2D: [String: V2] = [:]
     public var b3D: [String: V3] = [:]
     public var measurements: [String: Fraction] = [:]
     
     init (
-        _ l: CGFloat,
-        _ w: CGFloat,
-        _ d: CGFloat,
-        _ oX: CGFloat,
-        _ oY: CGFloat,
-        _ tW: CGFloat,
-        _ tD: CGFloat,
-        _ rT: CGFloat) {
+        _ l: F,
+        _ w: F,
+        _ d: F,
+        _ oX: F,
+        _ oY: F,
+        _ tW: F,
+        _ tD: F,
+        _ rT: F) {
         let v3 = Ductwork.getVertices3D(l, w, d, oX, oY, tW, tD)
         self.v3D = v3
-        let v2 = Ductwork.getVertices2D(v3)
+        let v2 = Ductwork.getVertices2D(l, w, d, oX, oY, tW, tD)
         self.v2D = v2
         let b2 = Ductwork.getBounding2D(v2)
         self.b2D = b2
@@ -46,17 +48,17 @@ struct Ductwork {
     }
     
     mutating func update (
-        _ l: CGFloat,
-        _ w: CGFloat,
-        _ d: CGFloat,
-        _ oX: CGFloat,
-        _ oY: CGFloat,
-        _ tW: CGFloat,
-        _ tD: CGFloat,
-        _ rT: CGFloat) {
+        _ l: F,
+        _ w: F,
+        _ d: F,
+        _ oX: F,
+        _ oY: F,
+        _ tW: F,
+        _ tD: F,
+        _ rT: F) {
         let v3 = Ductwork.getVertices3D(l, w, d, oX, oY, tW, tD)
         self.v3D = v3
-        let v2 = Ductwork.getVertices2D(v3)
+        let v2 = Ductwork.getVertices2D(l, w, d, oX, oY, tW, tD)
         self.v2D = v2
         let b2 = Ductwork.getBounding2D(v2)
         self.b2D = b2
@@ -66,12 +68,12 @@ struct Ductwork {
         self.measurements = m
     }
     
-    mutating func updateMeasurements(_ rT: CGFloat) {
+    mutating func updateMeasurements(_ rT: F) {
         let m = Ductwork.getMeasurements(self.v3D, rT)
         self.measurements = m
     }
     
-    static func getMeasurements(_ v: [String: V3], _ rT: CGFloat) -> [String: Fraction] {
+    static func getMeasurements(_ v: [String: V3], _ rT: F) -> [String: Fraction] {
         var lol: [String: Fraction] = [:]
         lol["front-bounding-l"] = v["fbl"]!.zero(.x).distance(v["ftl"]!.zero(.x)).toFraction(rT)
         lol["front-bounding-el"] = v["ftl"]!.zero(.y, .z).distance(v["fbl"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
@@ -108,8 +110,8 @@ struct Ductwork {
         var lol: [String: CGPoint] = [:]
         let iter: [String] = ["f", "b", "l", "r"]
         for i in iter {
-            let minX: CGFloat = min(min(v["\(i)bl"]!.x, v["\(i)tl"]!.x), min(v["\(i)br"]!.x, v["\(i)tr"]!.x))
-            let maxX: CGFloat = max(max(v["\(i)bl"]!.x, v["\(i)tl"]!.x), max(v["\(i)br"]!.x, v["\(i)tr"]!.x))
+            let minX: F = min(min(v["\(i)bl"]!.x, v["\(i)tl"]!.x), min(v["\(i)br"]!.x, v["\(i)tr"]!.x))
+            let maxX: F = max(max(v["\(i)bl"]!.x, v["\(i)tl"]!.x), max(v["\(i)br"]!.x, v["\(i)tr"]!.x))
             lol["\(i)bl"] = CGPoint(x: minX, y: v["\(i)bl"]!.y)
             lol["\(i)br"] = CGPoint(x: maxX, y: v["\(i)br"]!.y)
             lol["\(i)tl"] = CGPoint(x: minX, y: v["\(i)tl"]!.y)
@@ -145,38 +147,47 @@ struct Ductwork {
         return lol
     }
     
-    static func getVertices2D (_ v: [String: V3]) -> [String: CGPoint] {
+    static func getVertices2D (/*_ v: [String: V3]*/
+        _ l: F,
+        _ w: F,
+        _ d: F,
+        _ oX: F,
+        _ oY: F,
+        _ tW: F,
+        _ tD: F
+    ) -> [String: CGPoint] {
         var lol: [String: CGPoint] = [:]
-        lol["fbl"] = CGPoint(x: v["fbl"]!.x.cg, y: v["fbl"]!.y.cg).flip(.y)
-        lol["fbr"] = CGPoint(x: v["fbr"]!.x.cg, y: v["fbr"]!.y.cg).flip(.y)
-        lol["ftl"] = CGPoint(x: v["ftl"]!.x.cg, y: v["ftl"]!.y.cg).flip(.y)
-        lol["ftr"] = CGPoint(x: v["ftr"]!.x.cg, y: v["ftr"]!.y.cg).flip(.y)
         
-        lol["bbl"] = CGPoint(x: v["bbl"]!.x.cg, y: v["bbl"]!.y.cg).flip(.y)
-        lol["bbr"] = CGPoint(x: v["bbr"]!.x.cg, y: v["bbr"]!.y.cg).flip(.y)
-        lol["btl"] = CGPoint(x: v["btl"]!.x.cg, y: v["btl"]!.y.cg).flip(.y)
-        lol["btr"] = CGPoint(x: v["btr"]!.x.cg, y: v["btr"]!.y.cg).flip(.y)
+        lol["fbl"] = V2(x: -(w / 2), y: l / 2).translate(x: -(oX / 2))
+        lol["fbr"] = V2(x: w / 2, y: l / 2).translate(x: -(oX / 2))
+        lol["ftl"] = V2(x: -(tW / 2) + oX, y: -(l / 2)).translate(x: -(oX / 2))
+        lol["ftr"] = V2(x: tW / 2 + oX, y: -(l / 2)).translate(x: -(oX / 2))
         
-        lol["lbl"] = CGPoint(x: v["bbl"]!.z.cg, y: v["bbl"]!.y.cg).flip(.y)
-        lol["lbr"] = CGPoint(x: v["fbl"]!.z.cg, y: v["fbl"]!.y.cg).flip(.y)
-        lol["ltl"] = CGPoint(x: v["btl"]!.z.cg, y: v["btl"]!.y.cg).flip(.y)
-        lol["ltr"] = CGPoint(x: v["ftl"]!.z.cg, y: v["ftl"]!.y.cg).flip(.y)
+        lol["bbl"] = V2(x: -(w / 2), y: l / 2).translate(x: oX)
+        lol["bbr"] = V2(x: w / 2, y: l / 2).translate(x: oX)
+        lol["btl"] = V2(x: -(tW / 2) - oX, y: -(l / 2)).translate(x: oX)
+        lol["btr"] = V2(x: tW / 2 - oX, y: -(l / 2)).translate(x: oX)
         
-        lol["rbl"] = CGPoint(x: v["fbr"]!.z.cg, y: v["fbr"]!.y.cg).flip()
-        lol["rbr"] = CGPoint(x: v["bbr"]!.z.cg, y: v["bbr"]!.y.cg).flip()
-        lol["rtl"] = CGPoint(x: v["ftr"]!.z.cg, y: v["ftr"]!.y.cg).flip()
-        lol["rtr"] = CGPoint(x: v["btr"]!.z.cg, y: v["btr"]!.y.cg).flip()
+        lol["lbl"] = V2(x: -(d / 2), y: l / 2).translate(x: -(oY))
+        lol["lbr"] = V2(x: d / 2, y: l / 2).translate(x: -(oY))
+        lol["ltl"] = V2(x: -(tD / 2) + oY, y: -(l / 2)).translate(x: -(oY))
+        lol["ltr"] = V2(x: tD / 2 + oY, y: -(l / 2)).translate(x: -(oY))
+        
+        lol["rbl"] = V2(x: -(d / 2), y: l / 2).translate(x: oY / 2)
+        lol["rbr"] = V2(x: d / 2, y: l / 2).translate(x: oY / 2)
+        lol["rtl"] = V2(x: -(tD / 2) - oY, y: -(l / 2)).translate(x: oY / 2)
+        lol["rtr"] = V2(x: tD / 2 - oY, y: -(l / 2)).translate(x: oY / 2)
         return lol
     }
     
     static func getVertices3D (
-        _ l: CGFloat,
-        _ w: CGFloat,
-        _ d: CGFloat,
-        _ oX: CGFloat,
-        _ oY: CGFloat,
-        _ tW: CGFloat,
-        _ tD: CGFloat) -> [String: V3] {
+        _ l: F,
+        _ w: F,
+        _ d: F,
+        _ oX: F,
+        _ oY: F,
+        _ tW: F,
+        _ tD: F) -> [String: V3] {
         var lol: [String: V3] = [ "fbl": V3(-(w / 2), -(l / 2), d / 2) ]
         lol["fbr"] = V3(w / 2, -(l / 2), d / 2)
         lol["ftl"] = V3(-(tW / 2) + oX, l / 2, tD / 2 + oY)
@@ -190,6 +201,7 @@ struct Ductwork {
 }
 
 struct Duct {
+    typealias F = CGFloat
     enum DuctLines {
         case top
         case bottom
@@ -215,7 +227,7 @@ struct Duct {
         "btr": Vector3()
     ]
     
-    init (_ l: CGFloat, _ w: CGFloat, _ d: CGFloat, _ oX: CGFloat, _ oY: CGFloat, _ tW: CGFloat, _ tD: CGFloat) {
+    init (_ l: F, _ w: F, _ d: F, _ oX: F, _ oY: F, _ tW: F, _ tD: F) {
         let fbl = Vector3(-(w / 2), -(l / 2), d / 2)
         let fbr = Vector3(w / 2, -(l / 2), d / 2)
         let ftl = Vector3(-(tW / 2) + oX, l / 2, tD / 2 + oY)
@@ -234,7 +246,7 @@ struct Duct {
         self.vertices["btr"] = btr
     }
     
-    mutating func update(_ l: CGFloat, _ w: CGFloat, _ d: CGFloat, _ oX: CGFloat, _ oY: CGFloat, _ tW: CGFloat, _ tD: CGFloat) {
+    mutating func update(_ l: F, _ w: F, _ d: F, _ oX: F, _ oY: F, _ tW: F, _ tD: F) {
         let fbl = Vector3(-(w / 2), -(l / 2), d / 2)
         let fbr = Vector3(w / 2, -(l / 2), d / 2)
         let ftl = Vector3(-(tW / 2) + oX, l / 2, tD / 2 + oY)
@@ -253,7 +265,7 @@ struct Duct {
         self.vertices["btr"] = btr
     }
     
-    func textElements(side: DuctSides, roundTo: CGFloat) -> [String: Text] {
+    func textElements(side: DuctSides, roundTo: F) -> [String: Text] {
         let bounding = self.boundingLen(side: side)
         let l = Fraction(self[side, .left], roundTo: roundTo)
         let r = Fraction(self[side, .right], roundTo: roundTo)
@@ -290,10 +302,10 @@ struct Duct {
         let p: [String: Vector2] = self[side]
         var s: [String] = []
         s.append(contentsOf: ["bl", "br", "tl", "tr"])
-        var maxX: CGFloat = 0.0
-        var minX: CGFloat = 0.0
-        var maxY: CGFloat = 0.0
-        var minY: CGFloat = 0.0
+        var maxX: F = 0.0
+        var minX: F = 0.0
+        var maxY: F = 0.0
+        var minY: F = 0.0
         for i in 0...s.count - 1 {
             if p["\(s[i])"]!.x < minX { minX = p["\(s[i])"]!.x }
             if p["\(s[i])"]!.x > maxX { maxX = p["\(s[i])"]!.x }
@@ -308,7 +320,7 @@ struct Duct {
         ]
     }
     
-    func boundingLen(side: DuctSides) -> [BoundingLines: CGFloat] {
+    func boundingLen(side: DuctSides) -> [BoundingLines: F] {
         var bd: [String: Vector3] = [:]
         var d: [String: Vector3] = [:]
         var s: [String] = []
@@ -320,8 +332,8 @@ struct Duct {
             case .right: s.append("r")
         }
         s.append(contentsOf: ["bl", "br", "tl", "tr"])
-        var minX = CGFloat(0.0)
-        var maxX = CGFloat(0.0)
+        var minX = F(0.0)
+        var maxX = F(0.0)
         for i in 1...s.count - 1 {
             bd[s[i]] = self[s[0] + s[i]]
             d[s[i]] = bd[s[i]]
@@ -343,7 +355,7 @@ struct Duct {
         
     }
     
-    subscript(side: DuctSides, line: DuctLines) -> CGFloat {
+    subscript(side: DuctSides, line: DuctLines) -> F {
         var s: [String] = []
         switch side {
             case .front:
