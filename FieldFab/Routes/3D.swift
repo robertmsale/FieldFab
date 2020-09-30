@@ -11,16 +11,54 @@ import SceneKit
 import UIKit
 
 struct ThreeD: View {
+    @State var helpVisible = false
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         GeometryReader {g in
-            SceneView(geo: Binding.constant(g))
+            ZStack{
+                SceneView(geo: Binding.constant(g))
+                Button(action: { self.helpVisible = true }, label: {
+                    Image(systemName: "questionmark").font(.title)
+                })
+                .frame(width: 48.0, height: 48.0)
+                .background(AppColors.ControlBG[colorScheme])
+                .cornerRadius(45)
+                .position(CGPoint(x: g.size.width - 32, y: g.size.height - 40))
+                .zIndex(2.0)
+                if helpVisible {
+                    VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)).zIndex(3.0)
+                    CameraHelpView(g: g, visible: $helpVisible).zIndex(4.0)
+                }
+            }
         }
+    }
+}
+
+struct VisualEffectView: UIViewRepresentable {
+    var effect: UIVisualEffect
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        UIVisualEffectView()
+    }
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        uiView.effect = effect
     }
 }
 
 struct _D_Previews: PreviewProvider {
     static var previews: some View {
-        ThreeD()
+        let aL = AppLogic()
+        aL.isTransition = true
+        aL.width = Fraction(16)
+        aL.depth = Fraction(20)
+        aL.length = Fraction(5)
+        aL.offsetX = Fraction(1)
+        aL.offsetY = Fraction(1)
+        aL.tWidth = Fraction(20)
+        aL.tDepth = Fraction(16)
+        return GeometryReader { g in
+            ThreeD().environmentObject(aL)
+        }
     }
 }
 
@@ -29,120 +67,59 @@ struct SceneView: UIViewRepresentable {
     @EnvironmentObject var aL: AppLogic
     typealias V3 = SCNVector3
     
-    func sideFactory(_ el: [V3]) -> SCNGeometry {
-        let vertices: [V3] = [
-            el[0], el[1], el[2],
-            el[0], el[2], el[3]
-        ]
-        let normalx = V3(
-            (el[1].x - el[0].x) * (el[2].x - el[0].x),
-            (el[1].y - el[0].y) * (el[2].y - el[0].y),
-            (el[1].z - el[0].z) * (el[2].z - el[0].z))
-        let normaly = V3(
-            (el[0].x - el[2].x) * (el[1].x - el[2].x),
-            (el[0].y - el[2].y) * (el[1].y - el[2].y),
-            (el[0].z - el[2].z) * (el[1].z - el[2].z))
-        let normals: [V3] = [
-            normalx,
-            normalx,
-            normalx,
-            normalx,
-            normalx,
-            normalx
-        ]
-        let texMap = [
-            CGPoint(x: 0.0, y: 0.0),
-            CGPoint(x: 0.0, y: 1.0),
-            CGPoint(x: 1.0, y: 1.0),
-            CGPoint(x: 1.0, y: 0.0),
-        ]
-        let indices: [UInt16] = [
-            0, 1, 2,
-            3, 4, 5,
-            5, 4, 3,
-            2, 1, 0
-        ]
-        let t = SCNGeometrySource(textureCoordinates: [
-            texMap[0], texMap[1], texMap[2],
-            texMap[0], texMap[2], texMap[3]
-        ])
-        let n = SCNGeometrySource(normals: normals)
-        let source = SCNGeometrySource(vertices: vertices)
-        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
-        let geo = SCNGeometry(sources: [source, n, t], elements: [element])
-        let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "sheetmetal")
-        material.normal.contents = UIImage(named: "sheetmetal-normal")
-        geo.materials = [material]
-        
-        return geo
-    }
-    
-    func makeSideArray(_ quad: Quad) -> [SCNGeometry] {
-        return [
-            self.sideFactory([
-                quad.front.bl.toSCNV(),
-                quad.front.br.toSCNV(),
-                quad.front.tr.toSCNV(),
-                quad.front.tl.toSCNV()
-            ]),
-            self.sideFactory([
-                quad.back.br.toSCNV(),
-                quad.back.bl.toSCNV(),
-                quad.back.tl.toSCNV(),
-                quad.back.tr.toSCNV()
-            ]),
-            self.sideFactory([
-                quad.front.br.toSCNV(),
-                quad.back.br.toSCNV(),
-                quad.back.tr.toSCNV(),
-                quad.front.tr.toSCNV()
-            ]),
-            self.sideFactory([
-                quad.back.bl.toSCNV(),
-                quad.front.bl.toSCNV(),
-                quad.front.tl.toSCNV(),
-                quad.back.tl.toSCNV()
-            ])
-        ]
-    }
-    
     func makeUIView(context: Context) -> SCNView {
         let bounding = min(self.geo.size.width, self.geo.size.height)
         let sceneView = SCNView(frame: CGRect(x: 0.0, y: 0.0, width: bounding, height: bounding))
+        
         sceneView.allowsCameraControl = true
         sceneView.rendersContinuously = true
         guard let scene = SCNScene(named: "ductwork.scn", inDirectory: "main.scnassets")
             else { fatalError("Derp") }
-        var quad = Quad.genQuadFromDimensions(
-            length: self.aL.length.original,
-            width: self.aL.width.original,
-            depth: self.aL.depth.original,
-            offsetX: self.aL.offsetX.original,
-            offsetY: self.aL.offsetY.original,
-            tWidth: self.aL.tWidth.original,
-            tDepth: self.aL.tDepth.original)
         
-        var faces = self.makeSideArray(quad)
+        let camera = SCNCamera()
+        camera.fieldOfView = 90
+        let camNode = SCNNode()
+        camNode.worldPosition = SCNVector3(0.0, 0.0, max(self.aL.duct.b3D["ftr"]!.x,self.aL.duct.b3D["ftr"]!.z) * 4)
+        camNode.name = "camera"
+        camNode.camera = camera
         
-        for item in faces {
-            scene.rootNode.addChildNode(SCNNode(geometry: item))
-        }
+        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original)
+        geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
+        geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
         
-        Quad.convertToBounding(&quad)
-        faces = self.makeSideArray(quad)
+        let node = SCNNode(geometry: geometry)
+        node.name = "duct"
         
-        for item in faces {
-            item.firstMaterial?.fillMode = .lines
-            item.firstMaterial?.diffuse.contents = Color.red
-            scene.rootNode.addChildNode(SCNNode(geometry: item))
-        }
+        scene.rootNode.addChildNode(camNode)
+        scene.rootNode.addChildNode(node)
+
+        node.castsShadow = true
         
         sceneView.scene = scene
         return sceneView
     }
     
     func updateUIView(_ uiView: SCNView, context: Context) {
+        uiView.scene?.rootNode.childNode(withName: "duct", recursively: false)?.removeFromParentNode()
+        uiView.scene?.rootNode.childNode(withName: "camera", recursively: false)?.removeFromParentNode()
         
+        let camera = SCNCamera()
+        camera.fieldOfView = 90
+        let camNode = SCNNode()
+        camNode.worldPosition = SCNVector3(0.0, 0.0, max(self.aL.duct.b3D["ftr"]!.x,self.aL.duct.b3D["ftr"]!.z) * 4)
+        camNode.name = "camera"
+        camNode.camera = camera
+        uiView.scene?.rootNode.addChildNode(camNode)
+        
+        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original)
+        geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
+        geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
+        
+        let node = SCNNode(geometry: geometry)
+        node.name = "duct"
+        node.castsShadow = true
+        
+        uiView.scene?.rootNode.addChildNode(camNode)
+        uiView.scene?.rootNode.addChildNode(node)
     }
 }

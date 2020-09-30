@@ -73,6 +73,56 @@ struct Ductwork {
         self.measurements = m
     }
     
+    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, _ isAR: Bool = false) -> SCNGeometry {
+        var outer = self.v3D
+        for (k, v) in outer {
+            outer[k] = v.translate(x: -(oX / 2))
+            outer[k] = v.translate(z: -(oY / 2))
+        }
+        if isAR {
+            for (k, v) in outer {
+                outer[k] = v.multiplyScalar(0.0254)
+            }
+        }
+        
+        let z: CGFloat = 0.0
+        let s: CGFloat = 0.1 * (isAR ? 0.0254 : 1.0)
+        let inner = [
+            "ftl": outer["ftl"]! - V3(-s, z,  s),
+            "ftr": outer["ftr"]! - V3( s, z,  s),
+            "fbl": outer["fbl"]! - V3(-s, z,  s),
+            "fbr": outer["fbr"]! - V3( s, z,  s),
+            "btl": outer["btl"]! - V3(-s, z, -s),
+            "btr": outer["btr"]! - V3( s, z, -s),
+            "bbl": outer["bbl"]! - V3(-s, z, -s),
+            "bbr": outer["bbr"]! - V3( s, z, -s)
+        ]
+        let quads: [Quad] = [
+            // outer
+            Quad(outer["ftr"]!, outer["ftl"]!, outer["fbl"]!, outer["fbr"]!), // front
+            Quad(outer["btl"]!, outer["btr"]!, outer["bbr"]!, outer["bbl"]!), // back
+            Quad(outer["ftl"]!, outer["btl"]!, outer["bbl"]!, outer["fbl"]!), // left
+            Quad(outer["btr"]!, outer["ftr"]!, outer["fbr"]!, outer["bbr"]!), // right
+            // inner
+            Quad(inner["ftl"]!, inner["ftr"]!, inner["fbr"]!, inner["fbl"]!), // front
+            Quad(inner["btr"]!, inner["btl"]!, inner["bbl"]!, inner["bbr"]!), // back
+            Quad(inner["btl"]!, inner["ftl"]!, inner["fbl"]!, inner["bbl"]!), // left
+            Quad(inner["ftr"]!, inner["btr"]!, inner["bbr"]!, inner["fbr"]!), // right
+            // top edges
+            Quad(inner["ftr"]!, inner["ftl"]!, outer["ftl"]!, outer["ftr"]!), // front
+            Quad(outer["btr"]!, outer["btl"]!, inner["btl"]!, inner["btr"]!), // back
+            Quad(inner["btl"]!, outer["btl"]!, outer["ftl"]!, inner["ftl"]!), // left
+            Quad(outer["btr"]!, inner["btr"]!, inner["ftr"]!, outer["ftr"]!), // right
+            // bottom edges
+            Quad(outer["fbr"]!, outer["fbl"]!, inner["fbl"]!, inner["fbr"]!), // front
+            Quad(inner["bbr"]!, inner["bbl"]!, outer["bbl"]!, outer["bbr"]!), // back
+            Quad(inner["fbl"]!, outer["fbl"]!, outer["bbl"]!, inner["bbl"]!), // left
+            Quad(outer["fbr"]!, inner["fbr"]!, inner["bbr"]!, outer["bbr"]!), // right
+        ]
+        
+        return GeometryBuilder(quads: quads).getGeometry()
+    }
+    
     static func getMeasurements(_ v: [String: V3], _ rT: F) -> [String: Fraction] {
         var lol: [String: Fraction] = [:]
         lol["front-bounding-l"] = v["fbl"]!.zero(.x).distance(v["ftl"]!.zero(.x)).toFraction(rT)
@@ -199,256 +249,3 @@ struct Ductwork {
         return lol
     }
 }
-
-struct Duct {
-    typealias F = CGFloat
-    enum DuctLines {
-        case top
-        case bottom
-        case left
-        case right
-    }
-    enum BoundingLines {
-        case topLeft
-        case topRight
-        case bottomLeft
-        case bottomRight
-        case left
-    }
-    
-    public var vertices: [String: Vector3] = [
-        "fbl": Vector3(),
-        "ftl": Vector3(),
-        "fbr": Vector3(),
-        "ftr": Vector3(),
-        "bbl": Vector3(),
-        "bbr": Vector3(),
-        "btl": Vector3(),
-        "btr": Vector3()
-    ]
-    
-    init (_ l: F, _ w: F, _ d: F, _ oX: F, _ oY: F, _ tW: F, _ tD: F) {
-        let fbl = Vector3(-(w / 2), -(l / 2), d / 2)
-        let fbr = Vector3(w / 2, -(l / 2), d / 2)
-        let ftl = Vector3(-(tW / 2) + oX, l / 2, tD / 2 + oY)
-        let ftr = Vector3(tW / 2 + oX, l / 2, tD / 2 + oY)
-        let bbl = Vector3(fbl.x, fbl.y, -fbl.z)
-        let bbr = Vector3(fbr.x, fbr.y, -fbr.z)
-        let btl = Vector3(ftl.x, ftl.y, -ftl.z + (oY * 2))
-        let btr = Vector3(ftr.x, ftr.y, -ftl.z + (oY * 2))
-        self.vertices["fbl"] = fbl
-        self.vertices["fbr"] = fbr
-        self.vertices["ftl"] = ftl
-        self.vertices["ftr"] = ftr
-        self.vertices["bbl"] = bbl
-        self.vertices["bbr"] = bbr
-        self.vertices["btl"] = btl
-        self.vertices["btr"] = btr
-    }
-    
-    mutating func update(_ l: F, _ w: F, _ d: F, _ oX: F, _ oY: F, _ tW: F, _ tD: F) {
-        let fbl = Vector3(-(w / 2), -(l / 2), d / 2)
-        let fbr = Vector3(w / 2, -(l / 2), d / 2)
-        let ftl = Vector3(-(tW / 2) + oX, l / 2, tD / 2 + oY)
-        let ftr = Vector3(tW / 2 + oX, l / 2, tD / 2 + oY)
-        let bbl = Vector3(fbl.x, fbl.y, -fbl.z)
-        let bbr = Vector3(fbr.x, fbr.y, -fbr.z)
-        let btl = Vector3(ftl.x, ftl.y, -ftl.z + (oY * 2))
-        let btr = Vector3(ftr.x, ftr.y, -ftl.z + (oY * 2))
-        self.vertices["fbl"] = fbl
-        self.vertices["fbr"] = fbr
-        self.vertices["ftl"] = ftl
-        self.vertices["ftr"] = ftr
-        self.vertices["bbl"] = bbl
-        self.vertices["bbr"] = bbr
-        self.vertices["btl"] = btl
-        self.vertices["btr"] = btr
-    }
-    
-    func textElements(side: DuctSides, roundTo: F) -> [String: Text] {
-        let bounding = self.boundingLen(side: side)
-        let l = Fraction(self[side, .left], roundTo: roundTo)
-        let r = Fraction(self[side, .right], roundTo: roundTo)
-        let t = Fraction(self[side, .top], roundTo: roundTo)
-        let b = Fraction(self[side, .bottom], roundTo: roundTo)
-        let lF = Fraction(bounding[.left]!, roundTo: roundTo)
-        let tLF = Fraction(bounding[.topLeft]!, roundTo: roundTo)
-        let tRF = Fraction(bounding[.topRight]!, roundTo: roundTo)
-        let bLF = Fraction(bounding[.bottomLeft]!, roundTo: roundTo)
-        let bRF = Fraction(bounding[.bottomRight]!, roundTo: roundTo)
-        func reduce(_ v: Fraction) -> String {
-            if v.original == 0.0 { return "" }
-            else { return "\(v.whole)\(v.parts.d > 1 ? v.text(" n/d") : "")\"" }
-        }
-        print(lF.original)
-        print(tLF.original)
-        print(tRF.original)
-        print(bLF.original)
-        print(bRF.original)
-        return [
-            "bounding left": Text(reduce(lF)),
-            "bounding topLeft": Text(reduce(tLF)),
-            "bounding topRight": Text(reduce(tRF)),
-            "bounding bottomLeft": Text(reduce(bLF)),
-            "bounding bottomRight": Text(reduce(bRF)),
-            "left": Text(reduce(l)),
-            "right": Text(reduce(r)),
-            "top": Text(reduce(t)),
-            "bottom": Text(reduce(b)),
-        ]
-    }
-    
-    func bounding(side: DuctSides) -> [String: Vector2] {
-        let p: [String: Vector2] = self[side]
-        var s: [String] = []
-        s.append(contentsOf: ["bl", "br", "tl", "tr"])
-        var maxX: F = 0.0
-        var minX: F = 0.0
-        var maxY: F = 0.0
-        var minY: F = 0.0
-        for i in 0...s.count - 1 {
-            if p["\(s[i])"]!.x < minX { minX = p["\(s[i])"]!.x }
-            if p["\(s[i])"]!.x > maxX { maxX = p["\(s[i])"]!.x }
-            if p["\(s[i])"]!.y < minY { minY = p["\(s[i])"]!.y }
-            if p["\(s[i])"]!.y > maxY { maxY = p["\(s[i])"]!.y }
-        }
-        return [
-            "bl": Vector2(minX, minY),
-            "br": Vector2(maxX, minY),
-            "tr": Vector2(maxX, maxY),
-            "tl": Vector2(minX, maxY)
-        ]
-    }
-    
-    func boundingLen(side: DuctSides) -> [BoundingLines: F] {
-        var bd: [String: Vector3] = [:]
-        var d: [String: Vector3] = [:]
-        var s: [String] = []
-        let axis = side == .left || side == .right ? "z" : "x"
-        switch side {
-            case .front: s.append("f")
-            case .back: s.append("b")
-            case .left: s.append("l")
-            case .right: s.append("r")
-        }
-        s.append(contentsOf: ["bl", "br", "tl", "tr"])
-        var minX = F(0.0)
-        var maxX = F(0.0)
-        for i in 1...s.count - 1 {
-            bd[s[i]] = self[s[0] + s[i]]
-            d[s[i]] = bd[s[i]]
-            if bd[s[i]]![axis] < minX { minX = bd[s[i]]![axis] }
-            if bd[s[i]]![axis] > maxX { maxX = bd[s[i]]![axis] }
-        }
-        let corners = side == .left || side == .back ? ["tr", "tl", "br", "bl"] : ["tl", "tr", "bl", "br"]
-        bd["bl"]![axis] = minX
-        bd["tl"]![axis] = minX
-        bd["br"]![axis] = maxX
-        bd["tr"]![axis] = maxX
-        return [
-            .left: bd["bl"]!.distance(to: bd["tl"]!),
-            .topLeft: bd["\(corners[0])"]!.distance(to: d["\(corners[0])"]!),
-            .topRight: bd["\(corners[1])"]!.distance(to: d["\(corners[1])"]!),
-            .bottomLeft: bd["\(corners[2])"]!.distance(to: d["\(corners[2])"]!),
-            .bottomRight: bd["\(corners[3])"]!.distance(to: d["\(corners[3])"]!)
-        ]
-        
-    }
-    
-    subscript(side: DuctSides, line: DuctLines) -> F {
-        var s: [String] = []
-        switch side {
-            case .front:
-                s.append("f")
-            case .back:
-                s.append("b")
-            case .left:
-                s.append("l")
-            case .right:
-                s.append("r")
-        }
-        switch line {
-            case .top: s.append(contentsOf: ["tl", "tr"])
-            case .bottom: s.append(contentsOf: ["bl", "br"])
-            case .left: s.append(contentsOf: [
-                side == .left || side == .right ? "tr" : "tl",
-                side == .left || side == .right ? "br" : "bl"])
-            case .right: s.append(contentsOf: [
-                side == .left || side == .right ? "tl" : "tr",
-                side == .left || side == .right ? "bl" : "br"])
-        }
-        return self["\(s[0])\(s[1])"].distance(to: self["\(s[0])\(s[2])"])
-    }
-    
-    subscript(vertex: String) -> Vector3 {
-        switch vertex {
-            case "fbl": return self.vertices["fbl"]!
-            case "fbr": return self.vertices["fbr"]!
-            case "ftl": return self.vertices["ftl"]!
-            case "ftr": return self.vertices["ftr"]!
-            case "bbl": return self.vertices["bbl"]!
-            case "bbr": return self.vertices["bbr"]!
-            case "btl": return self.vertices["btl"]!
-            case "btr": return self.vertices["btr"]!
-            case "lbl": return self.vertices["bbl"]!
-            case "lbr": return self.vertices["fbl"]!
-            case "ltl": return self.vertices["btl"]!
-            case "ltr": return self.vertices["ftl"]!
-            case "rbl": return self.vertices["fbr"]!
-            case "rbr": return self.vertices["bbr"]!
-            case "rtl": return self.vertices["ftr"]!
-            case "rtr": return self.vertices["btr"]!
-            default: return Vector3()
-        }
-    }
-    
-    subscript(side: DuctSides) -> [String: Vector2] {
-        switch side {
-            case .front:
-                return [
-                    "bl": Vector2(self["fbl"], .xy).flipY(),
-                    "br": Vector2(self["fbr"], .xy).flipY(),
-                    "tl": Vector2(self["ftl"], .xy).flipY(),
-                    "tr": Vector2(self["ftr"], .xy).flipY()
-                ]
-            case .left:
-                return [
-                    "bl": Vector2(self["lbl"], .zy).flipY(),
-                    "br": Vector2(self["lbr"], .zy).flipY(),
-                    "tl": Vector2(self["ltl"], .zy).flipY(),
-                    "tr": Vector2(self["ltr"], .zy).flipY()
-                ]
-            case .right:
-                var bl = self["rbl"]
-                var br = self["rbr"]
-                var tl = self["rtl"]
-                var tr = self["rtr"]
-                bl.translate(z: -(bl.z * 2))
-                br.translate(z: -(br.z * 2))
-                tl.translate(z: -(tl.z * 2))
-                tr.translate(z: -(tr.z * 2))
-                return [
-                    "bl": Vector2(bl, .zy).flipY(),
-                    "br": Vector2(br, .zy).flipY(),
-                    "tl": Vector2(tl, .zy).flipY(),
-                    "tr": Vector2(tr, .zy).flipY()
-                ]
-            case .back:
-                var bl = self["bbl"]
-                var br = self["bbr"]
-                var tl = self["btl"]
-                var tr = self["btr"]
-                bl.translate(x: -(bl.x * 2))
-                br.translate(x: -(br.x * 2))
-                tl.translate(x: -(tl.x * 2))
-                tr.translate(x: -(tr.x * 2))
-                return [
-                    "bl": Vector2(bl, .xy).flipY(),
-                    "br": Vector2(br, .xy).flipY(),
-                    "tl": Vector2(tl, .xy).flipY(),
-                    "tr": Vector2(tr, .xy).flipY()
-                ]
-        }
-    }
-}
-

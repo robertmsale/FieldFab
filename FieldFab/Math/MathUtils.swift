@@ -29,7 +29,7 @@ class MathUtils {
     }
     
     static func extractND(_ x: CGFloat) -> ND {
-        switch x.truncatingRemainder(dividingBy: 1.0) {
+        switch abs(x).truncatingRemainder(dividingBy: 1.0) {
         case 0.03125: return ND(1, 32)
         case 0.0625: return ND(1, 16)
         case 0.09375: return ND(3, 32)

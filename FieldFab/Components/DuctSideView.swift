@@ -148,26 +148,9 @@ struct DuctSideView: View {
     
     func genTextZStack(_ d: [String: CGPoint], _ b: [String: CGPoint], _ t: [String: Text]) -> some View {
         let tS: CGFloat = 10.0
-        let el = d["tl"]!.x < d["bl"]!.x ? "t" : "b"
         let bl = d["tl"]!.x < d["bl"]!.x ? "b" : "t"
         let br = d["tr"]!.x < d["br"]!.x ? "t" : "b"
         let lol = /*self.side == .back ? "r" :*/ "l"
-        let loli = /*lol == "r" ? "l" :*/ "r"
-        let lPreAng: CGFloat = b["t\(lol)"]! == d["t\(lol)"]! ? 90 : -90
-        let rPreAng: CGFloat = b["t\(loli)"]! == d["t\(loli)"]! ? -90 : 90
-        var lAngCalc: CGFloat = 0.0
-        var rAngCalc: CGFloat = 0.0
-        
-        if d["t\(lol)"]! == b["t\(lol)"]! { lAngCalc = cos(d["t\(lol)"]!.x.distance(to: d["b\(lol)"]!.x) / d["t\(lol)"]!.distance(d["b\(lol)"]!)) }
-        else { lAngCalc = cos(d["t\(lol)"]!.y.distance(to: d["b\(lol)"]!.y) / d["t\(lol)"]!.distance(d["b\(lol)"]!)) }
-        
-        if d["t\(loli)"]! == b["t\(loli)"]! { rAngCalc = cos(d["t\(loli)"]!.x.distance(to: d["b\(loli)"]!.x) / d["t\(loli)"]!.distance(d["b\(loli)"]!)) }
-        else { rAngCalc = cos(d["t\(loli)"]!.y.distance(to: d["b\(loli)"]!.y) / d["t\(loli)"]!.distance(d["b\(loli)"]!)) }
-        
-        let dD: CGFloat = 15
-        
-        let lAng = Double(b["t\(lol)"] == d["t\(lol)"] ? lPreAng - lAngCalc.toDeg() + dD - 2 : lPreAng + lAngCalc.toDeg() - dD)
-        let rAng = Double(b["t\(loli)"] == d["t\(loli)"] ? rPreAng + rAngCalc.toDeg() - dD + 2 : rPreAng - rAngCalc.toDeg() + dD)
         return ZStack {
             t["bounding-l"]!
                 .rotationEffect(Angle(degrees: 90))
@@ -182,20 +165,20 @@ struct DuctSideView: View {
             }
             if d["\(bl)l"]!.x != b["\(bl)l"]!.x {
                 t["duct-l"]!
-                    .rotationEffect(Angle(degrees: lAng))
+                    .rotationEffect(Angle(degrees: 90))
                     //                .rotationEffect(Angle(degrees: lAng))
                     .position(
-                        d["tl"]!
-                            .translate(x: d["tl"]!.x.distance(to: d["bl"]!.x) / 2 + 15)
+                        (d["tl"]!.x < d["bl"]!.x ? CGPoint(x: d["bl"]!.x, y: d["tl"]!.y) : d["tl"]!)
+                            .translate(x: 15)
                             .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2))
             }
             if d["\(br)r"]!.x != b["\(br)r"]!.x {
                 t["duct-r"]!
-                    .rotationEffect(Angle(degrees: rAng))
+                    .rotationEffect(Angle(degrees: 90))
                     //                .rotationEffect(Angle(degrees: rAng))
                     .position(
-                        d["tr"]!
-                            .translate(x: d["tr"]!.x.distance(to: d["br"]!.x) / 2 - 15)
+                        (d["tr"]!.x < d["br"]!.x ? d["tr"]! : CGPoint(x: d["br"]!.x, y: d["tr"]!.y))
+                            .translate(x: -15)
                             .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2))
             }
             t["duct-t"]!
@@ -233,7 +216,15 @@ struct DuctSideView: View {
             .fill(ImagePaint(image: Image("sheetmetal")))
             .position(self.shapePos)
             .gesture(DragGesture().onChanged({v in
-                self.shapePos = v.location
+                if
+                    v.location.x < 15.0 ||
+                    v.location.x > self.g.size.width - 15 ||
+                    v.location.y < 15.0 ||
+                    v.location.y > self.g.size.height - 15 {
+                    return
+                } else {
+                    self.shapePos = v.location
+                }
             }))
             .gesture(MagnificationGesture().onChanged({v in
                 self.shapeScale = v

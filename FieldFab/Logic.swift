@@ -8,7 +8,6 @@
 
 import Combine
 import SwiftUI
-import Guitar
 
 enum AppLogicField {
     case width
@@ -20,7 +19,6 @@ enum AppLogicField {
     case tDepth
     case isTransition
 }
-
 
 class AppLogic : ObservableObject {
     @Published var width: Fraction {
@@ -71,9 +69,7 @@ class AppLogic : ObservableObject {
         UserDefaults.standard.set(self.roundTo, forKey: "roundTo")
         self.duct.updateMeasurements(self.roundTo)
         } }
-    @Published var increments: CGFloat { didSet {
-        UserDefaults.standard.set(self.increments, forKey: "increments")
-        } }
+    @Published var increments: FractionStepAmount
     @Published var duct: Ductwork
     
     func updateDuct() {
@@ -133,7 +129,7 @@ struct WD {
     var tD: CGFloat
     var iT: Bool
     var rT: CGFloat
-    var i: CGFloat
+    var i: FractionStepAmount
     
     init() {
         self.w = UserDefaults.standard.object(forKey: "width") as? CGFloat ?? 16.0
@@ -145,6 +141,6 @@ struct WD {
         self.tD = UserDefaults.standard.object(forKey: "tDepth") as? CGFloat ?? 21.0
         self.iT = UserDefaults.standard.object(forKey: "isTransition") as? Bool ?? true
         self.rT = UserDefaults.standard.object(forKey: "roundTo") as? CGFloat ?? 0.0625
-        self.i = UserDefaults.standard.object(forKey: "increments") as? CGFloat ?? 0.0625
+        self.i = FractionStepAmount.quarter
     }
 }

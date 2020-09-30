@@ -3,29 +3,25 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		EE29E40C2505794D007F4036 /* 2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40B2505794D007F4036 /* 2D.swift */; };
 		EE29E40E25057CF1007F4036 /* DuctSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40D25057CF1007F4036 /* DuctSideView.swift */; };
-		EE29E4142505EFFB007F4036 /* Carbon in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = EE29E4132505EFFB007F4036 /* Carbon */; };
 		EE29E4192505F6CA007F4036 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4182505F6CA007F4036 /* ControlView.swift */; };
 		EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41A2506A02F007F4036 /* Vector3.swift */; };
 		EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41C2506BF4F007F4036 /* Spherical.swift */; };
 		EE29E4202506BFCB007F4036 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41F2506BFCB007F4036 /* Fraction.swift */; };
 		EE29E4222506C401007F4036 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4212506C401007F4036 /* MathUtils.swift */; };
 		EE29E4242506CBAD007F4036 /* Quaternion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4232506CBAD007F4036 /* Quaternion.swift */; };
-		EE29E4262506CDE6007F4036 /* Quad.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4252506CDE6007F4036 /* Quad.swift */; };
 		EE29E429250BAC9D007F4036 /* 3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E428250BAC9D007F4036 /* 3D.swift */; };
 		EE29E432250D2D16007F4036 /* main.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = EE29E431250D2D16007F4036 /* main.scnassets */; };
-		EE590E8625045D4200ECCDF1 /* Guitar in Frameworks */ = {isa = PBXBuildFile; productRef = EE590E8525045D4200ECCDF1 /* Guitar */; };
 		EE97879525179A46003DE8E0 /* Duct2DParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97879425179A46003DE8E0 /* Duct2DParts.swift */; };
 		EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9787992517AC9F003DE8E0 /* Duct.swift */; };
 		EEAB9AD4251A24860000A548 /* Duct 2D Tile Set.sks in Resources */ = {isa = PBXBuildFile; fileRef = EEAB9AD2251A24860000A548 /* Duct 2D Tile Set.sks */; };
 		EEAB9AD5251A24860000A548 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEAB9AD3251A24860000A548 /* Assets.xcassets */; };
 		EEAF2B332516581F0074A516 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF2B322516581F0074A516 /* Line.swift */; };
-		EEAF2B3825165E650074A516 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF2B3725165E650074A516 /* Polygon.swift */; };
 		EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3525034396003389AB /* AppDelegate.swift */; };
 		EEC7CF3825034396003389AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3725034396003389AB /* ContentView.swift */; };
 		EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3925034396003389AB /* Experience.rcproject */; };
@@ -37,6 +33,19 @@
 		EEC7CF6625034800003389AB /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF6525034800003389AB /* Controls.swift */; };
 		EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF6C2503E70A003389AB /* Logic.swift */; };
 		EED1CE10251E775D003E6F08 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE0F251E775D003E6F08 /* GridView.swift */; };
+		EED1CE5B251F8BF0003E6F08 /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */; };
+		EED1CE60251F8C26003E6F08 /* Quad.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5F251F8C26003E6F08 /* Quad.swift */; };
+		EED1CE65251F8D99003E6F08 /* SCNUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE64251F8D99003E6F08 /* SCNUtils.swift */; };
+		EED1CE6D251FC876003E6F08 /* CameraHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */; };
+		EED1CE75251FE98E003E6F08 /* FStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE74251FE98E003E6F08 /* FStepper.swift */; };
+		EED1CE7A251FF091003E6F08 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE79251FF091003E6F08 /* FText.swift */; };
+		EED1CE7F251FFCB9003E6F08 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */; };
+		EEDCE8362520D9C200F21FAF /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE8352520D9C200F21FAF /* Colors.swift */; };
+		EEDCE83E2520E93C00F21FAF /* ARContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE83D2520E93C00F21FAF /* ARContentView.swift */; };
+		EEDCE8432520E97A00F21FAF /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */; };
+		EEDCE8482520F99900F21FAF /* PlaneAdjustmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */; };
+		EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */; };
+		EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE85125213C7600F21FAF /* RotateButtonView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +74,6 @@
 		EE29E41F2506BFCB007F4036 /* Fraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
 		EE29E4212506C401007F4036 /* MathUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtils.swift; sourceTree = "<group>"; };
 		EE29E4232506CBAD007F4036 /* Quaternion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quaternion.swift; sourceTree = "<group>"; };
-		EE29E4252506CDE6007F4036 /* Quad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quad.swift; sourceTree = "<group>"; };
 		EE29E42725086B01007F4036 /* FieldFab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FieldFab.entitlements; sourceTree = "<group>"; };
 		EE29E428250BAC9D007F4036 /* 3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3D.swift; sourceTree = "<group>"; };
 		EE29E431250D2D16007F4036 /* main.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = main.scnassets; sourceTree = "<group>"; };
@@ -74,7 +82,6 @@
 		EEAB9AD2251A24860000A548 /* Duct 2D Tile Set.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "Duct 2D Tile Set.sks"; sourceTree = "<group>"; };
 		EEAB9AD3251A24860000A548 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEAF2B322516581F0074A516 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
-		EEAF2B3725165E650074A516 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3525034396003389AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EEC7CF3725034396003389AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -92,6 +99,19 @@
 		EEC7CF6525034800003389AB /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
 		EEC7CF6C2503E70A003389AB /* Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 		EED1CE0F251E775D003E6F08 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryBuilder.swift; sourceTree = "<group>"; };
+		EED1CE5F251F8C26003E6F08 /* Quad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quad.swift; sourceTree = "<group>"; };
+		EED1CE64251F8D99003E6F08 /* SCNUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNUtils.swift; sourceTree = "<group>"; };
+		EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelpView.swift; sourceTree = "<group>"; };
+		EED1CE74251FE98E003E6F08 /* FStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FStepper.swift; sourceTree = "<group>"; };
+		EED1CE79251FF091003E6F08 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
+		EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		EEDCE8352520D9C200F21FAF /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		EEDCE83D2520E93C00F21FAF /* ARContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARContentView.swift; sourceTree = "<group>"; };
+		EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
+		EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneAdjustmentView.swift; sourceTree = "<group>"; };
+		EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetViewButton.swift; sourceTree = "<group>"; };
+		EEDCE85125213C7600F21FAF /* RotateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateButtonView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,8 +119,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE590E8625045D4200ECCDF1 /* Guitar in Frameworks */,
-				EE29E4142505EFFB007F4036 /* Carbon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +147,15 @@
 				EE97879425179A46003DE8E0 /* Duct2DParts.swift */,
 				EE9787992517AC9F003DE8E0 /* Duct.swift */,
 				EED1CE0F251E775D003E6F08 /* GridView.swift */,
+				EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */,
+				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
+				EED1CE79251FF091003E6F08 /* FText.swift */,
+				EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */,
+				EEDCE83D2520E93C00F21FAF /* ARContentView.swift */,
+				EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */,
+				EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */,
+				EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */,
+				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -141,9 +168,10 @@
 				EE29E41F2506BFCB007F4036 /* Fraction.swift */,
 				EE29E4212506C401007F4036 /* MathUtils.swift */,
 				EE29E4232506CBAD007F4036 /* Quaternion.swift */,
-				EE29E4252506CDE6007F4036 /* Quad.swift */,
 				EEAF2B322516581F0074A516 /* Line.swift */,
-				EEAF2B3725165E650074A516 /* Polygon.swift */,
+				EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */,
+				EED1CE5F251F8C26003E6F08 /* Quad.swift */,
+				EED1CE64251F8D99003E6F08 /* SCNUtils.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -172,6 +200,7 @@
 		EEC7CF3425034396003389AB /* FieldFab */ = {
 			isa = PBXGroup;
 			children = (
+				EEDCE8342520D9AD00F21FAF /* Globals */,
 				EEAB9AD2251A24860000A548 /* Duct 2D Tile Set.sks */,
 				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
 				EEC7CF3525034396003389AB /* AppDelegate.swift */,
@@ -226,6 +255,14 @@
 			path = Routes;
 			sourceTree = "<group>";
 		};
+		EEDCE8342520D9AD00F21FAF /* Globals */ = {
+			isa = PBXGroup;
+			children = (
+				EEDCE8352520D9C200F21FAF /* Colors.swift */,
+			);
+			path = Globals;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -243,8 +280,6 @@
 			);
 			name = FieldFab;
 			packageProductDependencies = (
-				EE590E8525045D4200ECCDF1 /* Guitar */,
-				EE29E4132505EFFB007F4036 /* Carbon */,
 			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
@@ -319,8 +354,6 @@
 			);
 			mainGroup = EEC7CF2925034396003389AB;
 			packageReferences = (
-				EE590E8425045D4200ECCDF1 /* XCRemoteSwiftPackageReference "Guitar" */,
-				EE29E4122505EFFB007F4036 /* XCRemoteSwiftPackageReference "Carbon" */,
 			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
@@ -371,21 +404,32 @@
 				EE97879525179A46003DE8E0 /* Duct2DParts.swift in Sources */,
 				EEC7CF3825034396003389AB /* ContentView.swift in Sources */,
 				EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */,
+				EED1CE5B251F8BF0003E6F08 /* GeometryBuilder.swift in Sources */,
 				EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */,
 				EE29E40E25057CF1007F4036 /* DuctSideView.swift in Sources */,
 				EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */,
 				EE29E40C2505794D007F4036 /* 2D.swift in Sources */,
 				EE29E4192505F6CA007F4036 /* ControlView.swift in Sources */,
+				EED1CE7A251FF091003E6F08 /* FText.swift in Sources */,
 				EEC7CF6625034800003389AB /* Controls.swift in Sources */,
+				EED1CE6D251FC876003E6F08 /* CameraHelpView.swift in Sources */,
+				EEDCE83E2520E93C00F21FAF /* ARContentView.swift in Sources */,
 				EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */,
 				EE29E429250BAC9D007F4036 /* 3D.swift in Sources */,
-				EE29E4262506CDE6007F4036 /* Quad.swift in Sources */,
 				EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */,
+				EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */,
+				EED1CE7F251FFCB9003E6F08 /* HeaderView.swift in Sources */,
+				EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */,
+				EEDCE8432520E97A00F21FAF /* ARViewContainer.swift in Sources */,
+				EEDCE8482520F99900F21FAF /* PlaneAdjustmentView.swift in Sources */,
 				EE29E4222506C401007F4036 /* MathUtils.swift in Sources */,
 				EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */,
-				EEAF2B3825165E650074A516 /* Polygon.swift in Sources */,
+				EED1CE60251F8C26003E6F08 /* Quad.swift in Sources */,
+				EED1CE65251F8D99003E6F08 /* SCNUtils.swift in Sources */,
 				EEAF2B332516581F0074A516 /* Line.swift in Sources */,
+				EEDCE8362520D9C200F21FAF /* Colors.swift in Sources */,
 				EE29E4242506CBAD007F4036 /* Quaternion.swift in Sources */,
+				EED1CE75251FE98E003E6F08 /* FStepper.swift in Sources */,
 				EED1CE10251E775D003E6F08 /* GridView.swift in Sources */,
 				EE29E4202506BFCB007F4036 /* Fraction.swift in Sources */,
 			);
@@ -720,38 +764,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		EE29E4122505EFFB007F4036 /* XCRemoteSwiftPackageReference "Carbon" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ra1028/Carbon";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		EE590E8425045D4200ECCDF1 /* XCRemoteSwiftPackageReference "Guitar" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ArtSabintsev/Guitar";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		EE29E4132505EFFB007F4036 /* Carbon */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EE29E4122505EFFB007F4036 /* XCRemoteSwiftPackageReference "Carbon" */;
-			productName = Carbon;
-		};
-		EE590E8525045D4200ECCDF1 /* Guitar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EE590E8425045D4200ECCDF1 /* XCRemoteSwiftPackageReference "Guitar" */;
-			productName = Guitar;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EEC7CF2A25034396003389AB /* Project object */;
 }

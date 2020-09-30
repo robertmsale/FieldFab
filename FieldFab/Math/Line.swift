@@ -7,33 +7,32 @@
 //
 
 import SwiftUI
+import SceneKit
 
 struct Line2 {
-    public var start: Vector2
-    public var end: Vector2
+    public var start: CGPoint
+    public var end: CGPoint
     public var len: CGFloat {
-        get { self.start.distance(to: self.end) }
+        get { self.start.distance(self.end) }
     }
-    public var center: Vector2 {
+    public var center: CGPoint {
         get {
-            var c = self.start + self.end
-            c.addScalar(scale: 0.5)
-            return c
+            let c = self.start + self.end
+            return c.addScalar(scale: 0.5)
         }
     }
 }
 
 struct Line3 {
-    public var start: Vector3
-    public var end: Vector3
+    public var start: SCNVector3
+    public var end: SCNVector3
     public var len: CGFloat {
-        get { self.start.distance(to: self.end) }
+        get { self.start.distance(self.end) }
     }
-    public var center: Vector3 {
+    public var center: SCNVector3 {
         get {
-            var c = self.start + self.end
-            c.addScalar(scale: 0.5)
-            return c
+            let c = self.start + self.end
+            return c.addScalar(scale: 0.5)
         }
     }
 }

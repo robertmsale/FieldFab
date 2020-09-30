@@ -11,90 +11,62 @@ import SpriteKit
 
 struct TwoD: View {
     @EnvironmentObject var aL: AppLogic
-    let sides = ["Left", "Front", "Right", "Back"]
-    @State var sidesIndex = 1
     @State var roundToIndex = 1
+    @ObservedObject var id: Indexer = Indexer(["Front", "Right", "Back", "Left"])
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         return GeometryReader { g in
-            ZStack(content: {
-                VStack() {
-                    HStack() {
-                        Button(action: {
-                            if self.sidesIndex == 0 { self.sidesIndex = 3 }
-                            else { self.sidesIndex -= 1 }
-                        }, label: {
-                            Image(systemName: "arrow.left")
-                        })
-                        Spacer()
-                        Text(self.sides[self.sidesIndex])
-                        Spacer()
-                        Button(action: {
-                            if self.sidesIndex == 3 { self.sidesIndex = 0 }
-                            else { self.sidesIndex += 1 }
-                        }, label: {
-                            Image(systemName: "arrow.right")
-                        })
+            NextPrevHeaderView(self.id.current, action: self.id.mutate, opt: [.overlay, .fillTopEdge]) {
+                ZStack(content: {
+                    switch self.id.current {
+                        case "Front": DuctSideView(g: g, side: .front).zIndex(-1)
+                        case "Left": DuctSideView(g: g, side: .left).zIndex(-1)
+                        case "Right": DuctSideView(g: g, side: .right).zIndex(-1)
+                        default: DuctSideView(g: g, side: .back).zIndex(-1)
                     }
-                    .padding(.all)
-                    .font(.title)
-                    .background(/*@START_MENU_TOKEN@*/Color(hue: 1.0, saturation: 0.013, brightness: 0.84, opacity: 0.209)/*@END_MENU_TOKEN@*/)
-//                    .zIndex(2.0)
-                    Spacer()
                     HStack() {
                         Text("Round To")
-                        Spacer()
-                        HStack(alignment: .center) {
-                            Button(action: {
-                                if self.roundToIndex == 0 { self.roundToIndex = 4 }
-                                else { self.roundToIndex -= 1}
-                                self.aL.roundTo = MathUtils.INCREMENTS[self.roundToIndex]
-                            }, label: {
-                                Image(systemName: "minus")
-                            })
-                            Spacer()
-                            Text(MathUtils.INCREMENTSTRINGS[self.roundToIndex])
-                            Spacer()
-                            Button(action: {
-                                if self.roundToIndex == 4 { self.roundToIndex = 0 }
-                                else { self.roundToIndex += 1}
-                                self.aL.roundTo = MathUtils.INCREMENTS[self.roundToIndex]
-                            }, label: {
-                                Image(systemName: "plus")
-                            })
+                        ZStack {
+                            HStack(alignment: .center) {
+                                
+                                Rectangle()
+                                    .fill(Color(.sRGB, white: 0, opacity: 0.01))
+                                    .background(Image(systemName: "arrow.left"))
+                                    .foregroundColor(.blue)
+                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                    .onTapGesture(count: 1, perform: {
+                                        if self.roundToIndex == 0 { self.roundToIndex = 4 }
+                                        else { self.roundToIndex -= 1}
+                                        self.aL.roundTo = MathUtils.INCREMENTS[self.roundToIndex]
+                                    })
+                                Spacer()
+                                Text(MathUtils.INCREMENTSTRINGS[self.roundToIndex])
+                                Spacer()
+                                
+                                Rectangle()
+                                    .fill(Color(.sRGB, white: 0, opacity: 0.01))
+                                    .background(Image(systemName: "arrow.right"))
+                                    .foregroundColor(.blue)
+                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                    .onTapGesture(count: 1, perform: {
+                                        if self.roundToIndex == 4 { self.roundToIndex = 0 }
+                                        else { self.roundToIndex += 1}
+                                        self.aL.roundTo = MathUtils.INCREMENTS[self.roundToIndex]
+                                    })
+                            }
+                            .padding(.horizontal, 16.0)
+                            .padding(.vertical, 8.0)
+                            .zIndex(20.0)
+                            VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light))
+                                .cornerRadius(15)
                         }
-                        .padding(.horizontal, 16.0)
-                        .padding(.vertical, 8.0)
-                        .background(/*@START_MENU_TOKEN@*/Color(hue: 1.0, saturation: 0.016, brightness: 0.51, opacity: 0.112)/*@END_MENU_TOKEN@*/)
-                        .frame(width: 180)
+                        .frame(width: g.size.width / 2, height: 32)
                     }
-                    .padding(.vertical, 8.0)
-                    .padding(.horizontal, 16.0)
-                    .onAppear() {
-                        switch self.aL.roundTo {
-                            case 0.03125:
-                            self.roundToIndex = 0
-                            case 0.0625:
-                            self.roundToIndex = 1
-                            case 0.125:
-                            self.roundToIndex = 2
-                            case 0.25:
-                            self.roundToIndex = 3
-                            case 0.5:
-                            self.roundToIndex = 4
-                            default:
-                            self.roundToIndex = 0
-                        }
-                    }
-                }
-                switch self.sides[self.sidesIndex] {
-                    case "Front": DuctSideView(g: g, side: .front)
-                    case "Left": DuctSideView(g: g, side: .left)
-                    case "Right": DuctSideView(g: g, side: .right)
-                    default: DuctSideView(g: g, side: .back)
-                }
-//                    .zIndex(-1.0)
-            })
+                    .position(x: g.size.width / 2, y: g.size.height)
+                })
+                
+            }
         }
     }
 }
@@ -124,6 +96,6 @@ struct TwoD: View {
 
 struct TwoD_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(AppLogic())
+        ContentView().environmentObject(AppLogic()).environment(\.colorScheme, .dark)
     }
 }

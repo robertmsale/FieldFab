@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Guitar
 
 struct ND {
     var n: Int
@@ -19,12 +18,13 @@ struct ND {
     }
 }
 
-enum FractionRound: Int {
-    case thirtySecond = 0
-    case sixteenth = 1
-    case eighth = 2
-    case quarter = 3
-    case half = 4
+enum FractionStepAmount: CGFloat {
+    case whole = 1.0
+    case half = 0.5
+    case quarter = 0.25
+    case eighth = 0.125
+    case sixteenth = 0.0625
+    case thirtysecond = 0.03125
 }
 
 struct Fraction {
@@ -35,7 +35,6 @@ struct Fraction {
         get {
             return MathUtils.extractND(self.original)
         }
-        set (v) {}
     }
     var whole: Int {
         get {
@@ -48,7 +47,18 @@ struct Fraction {
             self._original = MathUtils.roundNumber(v, roundTo: self.roundTo)
         }
     }
-    var isFraction: Bool { get { return self.parts.d > 1} }
+    var isFraction: Bool { get { return self.parts.d > 1 } }
+    
+    enum MutDir {
+        case increment
+        case decrement
+    }
+    
+    
+    mutating func mutate(_ amt: FractionStepAmount, _ direction: MutDir) {
+        if direction == .increment { self._original += amt.rawValue }
+        else { self._original -= amt.rawValue }
+    }
     
     func text(_ fmt: String = "n/d") -> String {
         var stringBuilder = ""

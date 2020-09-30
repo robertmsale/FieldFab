@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SceneKit
 
 struct Spherical {
     var radius: CGFloat
@@ -23,10 +24,10 @@ struct Spherical {
         self.phi = CGFloat(p)
         self.theta = CGFloat(t)
     }
-    init(_ v: Vector3) {
-        self.radius = v.x
-        self.phi = v.y
-        self.theta = v.z
+    init(_ v: SCNVector3) {
+        self.radius = v.x.cg
+        self.phi = v.y.cg
+        self.theta = v.z.cg
     }
     
     mutating func makeSafe() {
@@ -35,7 +36,10 @@ struct Spherical {
     }
     
     mutating func set<T: BinaryFloatingPoint> (x: T, y: T, z: T) {
-        let radius = CGFloat(sqrt(x * x + y * y + z * z))
+        let xx = x * x
+        let yy = y * y
+        let zz = z * z
+        let radius = CGFloat(sqrt(xx + yy + zz))
         var theta: CGFloat = 0.0
         var phi: CGFloat = 0.0
         
@@ -48,7 +52,7 @@ struct Spherical {
         self.phi = phi
     }
     
-    mutating func set(_ v: Vector3) {
-        self.set(x: v.x, y: v.y, z: v.z)
+    mutating func set(_ v: SCNVector3) {
+        self.set(x: v.x.cg, y: v.y.cg, z: v.z.cg)
     }
 }
