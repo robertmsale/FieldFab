@@ -37,6 +37,7 @@ struct LoadDuctworkView: View {
     }
 }
 
+#if DEBUG
 struct LoadDuctworkView_Previews: PreviewProvider {
     static var previews: some View {
         let db = DB([
@@ -62,3 +63,4 @@ struct LoadDuctworkView_Previews: PreviewProvider {
         }
     }
 }
+#endif

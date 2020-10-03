@@ -82,6 +82,7 @@ struct ScenePreview: UIViewRepresentable {
     }
 }
 
+#if DEBUG
 struct ScenePreview_Previews: PreviewProvider {
     static var previews: some View {
         StatefulPreviewWrapper(true) {
@@ -100,3 +101,4 @@ struct ScenePreview_Previews: PreviewProvider {
         }
     }
 }
+#endif

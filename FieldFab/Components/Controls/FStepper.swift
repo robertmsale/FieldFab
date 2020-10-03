@@ -84,6 +84,7 @@ struct FStepper: View {
     }
 }
 
+#if DEBUG
 struct FStepper_Previews: PreviewProvider {
     static var previews: some View {
         
@@ -94,3 +95,4 @@ struct FStepper_Previews: PreviewProvider {
         }.frame(width: 300, height: 64, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
     }
 }
+#endif

@@ -79,6 +79,7 @@ struct AboutView: View {
     }
 }
 
+#if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
         StatefulPreviewWrapper(true) {
@@ -86,3 +87,4 @@ struct AboutView_Previews: PreviewProvider {
         }
     }
 }
+#endif

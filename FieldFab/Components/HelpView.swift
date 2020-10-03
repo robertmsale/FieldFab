@@ -30,6 +30,7 @@ struct HelpView: View {
     }
 }
 
+#if DEBUG
 struct HelpView_Previews: PreviewProvider {
     static var previews: some View {
         StatefulPreviewWrapper(true) {
@@ -37,3 +38,4 @@ struct HelpView_Previews: PreviewProvider {
         }
     }
 }
+#endif
