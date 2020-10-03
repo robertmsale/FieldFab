@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Dimensions" representedClassName="Dimensions" syncable="YES" codeGenerationType="class">
+        <attribute name="createdOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="depth" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="length" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="offsetX" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="offsetY" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tDepth" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tWidth" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="width" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="tabid" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tabs" inverseName="tabid" inverseEntity="Tabs"/>
+    </entity>
+    <entity name="Tabs" representedClassName="Tabs" syncable="YES" codeGenerationType="class">
+        <attribute name="bBottom" optional="YES" attributeType="String"/>
+        <attribute name="bLeft" optional="YES" attributeType="String"/>
+        <attribute name="bRight" optional="YES" attributeType="String"/>
+        <attribute name="bTop" optional="YES" attributeType="String"/>
+        <attribute name="fBottom" optional="YES" attributeType="String"/>
+        <attribute name="fLeft" optional="YES" attributeType="String"/>
+        <attribute name="fRight" optional="YES" attributeType="String"/>
+        <attribute name="fTop" optional="YES" attributeType="String"/>
+        <attribute name="lBottom" optional="YES" attributeType="String"/>
+        <attribute name="lLeft" optional="YES" attributeType="String"/>
+        <attribute name="lRight" optional="YES" attributeType="String"/>
+        <attribute name="lTop" optional="YES" attributeType="String"/>
+        <attribute name="rBottom" optional="YES" attributeType="String"/>
+        <attribute name="rLeft" optional="YES" attributeType="String"/>
+        <attribute name="rRight" optional="YES" attributeType="String"/>
+        <attribute name="rTop" optional="YES" attributeType="String"/>
+        <relationship name="tabid" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Dimensions" inverseName="tabid" inverseEntity="Dimensions"/>
+    </entity>
+    <elements>
+        <element name="Dimensions" positionX="-63" positionY="-18" width="128" height="208"/>
+        <element name="Tabs" positionX="-54" positionY="54" width="128" height="298"/>
+    </elements>
+</model>

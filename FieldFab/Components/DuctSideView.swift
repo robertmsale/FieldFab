@@ -146,6 +146,37 @@ struct DuctSideView: View {
         ]
     }
     
+    enum SideTextAng { case left, right }
+    
+    func getAng(_ s: SideTextAng, _ d: [String: CGPoint], _ b: [String: CGPoint]) -> Double {
+        switch s {
+            case .left:
+                if b["tl"]! == d["tl"]! {
+                    let o = b["bl"]!.distance(d["bl"]!)
+                    let a = b["bl"]!.distance(b["tl"]!)
+                    if Int(o) == Int(a) { return Double(45) }
+                    return Double(90 - tan(o < a ? o / a : a / o).toDeg())
+                } else {
+                    let o = b["tl"]!.distance(d["tl"]!)
+                    let a = b["tl"]!.distance(b["bl"]!)
+                    if Int(o) == Int(a) { return Double(135) }
+                    return Double(90 + tan(o < a ? o / a : a / o).toDeg())
+                }
+            case .right:
+                if b["tr"]! == d["tr"]! {
+                    let o = b["br"]!.distance(d["br"]!)
+                    let a = b["br"]!.distance(b["tr"]!)
+                    if Int(o) == Int(a) { return Double(-45) }
+                    return Double(-90 + tan(o < a ? o / a : a / o).toDeg())
+                } else {
+                    let o = b["tr"]!.distance(d["tr"]!)
+                    let a = b["tr"]!.distance(b["br"]!)
+                    if Int(o) == Int(a) { return Double(-135) }
+                    return Double(-90 - tan(o < a ? o / a : a / o).toDeg())
+                }
+        }
+    }
+    
     func genTextZStack(_ d: [String: CGPoint], _ b: [String: CGPoint], _ t: [String: Text]) -> some View {
         let tS: CGFloat = 10.0
         let bl = d["tl"]!.x < d["bl"]!.x ? "b" : "t"
@@ -165,19 +196,19 @@ struct DuctSideView: View {
             }
             if d["\(bl)l"]!.x != b["\(bl)l"]!.x {
                 t["duct-l"]!
-                    .rotationEffect(Angle(degrees: 90))
+                    .rotationEffect(Angle(degrees: getAng(.left, d, b)))
                     //                .rotationEffect(Angle(degrees: lAng))
                     .position(
-                        (d["tl"]!.x < d["bl"]!.x ? CGPoint(x: d["bl"]!.x, y: d["tl"]!.y) : d["tl"]!)
+                        CGPoint(x: b["bl"]!.x + abs(d["bl"]!.x.distance(to: d["tl"]!.x)) / 2, y: d["tl"]!.y)
                             .translate(x: 15)
                             .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2))
             }
             if d["\(br)r"]!.x != b["\(br)r"]!.x {
                 t["duct-r"]!
-                    .rotationEffect(Angle(degrees: 90))
+                    .rotationEffect(Angle(degrees: getAng(.right, d, b)))
                     //                .rotationEffect(Angle(degrees: rAng))
                     .position(
-                        (d["tr"]!.x < d["br"]!.x ? d["tr"]! : CGPoint(x: d["br"]!.x, y: d["tr"]!.y))
+                        CGPoint(x: b["br"]!.x - abs(d["br"]!.x.distance(to: d["tr"]!.x)) / 2, y: d["tr"]!.y)
                             .translate(x: -15)
                             .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2))
             }

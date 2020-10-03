@@ -45,7 +45,7 @@ struct Spherical {
         
         if radius != 0.0 {
             theta = atan2( CGFloat(x), CGFloat(z) )
-            phi = acos( MathUtils.clamp(value: CGFloat(y) / radius, min: -1, max: 1 ) )
+            phi = acos( Math.clamp(value: CGFloat(y) / radius, min: -1, max: 1 ) )
         }
         self.radius = radius
         self.theta = theta

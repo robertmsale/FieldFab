@@ -33,7 +33,7 @@ struct Fraction {
     var roundTo: CGFloat
     var parts: ND {
         get {
-            return MathUtils.extractND(self.original)
+            return Math.extractND(self.original)
         }
     }
     var whole: Int {
@@ -44,7 +44,7 @@ struct Fraction {
     var original: CGFloat {
         get { return self._original }
         set (v) {
-            self._original = MathUtils.roundNumber(v, roundTo: self.roundTo)
+            self._original = Math.roundNumber(v, roundTo: self.roundTo)
         }
     }
     var isFraction: Bool { get { return self.parts.d > 1 } }
@@ -77,7 +77,7 @@ struct Fraction {
     }
     
     init<T: BinaryFloatingPoint>(_ x: T, roundTo: CGFloat = 0.03125) {
-        let rounded = MathUtils.roundNumber(CGFloat(x), roundTo: roundTo)
+        let rounded = Math.roundNumber(CGFloat(x), roundTo: roundTo)
         self._original = rounded
         self.roundTo = roundTo
     }

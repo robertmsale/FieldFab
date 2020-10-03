@@ -59,19 +59,19 @@ struct ARContentView: View {
                     .edgesIgnoringSafeArea(.top)
                     .onTapGesture(count: 1, perform: {
                         if self.arData.ductRotation.z == 0 {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(z: MathUtils.degToRad(degrees: 270))
+                            self.arData.ductRotation = self.arData.ductRotation.translate(z: Math.degToRad(degrees: 270))
                         } else {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(z: MathUtils.degToRad(degrees: -90))
+                            self.arData.ductRotation = self.arData.ductRotation.translate(z: Math.degToRad(degrees: -90))
                         }
                     })
                 RotateButtonView(side: .bottom)
                     .frame(width: 70, height: 70, alignment: .center)
                     .position(x: g.size.width / 2, y: g.size.height - 130)
                     .onTapGesture(count: 1, perform: {
-                        if self.arData.ductRotation.z == MathUtils.degToRad(degrees: 270).f {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(z: MathUtils.degToRad(degrees: -270))
+                        if self.arData.ductRotation.z == Math.degToRad(degrees: 270).f {
+                            self.arData.ductRotation = self.arData.ductRotation.translate(z: Math.degToRad(degrees: -270))
                         } else {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(z: MathUtils.degToRad(degrees: 90))
+                            self.arData.ductRotation = self.arData.ductRotation.translate(z: Math.degToRad(degrees: 90))
                         }
                     })
                 RotateButtonView(side: .left)
@@ -79,19 +79,19 @@ struct ARContentView: View {
                     .position(x: 40, y: g.size.height / 2)
                     .onTapGesture(count: 1, perform: {
                         if self.arData.ductRotation.x == 0 {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(x: MathUtils.degToRad(degrees: 270))
+                            self.arData.ductRotation = self.arData.ductRotation.translate(x: Math.degToRad(degrees: 270))
                         } else {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(x: MathUtils.degToRad(degrees: -90))
+                            self.arData.ductRotation = self.arData.ductRotation.translate(x: Math.degToRad(degrees: -90))
                         }
                     })
                 RotateButtonView(side: .right)
                     .frame(width: 70, height: 70, alignment: .center)
                     .position(x: g.size.width - 40, y: g.size.height / 2)
                     .onTapGesture(count: 1, perform: {
-                        if self.arData.ductRotation.x == MathUtils.degToRad(degrees: 270).f {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(x: MathUtils.degToRad(degrees: -270))
+                        if self.arData.ductRotation.x == Math.degToRad(degrees: 270).f {
+                            self.arData.ductRotation = self.arData.ductRotation.translate(x: Math.degToRad(degrees: -270))
                         } else {
-                            self.arData.ductRotation = self.arData.ductRotation.translate(x: MathUtils.degToRad(degrees: 90))
+                            self.arData.ductRotation = self.arData.ductRotation.translate(x: Math.degToRad(degrees: 90))
                         }
                     })
                     

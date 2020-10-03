@@ -79,11 +79,15 @@ struct SceneView: UIViewRepresentable {
         let camera = SCNCamera()
         camera.fieldOfView = 90
         let camNode = SCNNode()
+        var maxXZ: Float = 0.0
+        for (_, v) in self.aL.duct.v3D {
+            maxXZ = maxXZ < max(v.x, v.z) ? max(v.x, v.z) : maxXZ
+        }
         camNode.worldPosition = SCNVector3(0.0, 0.0, max(self.aL.duct.b3D["ftr"]!.x,self.aL.duct.b3D["ftr"]!.z) * 4)
         camNode.name = "camera"
         camNode.camera = camera
         
-        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original)
+        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, tabs: Tabs())
         geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
         geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
         
@@ -106,12 +110,15 @@ struct SceneView: UIViewRepresentable {
         let camera = SCNCamera()
         camera.fieldOfView = 90
         let camNode = SCNNode()
-        camNode.worldPosition = SCNVector3(0.0, 0.0, max(self.aL.duct.b3D["ftr"]!.x,self.aL.duct.b3D["ftr"]!.z) * 4)
+        var maxXZ: Float = 0.0
+        for (_, v) in self.aL.duct.v3D {
+            maxXZ = maxXZ < max(v.x, v.z) ? max(v.x, v.z) : maxXZ
+        }
+        camNode.worldPosition = SCNVector3(0.0, 0.0, maxXZ * 4)
         camNode.name = "camera"
         camNode.camera = camera
-        uiView.scene?.rootNode.addChildNode(camNode)
         
-        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original)
+        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, tabs: Tabs())
         geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
         geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
         

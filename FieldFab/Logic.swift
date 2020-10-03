@@ -71,6 +71,10 @@ class AppLogic : ObservableObject {
         } }
     @Published var increments: FractionStepAmount
     @Published var duct: Ductwork
+    @Published var sessionName: String { didSet {
+        UserDefaults.standard.set(self.sessionName, forKey: "sessionName")
+    }}
+//    @Published var tabs: TabsDB
     
     func updateDuct() {
         self.duct.update(
@@ -109,6 +113,7 @@ class AppLogic : ObservableObject {
         self.isTransition = d.iT
         self.increments = d.i
         self.duct = Ductwork(d.l, d.w, d.d, d.oX, d.oY, d.tW, d.tD, d.rT)
+        self.sessionName = d.s
     }
     
     func toggleTransition() {
@@ -130,6 +135,7 @@ struct WD {
     var iT: Bool
     var rT: CGFloat
     var i: FractionStepAmount
+    var s: String
     
     init() {
         self.w = UserDefaults.standard.object(forKey: "width") as? CGFloat ?? 16.0
@@ -142,5 +148,6 @@ struct WD {
         self.iT = UserDefaults.standard.object(forKey: "isTransition") as? Bool ?? true
         self.rT = UserDefaults.standard.object(forKey: "roundTo") as? CGFloat ?? 0.0625
         self.i = FractionStepAmount.quarter
+        self.s = UserDefaults.standard.object(forKey: "sessionName") as? String ?? "Ductwork"
     }
 }

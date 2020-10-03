@@ -16,12 +16,14 @@ final class Indexer<T>: ObservableObject {
     
     @Published var data: [T]
     @Published var index: Int
+//    @Published var previous: Int
     
     var current: T {
         get { data[index] }
     }
     
     func mutate(_ dir: IndexerMutate) {
+//        self.previous = self.index
         switch dir {
             case .inc:
                 if self.index == self.data.count - 1 { self.index = 0 }
@@ -104,7 +106,7 @@ struct TopBarView<Content: View, TBC: View>: View {
                     .background(AppColors.ControlBG[colorScheme])
                     self.content
                 }
-                .edgesIgnoringSafeArea(self.options.contains(.fillTopEdge) ? .top : .bottom)
+                .edgesIgnoringSafeArea(self.options.contains(.fillTopEdge) ? .top : .trailing)
             )
         }
     }
@@ -176,7 +178,7 @@ struct NextPrevHeaderView<Content: View>: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        let id = Indexer(["Front", "Right", "Back", "Left"])
+//        let id = Indexer(["Front", "Right", "Back", "Left"])
         return HeaderView("Ayyyy", opt: [.fillTopEdge]) {
             Text("Ayyyyy")
         }.environment(\.colorScheme, .light)

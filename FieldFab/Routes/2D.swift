@@ -20,10 +20,18 @@ struct TwoD: View {
             NextPrevHeaderView(self.id.current, action: self.id.mutate, opt: [.overlay, .fillTopEdge]) {
                 ZStack(content: {
                     switch self.id.current {
-                        case "Front": DuctSideView(g: g, side: .front).zIndex(-1)
-                        case "Left": DuctSideView(g: g, side: .left).zIndex(-1)
-                        case "Right": DuctSideView(g: g, side: .right).zIndex(-1)
-                        default: DuctSideView(g: g, side: .back).zIndex(-1)
+                        case "Front":
+                            DuctSideView(g: g, side: .front)
+                                .zIndex(-1)
+                        case "Left":
+                            DuctSideView(g: g, side: .left)
+                                .zIndex(-1)
+                        case "Right":
+                            DuctSideView(g: g, side: .right)
+                                .zIndex(-1)
+                        default:
+                            DuctSideView(g: g, side: .back)
+                                .zIndex(-1)
                     }
                     HStack() {
                         Text("Round To")
@@ -38,10 +46,10 @@ struct TwoD: View {
                                     .onTapGesture(count: 1, perform: {
                                         if self.roundToIndex == 0 { self.roundToIndex = 4 }
                                         else { self.roundToIndex -= 1}
-                                        self.aL.roundTo = MathUtils.INCREMENTS[self.roundToIndex]
+                                        self.aL.roundTo = Math.INCREMENTS[self.roundToIndex]
                                     })
                                 Spacer()
-                                Text(MathUtils.INCREMENTSTRINGS[self.roundToIndex])
+                                Text(Math.INCREMENTSTRINGS[self.roundToIndex])
                                 Spacer()
                                 
                                 Rectangle()
@@ -52,7 +60,7 @@ struct TwoD: View {
                                     .onTapGesture(count: 1, perform: {
                                         if self.roundToIndex == 4 { self.roundToIndex = 0 }
                                         else { self.roundToIndex += 1}
-                                        self.aL.roundTo = MathUtils.INCREMENTS[self.roundToIndex]
+                                        self.aL.roundTo = Math.INCREMENTS[self.roundToIndex]
                                     })
                             }
                             .padding(.horizontal, 16.0)

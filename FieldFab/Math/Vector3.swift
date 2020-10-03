@@ -72,7 +72,7 @@ extension CGPoint {
     
     func rotate(degrees: CGFloat, origin: CGPoint = CGPoint(x: 0.0, y: 0.0)) -> CGPoint {
         let n = self.translate(origin.flip())
-        let theta = MathUtils.degToRad(degrees: degrees)
+        let theta = Math.degToRad(degrees: degrees)
         let cs = cos(theta)
         let sn = sin(theta)
         let dx = n.x * cs - n.y * sn
@@ -82,11 +82,11 @@ extension CGPoint {
     func rotate(_ d: CGFloat, origin: CGPoint = CGPoint(x: 0.0, y: 0.0)) -> CGPoint { self.rotate(degrees: d, origin: origin) }
     
     func floor() -> CGPoint {
-        return CGPoint(x: MathUtils.floor(self.x), y: MathUtils.floor(self.y))
+        return CGPoint(x: Math.floor(self.x), y: Math.floor(self.y))
     }
     
     func ceil() -> CGPoint {
-        return CGPoint(x: MathUtils.ceil(self.x), y: MathUtils.ceil(self.y))
+        return CGPoint(x: Math.ceil(self.x), y: Math.ceil(self.y))
     }
     
     func zero(_ axis: Axis) -> CGPoint {
@@ -140,11 +140,11 @@ extension SCNVector3 {
     func translate(_ v: SCNVector3) -> SCNVector3 { SCNVector3(self.x + v.x, self.y + v.y, self.z + v.z) }
     
     func floor() -> SCNVector3 {
-        SCNVector3(MathUtils.floor(self.x), MathUtils.floor(self.y), MathUtils.floor(self.z))
+        SCNVector3(Math.floor(self.x), Math.floor(self.y), Math.floor(self.z))
     }
     
     func ceil() -> SCNVector3 {
-        SCNVector3(MathUtils.ceil(self.x), MathUtils.ceil(self.y), MathUtils.ceil(self.z))
+        SCNVector3(Math.ceil(self.x), Math.ceil(self.y), Math.ceil(self.z))
     }
     
     func zero(_ axis: Axis...) -> SCNVector3 {

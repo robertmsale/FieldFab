@@ -25,7 +25,7 @@ struct ARViewContainer: UIViewRepresentable {
         configuration.planeDetection = .horizontal
         arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         
-        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, true)
+        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, true, tabs: Tabs())
         geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
         geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
         geometry.firstMaterial?.lightingModel = .physicallyBased
@@ -55,7 +55,7 @@ struct ARViewContainer: UIViewRepresentable {
             self.reset = false
         }
         
-        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, true)
+        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, true, tabs: Tabs())
         geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
         geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
         geometry.firstMaterial?.lightingModel = .physicallyBased

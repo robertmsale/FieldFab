@@ -73,7 +73,55 @@ struct Ductwork {
         self.measurements = m
     }
     
-    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, _ isAR: Bool = false) -> SCNGeometry {
+    static func getQuadGeoFromFile(_ d: Dimensions) -> SCNGeometry {
+        let outer = Ductwork.getVertices3D(
+            d.length,
+            d.width,
+            d.depth,
+            d.offsetX,
+            d.offsetY,
+            d.tWidth,
+            d.tDepth)
+        let z: CGFloat = 0.0
+        let s: CGFloat = 0.1
+        let inner = [
+            "ftl": outer["ftl"]! - V3(-s, z,  s),
+            "ftr": outer["ftr"]! - V3( s, z,  s),
+            "fbl": outer["fbl"]! - V3(-s, z,  s),
+            "fbr": outer["fbr"]! - V3( s, z,  s),
+            "btl": outer["btl"]! - V3(-s, z, -s),
+            "btr": outer["btr"]! - V3( s, z, -s),
+            "bbl": outer["bbl"]! - V3(-s, z, -s),
+            "bbr": outer["bbr"]! - V3( s, z, -s)
+        ]
+        let quads: [Quad] = [
+            // outer
+            Quad(outer["ftr"]!, outer["ftl"]!, outer["fbl"]!, outer["fbr"]!), // front
+            Quad(outer["btl"]!, outer["btr"]!, outer["bbr"]!, outer["bbl"]!), // back
+            Quad(outer["ftl"]!, outer["btl"]!, outer["bbl"]!, outer["fbl"]!), // left
+            Quad(outer["btr"]!, outer["ftr"]!, outer["fbr"]!, outer["bbr"]!), // right
+            // inner
+            Quad(inner["ftl"]!, inner["ftr"]!, inner["fbr"]!, inner["fbl"]!), // front
+            Quad(inner["btr"]!, inner["btl"]!, inner["bbl"]!, inner["bbr"]!), // back
+            Quad(inner["btl"]!, inner["ftl"]!, inner["fbl"]!, inner["bbl"]!), // left
+            Quad(inner["ftr"]!, inner["btr"]!, inner["bbr"]!, inner["fbr"]!), // right
+            // top edges
+            Quad(inner["ftr"]!, inner["ftl"]!, outer["ftl"]!, outer["ftr"]!), // front
+            Quad(outer["btr"]!, outer["btl"]!, inner["btl"]!, inner["btr"]!), // back
+            Quad(inner["btl"]!, outer["btl"]!, outer["ftl"]!, inner["ftl"]!), // left
+            Quad(outer["btr"]!, inner["btr"]!, inner["ftr"]!, outer["ftr"]!), // right
+            // bottom edges
+            Quad(outer["fbr"]!, outer["fbl"]!, inner["fbl"]!, inner["fbr"]!), // front
+            Quad(inner["bbr"]!, inner["bbl"]!, outer["bbl"]!, outer["bbr"]!), // back
+            Quad(inner["fbl"]!, outer["fbl"]!, outer["bbl"]!, inner["bbl"]!), // left
+            Quad(outer["fbr"]!, inner["fbr"]!, inner["bbr"]!, outer["bbr"]!), // right
+        ]
+        
+        return GeometryBuilder(quads: quads).getGeometry()
+    }
+    
+    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, _ isAR: Bool = false, tabs: Tabs) -> SCNGeometry {
+        
         var outer = self.v3D
         for (k, v) in outer {
             outer[k] = v.translate(x: -(oX / 2))

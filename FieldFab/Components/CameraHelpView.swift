@@ -13,17 +13,12 @@ struct CameraHelpView: View {
     @Binding var visible: Bool
     @Environment(\.colorScheme) var colorScheme
     
-    func rImage(_ i: String) -> some View {
-        let image = Image(i)
+    func rImage(_ i: String) -> Image {
         if colorScheme == .dark {
-            return AnyView{
-                image.colorInvert()
-            }
+            return Image("\(i) Inverted")
         }
         else {
-            return AnyView{
-                image
-            }
+            return Image(i)
         }
     }
     

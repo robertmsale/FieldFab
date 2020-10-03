@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,14 +13,12 @@
 		EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41A2506A02F007F4036 /* Vector3.swift */; };
 		EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41C2506BF4F007F4036 /* Spherical.swift */; };
 		EE29E4202506BFCB007F4036 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41F2506BFCB007F4036 /* Fraction.swift */; };
-		EE29E4222506C401007F4036 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4212506C401007F4036 /* MathUtils.swift */; };
+		EE29E4222506C401007F4036 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4212506C401007F4036 /* Math.swift */; };
 		EE29E4242506CBAD007F4036 /* Quaternion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4232506CBAD007F4036 /* Quaternion.swift */; };
 		EE29E429250BAC9D007F4036 /* 3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E428250BAC9D007F4036 /* 3D.swift */; };
 		EE29E432250D2D16007F4036 /* main.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = EE29E431250D2D16007F4036 /* main.scnassets */; };
-		EE97879525179A46003DE8E0 /* Duct2DParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97879425179A46003DE8E0 /* Duct2DParts.swift */; };
+		EE8FB6B125254E10008FA41B /* LoadDuctworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */; };
 		EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9787992517AC9F003DE8E0 /* Duct.swift */; };
-		EEAB9AD4251A24860000A548 /* Duct 2D Tile Set.sks in Resources */ = {isa = PBXBuildFile; fileRef = EEAB9AD2251A24860000A548 /* Duct 2D Tile Set.sks */; };
-		EEAB9AD5251A24860000A548 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEAB9AD3251A24860000A548 /* Assets.xcassets */; };
 		EEAF2B332516581F0074A516 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF2B322516581F0074A516 /* Line.swift */; };
 		EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3525034396003389AB /* AppDelegate.swift */; };
 		EEC7CF3825034396003389AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3725034396003389AB /* ContentView.swift */; };
@@ -46,6 +44,18 @@
 		EEDCE8482520F99900F21FAF /* PlaneAdjustmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */; };
 		EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */; };
 		EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE85125213C7600F21FAF /* RotateButtonView.swift */; };
+		EEFB98D82526CCA8008AB605 /* Disk in Frameworks */ = {isa = PBXBuildFile; productRef = EEFB98D72526CCA8008AB605 /* Disk */; };
+		EEFB98DE2526CF1D008AB605 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98DD2526CF1D008AB605 /* Dimensions.swift */; };
+		EEFB98E32526D061008AB605 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98E22526D061008AB605 /* Tabs.swift */; };
+		EEFB98E82526D296008AB605 /* DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98E72526D296008AB605 /* DB.swift */; };
+		EEFB98F22526E2C6008AB605 /* Fractional.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98F12526E2C6008AB605 /* Fractional.swift */; };
+		EEFB98FA2526EA00008AB605 /* UnitText.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98F92526EA00008AB605 /* UnitText.swift */; };
+		EEFB98FF25275CFA008AB605 /* StatefulPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98FE25275CFA008AB605 /* StatefulPreviewWrapper.swift */; };
+		EEFB990725276787008AB605 /* LoadDuctworkListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */; };
+		EEFB990C25277BBC008AB605 /* ScenePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB990B25277BBC008AB605 /* ScenePreview.swift */; };
+		EEFB99112527B9EC008AB605 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99102527B9EC008AB605 /* HelpView.swift */; };
+		EEFB99162527BBDB008AB605 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
+		EEFB992F2527DCF0008AB605 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB992E2527DCF0008AB605 /* CarouselView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,15 +82,13 @@
 		EE29E41A2506A02F007F4036 /* Vector3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
 		EE29E41C2506BF4F007F4036 /* Spherical.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spherical.swift; sourceTree = "<group>"; };
 		EE29E41F2506BFCB007F4036 /* Fraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
-		EE29E4212506C401007F4036 /* MathUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtils.swift; sourceTree = "<group>"; };
+		EE29E4212506C401007F4036 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		EE29E4232506CBAD007F4036 /* Quaternion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quaternion.swift; sourceTree = "<group>"; };
 		EE29E42725086B01007F4036 /* FieldFab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FieldFab.entitlements; sourceTree = "<group>"; };
 		EE29E428250BAC9D007F4036 /* 3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3D.swift; sourceTree = "<group>"; };
 		EE29E431250D2D16007F4036 /* main.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = main.scnassets; sourceTree = "<group>"; };
-		EE97879425179A46003DE8E0 /* Duct2DParts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct2DParts.swift; sourceTree = "<group>"; };
+		EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDuctworkView.swift; sourceTree = "<group>"; };
 		EE9787992517AC9F003DE8E0 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
-		EEAB9AD2251A24860000A548 /* Duct 2D Tile Set.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "Duct 2D Tile Set.sks"; sourceTree = "<group>"; };
-		EEAB9AD3251A24860000A548 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEAF2B322516581F0074A516 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3525034396003389AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +120,17 @@
 		EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneAdjustmentView.swift; sourceTree = "<group>"; };
 		EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetViewButton.swift; sourceTree = "<group>"; };
 		EEDCE85125213C7600F21FAF /* RotateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateButtonView.swift; sourceTree = "<group>"; };
+		EEFB98DD2526CF1D008AB605 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
+		EEFB98E22526D061008AB605 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
+		EEFB98E72526D296008AB605 /* DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB.swift; sourceTree = "<group>"; };
+		EEFB98F12526E2C6008AB605 /* Fractional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fractional.swift; sourceTree = "<group>"; };
+		EEFB98F92526EA00008AB605 /* UnitText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitText.swift; sourceTree = "<group>"; };
+		EEFB98FE25275CFA008AB605 /* StatefulPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulPreviewWrapper.swift; sourceTree = "<group>"; };
+		EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDuctworkListItemView.swift; sourceTree = "<group>"; };
+		EEFB990B25277BBC008AB605 /* ScenePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePreview.swift; sourceTree = "<group>"; };
+		EEFB99102527B9EC008AB605 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		EEFB99152527BBDB008AB605 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		EEFB992E2527DCF0008AB605 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEFB98D82526CCA8008AB605 /* Disk in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,18 +164,18 @@
 			children = (
 				EE29E40D25057CF1007F4036 /* DuctSideView.swift */,
 				EE29E4182505F6CA007F4036 /* ControlView.swift */,
-				EE97879425179A46003DE8E0 /* Duct2DParts.swift */,
 				EE9787992517AC9F003DE8E0 /* Duct.swift */,
-				EED1CE0F251E775D003E6F08 /* GridView.swift */,
+				EE8FB6AC252545AE008FA41B /* Controls */,
 				EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */,
-				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
-				EED1CE79251FF091003E6F08 /* FText.swift */,
 				EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */,
 				EEDCE83D2520E93C00F21FAF /* ARContentView.swift */,
 				EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */,
-				EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */,
-				EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */,
-				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
+				EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */,
+				EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */,
+				EEFB990B25277BBC008AB605 /* ScenePreview.swift */,
+				EEFB99102527B9EC008AB605 /* HelpView.swift */,
+				EEFB99152527BBDB008AB605 /* AboutView.swift */,
+				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -166,20 +186,34 @@
 				EE29E41A2506A02F007F4036 /* Vector3.swift */,
 				EE29E41C2506BF4F007F4036 /* Spherical.swift */,
 				EE29E41F2506BFCB007F4036 /* Fraction.swift */,
-				EE29E4212506C401007F4036 /* MathUtils.swift */,
+				EE29E4212506C401007F4036 /* Math.swift */,
 				EE29E4232506CBAD007F4036 /* Quaternion.swift */,
 				EEAF2B322516581F0074A516 /* Line.swift */,
 				EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */,
 				EED1CE5F251F8C26003E6F08 /* Quad.swift */,
 				EED1CE64251F8D99003E6F08 /* SCNUtils.swift */,
+				EEFB98F12526E2C6008AB605 /* Fractional.swift */,
 			);
 			path = Math;
+			sourceTree = "<group>";
+		};
+		EE8FB6AC252545AE008FA41B /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				EED1CE0F251E775D003E6F08 /* GridView.swift */,
+				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
+				EED1CE79251FF091003E6F08 /* FText.swift */,
+				EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */,
+				EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */,
+				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
+				EEFB98F92526EA00008AB605 /* UnitText.swift */,
+			);
+			path = Controls;
 			sourceTree = "<group>";
 		};
 		EEC7CF2925034396003389AB = {
 			isa = PBXGroup;
 			children = (
-				EEAB9AD3251A24860000A548 /* Assets.xcassets */,
 				EEC7CF3425034396003389AB /* FieldFab */,
 				EEC7CF4B25034397003389AB /* FieldFabTests */,
 				EEC7CF5625034397003389AB /* FieldFabUITests */,
@@ -200,8 +234,8 @@
 		EEC7CF3425034396003389AB /* FieldFab */ = {
 			isa = PBXGroup;
 			children = (
+				EEFB98DC2526CEDA008AB605 /* Data Persistence */,
 				EEDCE8342520D9AD00F21FAF /* Globals */,
-				EEAB9AD2251A24860000A548 /* Duct 2D Tile Set.sks */,
 				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
 				EEC7CF3525034396003389AB /* AppDelegate.swift */,
 				EEC7CF3725034396003389AB /* ContentView.swift */,
@@ -223,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				EEC7CF3E25034397003389AB /* Preview Assets.xcassets */,
+				EEFB98FE25275CFA008AB605 /* StatefulPreviewWrapper.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -263,6 +298,16 @@
 			path = Globals;
 			sourceTree = "<group>";
 		};
+		EEFB98DC2526CEDA008AB605 /* Data Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				EEFB98DD2526CF1D008AB605 /* Dimensions.swift */,
+				EEFB98E22526D061008AB605 /* Tabs.swift */,
+				EEFB98E72526D296008AB605 /* DB.swift */,
+			);
+			path = "Data Persistence";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -280,6 +325,7 @@
 			);
 			name = FieldFab;
 			packageProductDependencies = (
+				EEFB98D72526CCA8008AB605 /* Disk */,
 			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
@@ -333,6 +379,7 @@
 				TargetAttributes = {
 					EEC7CF3125034396003389AB = {
 						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1200;
 					};
 					EEC7CF4725034397003389AB = {
 						CreatedOnToolsVersion = 11.6;
@@ -354,6 +401,7 @@
 			);
 			mainGroup = EEC7CF2925034396003389AB;
 			packageReferences = (
+				EEFB98D62526CCA8008AB605 /* XCRemoteSwiftPackageReference "Disk" */,
 			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
@@ -372,9 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE29E432250D2D16007F4036 /* main.scnassets in Resources */,
-				EEAB9AD4251A24860000A548 /* Duct 2D Tile Set.sks in Resources */,
 				EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */,
-				EEAB9AD5251A24860000A548 /* Assets.xcassets in Resources */,
 				EEC7CF3F25034397003389AB /* Preview Assets.xcassets in Resources */,
 				EEC7CF3C25034397003389AB /* Assets.xcassets in Resources */,
 			);
@@ -401,37 +447,48 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE97879525179A46003DE8E0 /* Duct2DParts.swift in Sources */,
+				EEFB990725276787008AB605 /* LoadDuctworkListItemView.swift in Sources */,
 				EEC7CF3825034396003389AB /* ContentView.swift in Sources */,
 				EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */,
 				EED1CE5B251F8BF0003E6F08 /* GeometryBuilder.swift in Sources */,
+				EEFB992F2527DCF0008AB605 /* CarouselView.swift in Sources */,
 				EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */,
+				EEFB98FF25275CFA008AB605 /* StatefulPreviewWrapper.swift in Sources */,
+				EEFB98DE2526CF1D008AB605 /* Dimensions.swift in Sources */,
 				EE29E40E25057CF1007F4036 /* DuctSideView.swift in Sources */,
 				EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */,
 				EE29E40C2505794D007F4036 /* 2D.swift in Sources */,
 				EE29E4192505F6CA007F4036 /* ControlView.swift in Sources */,
 				EED1CE7A251FF091003E6F08 /* FText.swift in Sources */,
+				EEFB98F22526E2C6008AB605 /* Fractional.swift in Sources */,
+				EEFB99112527B9EC008AB605 /* HelpView.swift in Sources */,
 				EEC7CF6625034800003389AB /* Controls.swift in Sources */,
 				EED1CE6D251FC876003E6F08 /* CameraHelpView.swift in Sources */,
 				EEDCE83E2520E93C00F21FAF /* ARContentView.swift in Sources */,
 				EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */,
 				EE29E429250BAC9D007F4036 /* 3D.swift in Sources */,
 				EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */,
+				EEFB99162527BBDB008AB605 /* AboutView.swift in Sources */,
+				EEFB990C25277BBC008AB605 /* ScenePreview.swift in Sources */,
 				EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */,
 				EED1CE7F251FFCB9003E6F08 /* HeaderView.swift in Sources */,
 				EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */,
 				EEDCE8432520E97A00F21FAF /* ARViewContainer.swift in Sources */,
 				EEDCE8482520F99900F21FAF /* PlaneAdjustmentView.swift in Sources */,
-				EE29E4222506C401007F4036 /* MathUtils.swift in Sources */,
+				EE29E4222506C401007F4036 /* Math.swift in Sources */,
 				EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */,
 				EED1CE60251F8C26003E6F08 /* Quad.swift in Sources */,
 				EED1CE65251F8D99003E6F08 /* SCNUtils.swift in Sources */,
 				EEAF2B332516581F0074A516 /* Line.swift in Sources */,
+				EEFB98E32526D061008AB605 /* Tabs.swift in Sources */,
 				EEDCE8362520D9C200F21FAF /* Colors.swift in Sources */,
 				EE29E4242506CBAD007F4036 /* Quaternion.swift in Sources */,
 				EED1CE75251FE98E003E6F08 /* FStepper.swift in Sources */,
 				EED1CE10251E775D003E6F08 /* GridView.swift in Sources */,
 				EE29E4202506BFCB007F4036 /* Fraction.swift in Sources */,
+				EE8FB6B125254E10008FA41B /* LoadDuctworkView.swift in Sources */,
+				EEFB98FA2526EA00008AB605 /* UnitText.swift in Sources */,
+				EEFB98E82526D296008AB605 /* DB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +589,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -588,6 +646,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -600,6 +659,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FieldFab/Preview Content\"";
@@ -613,6 +673,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -622,6 +684,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FieldFab/Preview Content\"";
@@ -635,6 +698,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -764,6 +828,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EEFB98D62526CCA8008AB605 /* XCRemoteSwiftPackageReference "Disk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/saoudrizwan/Disk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EEFB98D72526CCA8008AB605 /* Disk */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEFB98D62526CCA8008AB605 /* XCRemoteSwiftPackageReference "Disk" */;
+			productName = Disk;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EEC7CF2A25034396003389AB /* Project object */;
 }
