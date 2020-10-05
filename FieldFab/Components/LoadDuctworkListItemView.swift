@@ -30,18 +30,8 @@ struct LoadDuctworkListItemView: View {
                 Text(dimensions.name).font(.title)
                 Spacer()
                 Button(action: {
-                    var url = "fieldfab://load?name=\(dimensions.name)&"
-                    url += "length=\(dimensions.length.description)&"
-                    url += "width=\(dimensions.width.description)&"
-                    url += "depth=\(dimensions.depth.description)&"
-                    url += "offsetX=\(dimensions.offsetX.description)&"
-                    url += "offsetY=\(dimensions.offsetY.description)&"
-                    url += "tWidth=\(dimensions.tWidth.description)&"
-                    url += "tDepth=\(dimensions.tDepth.description)&"
-                    url += "isTransition=\(dimensions.isTransition.description)"
-                    guard let data = URL(string: url) else { return }
-                    let av = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-                    UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
+                    self.al.shareSheetContent = [db.getURL(dimensions.id)!]
+                    self.al.shareSheetShown = true
                 }, label: {
                     Image(systemName: "square.and.arrow.up")
                 })

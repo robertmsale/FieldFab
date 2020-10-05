@@ -11,6 +11,7 @@ import ARKit
 import UIKit
 
 struct ContentView : View {
+    @EnvironmentObject var al: AppLogic
     var body: some View {
         TabView {
             TwoD()
@@ -35,7 +36,22 @@ struct ContentView : View {
                 }
         }
         .padding(0)
+        .sheet(isPresented: $al.shareSheetShown, content: {
+            ActivityView(activityItems: al.shareSheetContent!, applicationActivities: nil)
+        })
             // 
+    }
+}
+
+struct ActivityView: UIViewControllerRepresentable {
+    let activityItems: [Any]
+    let applicationActivities: [UIActivity]?
+    
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityView>) -> UIActivityViewController {
+        return UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+    }
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityView>) {
+        
     }
 }
 

@@ -139,6 +139,10 @@ extension SCNVector3 {
     func translate(z: CGFloat) -> SCNVector3 { SCNVector3(self.x, self.y, self.z + Float(z)) }
     func translate(_ v: SCNVector3) -> SCNVector3 { SCNVector3(self.x + v.x, self.y + v.y, self.z + v.z) }
     
+    func set(x: Float) -> SCNVector3 { SCNVector3(x, self.y, self.z) }
+    func set(y: Float) -> SCNVector3 { SCNVector3(self.x, y, self.z) }
+    func set(z: Float) -> SCNVector3 { SCNVector3(self.x, self.y, z) }
+    
     func floor() -> SCNVector3 {
         SCNVector3(Math.floor(self.x), Math.floor(self.y), Math.floor(self.z))
     }

@@ -12,12 +12,13 @@ import UIKit
 
 struct ThreeD: View {
     @State var helpVisible = false
+    @State var sideTextShown = false
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         GeometryReader {g in
             ZStack{
-                SceneView(geo: Binding.constant(g))
+                SceneView(geo: g, textShown: sideTextShown)
                 Button(action: { self.helpVisible = true }, label: {
                     Image(systemName: "questionmark").font(.title)
                 })
@@ -26,6 +27,15 @@ struct ThreeD: View {
                 .cornerRadius(45)
                 .position(CGPoint(x: g.size.width - 32, y: g.size.height - 40))
                 .zIndex(2.0)
+                Button(action: { self.sideTextShown.toggle() }, label: {
+                    Text(sideTextShown ? "Hide\nHelpers" : "Show\nHelpers")
+                        .multilineTextAlignment(.center)
+                        .padding()
+                })
+                .background(AppColors.ControlBG[colorScheme])
+                .cornerRadius(15)
+                .position(CGPoint(x: 62, y: g.size.height - 48))
+                .zIndex(3)
                 if helpVisible {
                     VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)).zIndex(3.0)
                     CameraHelpView(g: g, visible: $helpVisible).zIndex(4.0)
@@ -63,7 +73,8 @@ struct _D_Previews: PreviewProvider {
 }
 
 struct SceneView: UIViewRepresentable {
-    @Binding var geo: GeometryProxy
+    var geo: GeometryProxy
+    var textShown: Bool
     @EnvironmentObject var aL: AppLogic
     typealias V3 = SCNVector3
     
@@ -87,17 +98,15 @@ struct SceneView: UIViewRepresentable {
         camNode.name = "camera"
         camNode.camera = camera
         
-        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, tabs: Tabs())
-        geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
-        geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
-        
-        let node = SCNNode(geometry: geometry)
-        node.name = "duct"
+        let geometryNode = self.aL.duct.getQuadGeometry(
+            self.aL.offsetX.original,
+            self.aL.offsetY.original,
+            options: textShown ? [.sideTextShown] : [],
+            tabs: Tabs())
+        geometryNode.name = "duct"
         
         scene.rootNode.addChildNode(camNode)
-        scene.rootNode.addChildNode(node)
-
-        node.castsShadow = true
+        scene.rootNode.addChildNode(geometryNode)
         
         sceneView.scene = scene
         return sceneView
@@ -118,15 +127,15 @@ struct SceneView: UIViewRepresentable {
         camNode.name = "camera"
         camNode.camera = camera
         
-        let geometry = self.aL.duct.getQuadGeometry(self.aL.offsetX.original, self.aL.offsetY.original, tabs: Tabs())
-        geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
-        geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
-        
-        let node = SCNNode(geometry: geometry)
-        node.name = "duct"
-        node.castsShadow = true
+        let geometryNode = self.aL.duct.getQuadGeometry(
+            self.aL.offsetX.original,
+            self.aL.offsetY.original,
+            options: textShown ? [.sideTextShown] : [],
+            tabs: Tabs())
+        geometryNode.name = "duct"
         
         uiView.scene?.rootNode.addChildNode(camNode)
-        uiView.scene?.rootNode.addChildNode(node)
+        uiView.scene?.rootNode.addChildNode(geometryNode)
+//        uiView.scene?.rootNode.addChildNode()
     }
 }

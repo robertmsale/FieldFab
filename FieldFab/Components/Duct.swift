@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SceneKit
+import UIKit
 
 enum DuctSides {
     case front
@@ -73,7 +74,7 @@ struct Ductwork {
         self.measurements = m
     }
     
-    static func getQuadGeoFromFile(_ d: Dimensions) -> SCNGeometry {
+    static func getQuadGeoFromFile(_ d: Dimensions) -> SCNNode {
         let outer = Ductwork.getVertices3D(
             d.length,
             d.width,
@@ -82,59 +83,30 @@ struct Ductwork {
             d.offsetY,
             d.tWidth,
             d.tDepth)
-        let z: CGFloat = 0.0
-        let s: CGFloat = 0.1
-        let inner = [
-            "ftl": outer["ftl"]! - V3(-s, z,  s),
-            "ftr": outer["ftr"]! - V3( s, z,  s),
-            "fbl": outer["fbl"]! - V3(-s, z,  s),
-            "fbr": outer["fbr"]! - V3( s, z,  s),
-            "btl": outer["btl"]! - V3(-s, z, -s),
-            "btr": outer["btr"]! - V3( s, z, -s),
-            "bbl": outer["bbl"]! - V3(-s, z, -s),
-            "bbr": outer["bbr"]! - V3( s, z, -s)
-        ]
-        let quads: [Quad] = [
-            // outer
-            Quad(outer["ftr"]!, outer["ftl"]!, outer["fbl"]!, outer["fbr"]!), // front
-            Quad(outer["btl"]!, outer["btr"]!, outer["bbr"]!, outer["bbl"]!), // back
-            Quad(outer["ftl"]!, outer["btl"]!, outer["bbl"]!, outer["fbl"]!), // left
-            Quad(outer["btr"]!, outer["ftr"]!, outer["fbr"]!, outer["bbr"]!), // right
-            // inner
-            Quad(inner["ftl"]!, inner["ftr"]!, inner["fbr"]!, inner["fbl"]!), // front
-            Quad(inner["btr"]!, inner["btl"]!, inner["bbl"]!, inner["bbr"]!), // back
-            Quad(inner["btl"]!, inner["ftl"]!, inner["fbl"]!, inner["bbl"]!), // left
-            Quad(inner["ftr"]!, inner["btr"]!, inner["bbr"]!, inner["fbr"]!), // right
-            // top edges
-            Quad(inner["ftr"]!, inner["ftl"]!, outer["ftl"]!, outer["ftr"]!), // front
-            Quad(outer["btr"]!, outer["btl"]!, inner["btl"]!, inner["btr"]!), // back
-            Quad(inner["btl"]!, outer["btl"]!, outer["ftl"]!, inner["ftl"]!), // left
-            Quad(outer["btr"]!, inner["btr"]!, inner["ftr"]!, outer["ftr"]!), // right
-            // bottom edges
-            Quad(outer["fbr"]!, outer["fbl"]!, inner["fbl"]!, inner["fbr"]!), // front
-            Quad(inner["bbr"]!, inner["bbl"]!, outer["bbl"]!, outer["bbr"]!), // back
-            Quad(inner["fbl"]!, outer["fbl"]!, outer["bbl"]!, inner["bbl"]!), // left
-            Quad(outer["fbr"]!, inner["fbr"]!, inner["bbr"]!, outer["bbr"]!), // right
-        ]
+        let newD = Ductwork(d.length, d.width, d.depth, d.offsetX, d.offsetY, d.tWidth, d.tDepth, 0.5)
         
-        return GeometryBuilder(quads: quads).getGeometry()
+        return newD.getQuadGeometry(d.offsetX, d.offsetY, options: [.sideTextShown], tabs: Tabs())
     }
     
-    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, _ isAR: Bool = false, tabs: Tabs) -> SCNGeometry {
-        
+    enum GetGeometryOptions {
+        case isAR, sideTextShown
+    }
+    
+    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, options opt: [GetGeometryOptions] = [], tabs: Tabs) -> SCNNode {
+        let options = Set(opt)
         var outer = self.v3D
         for (k, v) in outer {
             outer[k] = v.translate(x: -(oX / 2))
             outer[k] = v.translate(z: -(oY / 2))
         }
-        if isAR {
+        if options.contains(.isAR) {
             for (k, v) in outer {
                 outer[k] = v.multiplyScalar(0.0254)
             }
         }
         
         let z: CGFloat = 0.0
-        let s: CGFloat = 0.1 * (isAR ? 0.0254 : 1.0)
+        let s: CGFloat = 0.1 * (options.contains(.isAR) ? 0.0254 : 1.0)
         let inner = [
             "ftl": outer["ftl"]! - V3(-s, z,  s),
             "ftr": outer["ftr"]! - V3( s, z,  s),
@@ -168,7 +140,74 @@ struct Ductwork {
             Quad(outer["fbr"]!, inner["fbr"]!, inner["bbr"]!, outer["bbr"]!), // right
         ]
         
-        return GeometryBuilder(quads: quads).getGeometry()
+        
+        
+        let geometry = GeometryBuilder(quads: quads).getGeometry()
+        geometry.firstMaterial?.diffuse.contents = UIImage(named: "metal-diffuse")
+        geometry.firstMaterial?.normal.contents = UIImage(named: "metal-normal")
+        geometry.firstMaterial?.ambientOcclusion.contents = UIImage(named: "metal-ao")
+        geometry.firstMaterial?.metalness.contents = UIImage(named: "metal-metallic")
+        geometry.firstMaterial?.roughness.contents = UIImage(named: "metal-roughness")
+        geometry.firstMaterial?.lightingModel = .physicallyBased
+        
+        let geometryNode = SCNNode(geometry: geometry)
+        
+        if options.contains(.sideTextShown) {
+            let tr: CGFloat = options.contains(.isAR) ? 0.1 * 0.0254 : 0.1
+            let fText = GeometryBuilder(quads: [
+                Quad(
+                    outer["ftr"]!.translate(z: 1 * tr).set(x: 0).translate(x: min(outer["fbr"]!.x, outer["ftr"]!.x).cg),
+                    outer["ftl"]!.translate(z: 1 * tr).set(x: 0).translate(x: max(outer["ftl"]!.x, outer["fbl"]!.x).cg),
+                    outer["fbl"]!.translate(z: 1 * tr).set(x: 0).translate(x: max(outer["ftl"]!.x, outer["fbl"]!.x).cg),
+                    outer["fbr"]!.translate(z: 1 * tr).set(x: 0).translate(x: min(outer["fbr"]!.x, outer["ftr"]!.x).cg))
+                ]).getGeometry()
+            let bText = GeometryBuilder(quads: [
+                Quad(
+                    outer["btl"]!.translate(z: -1 * tr).set(x: 0).translate(x: max(outer["btl"]!.x, outer["bbl"]!.x).cg),
+                    outer["btr"]!.translate(z: -1 * tr).set(x: 0).translate(x: min(outer["bbr"]!.x, outer["btr"]!.x).cg),
+                    outer["bbr"]!.translate(z: -1 * tr).set(x: 0).translate(x: min(outer["bbr"]!.x, outer["btr"]!.x).cg),
+                    outer["bbl"]!.translate(z: -1 * tr).set(x: 0).translate(x: max(outer["btl"]!.x, outer["bbl"]!.x).cg))
+                ]).getGeometry()
+            let lText = GeometryBuilder(quads: [
+                Quad(
+                    outer["ftl"]!.translate(x: -1 * tr).set(z: 0).translate(z: min(outer["fbl"]!.z, outer["ftl"]!.z).cg),
+                    outer["btl"]!.translate(x: -1 * tr).set(z: 0).translate(z: max(outer["btl"]!.z, outer["bbl"]!.z).cg),
+                    outer["bbl"]!.translate(x: -1 * tr).set(z: 0).translate(z: max(outer["btl"]!.z, outer["bbl"]!.z).cg),
+                    outer["fbl"]!.translate(x: -1 * tr).set(z: 0).translate(z: min(outer["ftl"]!.z, outer["fbl"]!.z).cg))
+                ]).getGeometry()
+            let rText = GeometryBuilder(quads: [
+                Quad(
+                    outer["btr"]!.translate(x: 1 * tr).set(z: 0).translate(z: max(outer["btr"]!.z, outer["bbr"]!.z).cg),
+                    outer["ftr"]!.translate(x: 1 * tr).set(z: 0).translate(z: min(outer["fbr"]!.z, outer["ftr"]!.z).cg),
+                    outer["fbr"]!.translate(x: 1 * tr).set(z: 0).translate(z: min(outer["fbr"]!.z, outer["ftr"]!.z).cg),
+                    outer["bbr"]!.translate(x: 1 * tr).set(z: 0).translate(z: max(outer["btr"]!.z, outer["bbr"]!.z).cg))
+                ]).getGeometry()
+            
+            fText.firstMaterial?.diffuse.contents = UIColor.green
+            bText.firstMaterial?.diffuse.contents = UIColor.yellow
+            lText.firstMaterial?.diffuse.contents = UIColor.cyan
+            rText.firstMaterial?.diffuse.contents = UIColor.red
+            fText.firstMaterial?.transparent.contents = UIImage(named: "F")
+            bText.firstMaterial?.transparent.contents = UIImage(named: "B")
+            lText.firstMaterial?.transparent.contents = UIImage(named: "L")
+            rText.firstMaterial?.transparent.contents = UIImage(named: "R")
+            fText.firstMaterial?.transparencyMode = .rgbZero
+            bText.firstMaterial?.transparencyMode = .rgbZero
+            lText.firstMaterial?.transparencyMode = .rgbZero
+            rText.firstMaterial?.transparencyMode = .rgbZero
+            
+            let f = SCNNode(geometry: fText)
+            let b = SCNNode(geometry: bText)
+            let l = SCNNode(geometry: lText)
+            let r = SCNNode(geometry: rText)
+            
+            geometryNode.addChildNode(f)
+            geometryNode.addChildNode(b)
+            geometryNode.addChildNode(l)
+            geometryNode.addChildNode(r)
+        }
+        
+        return geometryNode
     }
     
     static func getMeasurements(_ v: [String: V3], _ rT: F) -> [String: Fraction] {

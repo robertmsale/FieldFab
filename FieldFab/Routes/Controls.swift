@@ -52,18 +52,8 @@ struct Controls: View {
                                     })
                                     Spacer()
                                     Button(action: {
-                                        var url = "fieldfab://load?name=\(aL.sessionName)&"
-                                        url += "length=\(aL.length.original.description)&"
-                                        url += "width=\(aL.width.original.description)&"
-                                        url += "depth=\(aL.depth.original.description)&"
-                                        url += "offsetX=\(aL.offsetX.original.description)&"
-                                        url += "offsetY=\(aL.offsetY.original.description)&"
-                                        url += "tWidth=\(aL.tWidth.original.description)&"
-                                        url += "tDepth=\(aL.tDepth.original.description)&"
-                                        url += "isTransition=\(aL.isTransition.description)"
-                                        guard let data = URL(string: url) else { return }
-                                        let av = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-                                        UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
+                                        self.aL.shareSheetContent = [self.aL.url]
+                                        self.aL.shareSheetShown.toggle()
                                     }, label: {
                                         Image(systemName: "square.and.arrow.up").font(.title)
                                     })

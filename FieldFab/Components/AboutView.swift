@@ -10,7 +10,8 @@ import SwiftUI
 
 struct AboutView: View {
     @Binding var shown: Bool
-    var buildDate: Date {
+    
+    func bd() -> Date {
         if let infoPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
             let infoAttr = try? FileManager.default.attributesOfItem(atPath: infoPath),
             let infoDate = infoAttr[.modificationDate] as? Date {
@@ -24,6 +25,8 @@ struct AboutView: View {
         let copyrightFormat = DateFormatter()
         copyrightFormat.dateFormat = "YYYY"
         let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .medium
         
         return VStack(alignment: .center) {
             Image("FieldFab Logo")
@@ -41,19 +44,19 @@ struct AboutView: View {
                 HStack {
                     Text("Build Date")
                     Spacer()
-                    Text(df.string(from: buildDate))
+                    Text(df.string(from: bd()))
                 }
                 Divider()
                 HStack {
                     Text("Website")
                     Spacer()
-                    Link("Fieldfab.com", destination: URL(string: "https://fieldfab.com")!)
+                    Link("Fieldfab.net", destination: URL(string: "https://fieldfab.net")!)
                 }
                 Divider()
                 HStack {
                     Text("Developer Email")
                     Spacer()
-                    Link("robert.sale@outlook.com", destination: URL(string: "mailto:robert.sale@outlook.com")!)
+                    Link("robert@fieldfab.net", destination: URL(string: "mailto:robert@fieldfab.net")!)
                 }
                 Divider()
             }

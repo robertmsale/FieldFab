@@ -111,12 +111,12 @@ class Math {
         return x + (1.0 - x.truncatingRemainder(dividingBy: 1.0))
     }
     
-    static func degToRad(degrees d: CGFloat) -> CGFloat {
-        return d * Math.DEGRAD
+    static func degToRad<T: BinaryFloatingPoint>(degrees d: T) -> T {
+        return d * T(Math.DEGRAD)
     }
     
-    static func radToDeg(rads r: CGFloat) -> CGFloat {
-        return r * Math.RADDEG
+    static func radToDeg<T: BinaryFloatingPoint>(rads r: T) -> T {
+        return r * T(Math.RADDEG)
     }
     
     static func invertDeg(_ d: CGFloat) -> CGFloat {

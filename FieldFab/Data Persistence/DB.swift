@@ -20,6 +20,23 @@ class DB: ObservableObject {
         }
     }
     
+    func getURL(_ id: UUID) -> URL? {
+        var index = 0
+        if dimensions.count < 1 { return nil }
+        for i in 0...dimensions.count - 1 {
+            if dimensions[i].id == id { index = i }
+        }
+        var url = "fieldfab://load?width=\(dimensions[index].width.description)&"
+        url += "length=\(dimensions[index].length.description)&"
+        url += "depth=\(dimensions[index].depth.description)&"
+        url += "offsetX=\(dimensions[index].offsetX.description)&"
+        url += "offsetY=\(dimensions[index].offsetY.description)&"
+        url += "tWidth=\(dimensions[index].tWidth.description)&"
+        url += "tDepth=\(dimensions[index].tDepth.description)&"
+        url += "isTransition=\(dimensions[index].isTransition.description)"
+        return URL(string: url)!
+    }
+    
     init() {
         let defaultDimensions = [
             DimensionsData(

@@ -56,6 +56,7 @@
 		EEFB99112527B9EC008AB605 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99102527B9EC008AB605 /* HelpView.swift */; };
 		EEFB99162527BBDB008AB605 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
 		EEFB992F2527DCF0008AB605 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB992E2527DCF0008AB605 /* CarouselView.swift */; };
+		EEFB993A252A6F6B008AB605 /* ButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,7 @@
 		EEFB99102527B9EC008AB605 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		EEFB99152527BBDB008AB605 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		EEFB992E2527DCF0008AB605 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
+		EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +209,7 @@
 				EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */,
 				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
 				EEFB98F92526EA00008AB605 /* UnitText.swift */,
+				EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				EEC7CF6D2503E70A003389AB /* Logic.swift in Sources */,
 				EE29E40C2505794D007F4036 /* 2D.swift in Sources */,
 				EE29E4192505F6CA007F4036 /* ControlView.swift in Sources */,
+				EEFB993A252A6F6B008AB605 /* ButtonGroup.swift in Sources */,
 				EED1CE7A251FF091003E6F08 /* FText.swift in Sources */,
 				EEFB98F22526E2C6008AB605 /* Fractional.swift in Sources */,
 				EEFB99112527B9EC008AB605 /* HelpView.swift in Sources */,

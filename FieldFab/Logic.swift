@@ -71,9 +71,36 @@ class AppLogic : ObservableObject {
         } }
     @Published var increments: FractionStepAmount
     @Published var duct: Ductwork
+    @Published var tabs: Tabs { didSet {
+        do {
+        UserDefaults.standard.set(
+            try JSONEncoder().encode(
+                TabsData(
+                    front: self.tabs.front?.toData(),
+                    back: self.tabs.back?.toData(),
+                    left: self.tabs.left?.toData(),
+                    right: self.tabs.right?.toData())),
+            forKey: "tabs")
+        } catch { print("Problem encoding tabs to JSON") }
+    }}
     @Published var sessionName: String { didSet {
         UserDefaults.standard.set(self.sessionName, forKey: "sessionName")
     }}
+    @Published var shareSheetContent: [Any]?
+    @Published var shareSheetShown: Bool = false
+    var url: URL {
+        get {
+            var url = "fieldfab://load?width=\(self.width.original.description)&"
+            url += "length=\(self.length.original.description)&"
+            url += "depth=\(self.depth.original.description)&"
+            url += "offsetX=\(self.offsetX.original.description)&"
+            url += "offsetY=\(self.offsetY.original.description)&"
+            url += "tWidth=\(self.tWidth.original.description)&"
+            url += "tDepth=\(self.tDepth.original.description)&"
+            url += "isTransition=\(self.isTransition.description)"
+            return URL(string: url)!
+        }
+    }
 //    @Published var tabs: TabsDB
     
     func updateDuct() {
@@ -114,6 +141,7 @@ class AppLogic : ObservableObject {
         self.increments = d.i
         self.duct = Ductwork(d.l, d.w, d.d, d.oX, d.oY, d.tW, d.tD, d.rT)
         self.sessionName = d.s
+        self.tabs = d.t
     }
     
     func toggleTransition() {
@@ -136,6 +164,7 @@ struct WD {
     var rT: CGFloat
     var i: FractionStepAmount
     var s: String
+    var t: Tabs
     
     init() {
         self.w = UserDefaults.standard.object(forKey: "width") as? CGFloat ?? 16.0
@@ -149,5 +178,11 @@ struct WD {
         self.rT = UserDefaults.standard.object(forKey: "roundTo") as? CGFloat ?? 0.0625
         self.i = FractionStepAmount.quarter
         self.s = UserDefaults.standard.object(forKey: "sessionName") as? String ?? "Ductwork"
+        do {
+            self.t = Tabs(from: try JSONDecoder().decode(TabsData.self, from: Data((UserDefaults.standard.object(forKey: "tabs") as? String ?? "").utf8)))
+        } catch {
+            print("Could not decode Tabs user defaults from JSON")
+            self.t = Tabs()
+        }
     }
 }

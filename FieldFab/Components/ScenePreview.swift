@@ -36,6 +36,7 @@ struct ScenePreview: UIViewRepresentable {
     var geo: GeometryProxy
     var dimensions: Dimensions
     @Binding var shown: Bool
+    
     func makeUIView(context: Context) -> some UIView {
         let sceneView = SCNView(frame: CGRect(x: 0, y: 0, width: geo.size.width, height: geo.size.height))
         sceneView.allowsCameraControl = true
@@ -63,11 +64,7 @@ struct ScenePreview: UIViewRepresentable {
         camNode.camera = camera
         scene.rootNode.addChildNode(camNode)
         
-        let geometry = Ductwork.getQuadGeoFromFile(dimensions)
-        geometry.firstMaterial?.diffuse.contents = UIImage(named: "sheetmetal")
-        geometry.firstMaterial?.normal.contents = UIImage(named: "sheetmetal-normal")
-        
-        let node = SCNNode(geometry: geometry)
+        let node = Ductwork.getQuadGeoFromFile(dimensions)
         node.name = "duct"
         node.castsShadow = true
         
