@@ -88,6 +88,7 @@ class AppLogic : ObservableObject {
     }}
     @Published var shareSheetContent: [Any]?
     @Published var shareSheetShown: Bool = false
+    @Published var makeSideFlatShown: Bool = false
     var url: URL {
         get {
             var url = "fieldfab://load?width=\(self.width.original.description)&"
@@ -102,6 +103,19 @@ class AppLogic : ObservableObject {
         }
     }
 //    @Published var tabs: TabsDB
+    
+    func makeSideFlat(side: DuctSides) {
+        switch side {
+            case .front:
+                offsetY = Fraction((depth.original - tDepth.original) / 2, roundTo: roundTo)
+            case .back:
+                offsetY = Fraction(-((depth.original - tDepth.original) / 2), roundTo: roundTo)
+            case .left:
+                offsetX = Fraction((width.original - tWidth.original) / 2, roundTo: roundTo)
+            case .right:
+                offsetX = Fraction(-((width.original - tWidth.original) / 2))
+        }
+    }
     
     func updateDuct() {
         self.duct.update(

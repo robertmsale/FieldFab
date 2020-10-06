@@ -155,24 +155,24 @@ struct DuctSideView: View {
                     let o = b["bl"]!.distance(d["bl"]!)
                     let a = b["bl"]!.distance(b["tl"]!)
                     if Int(o) == Int(a) { return Double(45) }
-                    return Double(90 - tan(o < a ? o / a : a / o).toDeg())
+                    return Double(90 - atan(o < a ? o / a : a / o).toDeg())
                 } else {
                     let o = b["tl"]!.distance(d["tl"]!)
                     let a = b["tl"]!.distance(b["bl"]!)
                     if Int(o) == Int(a) { return Double(135) }
-                    return Double(90 + tan(o < a ? o / a : a / o).toDeg())
+                    return Double(90 + atan(o < a ? o / a : a / o).toDeg())
                 }
             case .right:
                 if b["tr"]! == d["tr"]! {
                     let o = b["br"]!.distance(d["br"]!)
                     let a = b["br"]!.distance(b["tr"]!)
                     if Int(o) == Int(a) { return Double(-45) }
-                    return Double(-90 + tan(o < a ? o / a : a / o).toDeg())
+                    return Double(-90 + atan(o < a ? o / a : a / o).toDeg())
                 } else {
                     let o = b["tr"]!.distance(d["tr"]!)
                     let a = b["tr"]!.distance(b["br"]!)
                     if Int(o) == Int(a) { return Double(-135) }
-                    return Double(-90 - tan(o < a ? o / a : a / o).toDeg())
+                    return Double(-90 - atan(o < a ? o / a : a / o).toDeg())
                 }
         }
     }
@@ -182,35 +182,40 @@ struct DuctSideView: View {
         let bl = d["tl"]!.x < d["bl"]!.x ? "b" : "t"
         let br = d["tr"]!.x < d["br"]!.x ? "t" : "b"
         let lol = /*self.side == .back ? "r" :*/ "l"
+        let belPos = b["\(bl)l"]!.translate(y: bl == "t" ? -tS : tS).translate(x: b["\(bl)l"]!.x.distance(to: d["\(bl)l"]!.x) / 2)
+        let berPos = b["\(br)r"]!.translate(y: br == "t" ? -tS : tS).translate(x: -d["\(br)r"]!.x.distance(to: b["\(br)r"]!.x) / 2)
+        let dlPos = CGPoint(x: b["bl"]!.x + abs(d["bl"]!.x.distance(to: d["tl"]!.x)) / 2, y: d["tl"]!.y)
+            .translate(x: 15)
+            .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2)
+        let dlAng = Angle(degrees: getAng(.left, d, b))
+        let drAng = Angle(degrees: getAng(.right, d, b))
+        let drPos = CGPoint(x: b["br"]!.x - abs(d["br"]!.x.distance(to: d["tr"]!.x)) / 2, y: d["tr"]!.y)
+            .translate(x: -15)
+            .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2)
+        let isBack = self.side == .back
         return ZStack {
             t["bounding-l"]!
                 .rotationEffect(Angle(degrees: 90))
                 .position(b["t\(lol)"]!.translate(y: b["t\(lol)"]!.y.distance(to: b["b\(lol)"]!.y) / 2).translate(x: -tS))
             if b["\(bl)l"]!.x != d["\(bl)l"]!.x {
                 t["bounding-el"]!
-                    .position(b["\(bl)l"]!.translate(y: bl == "t" ? -tS : tS).translate(x: b["\(bl)l"]!.x.distance(to: d["\(bl)l"]!.x) / 2))
+                    .position(isBack ? berPos : belPos)
             }
             if b["\(br)r"]!.x != d["\(br)r"]!.x {
                 t["bounding-er"]!
-                    .position(b["\(br)r"]!.translate(y: br == "t" ? -tS : tS).translate(x: -d["\(br)r"]!.x.distance(to: b["\(br)r"]!.x) / 2))
+                    .position(isBack ? belPos : berPos)
             }
             if d["\(bl)l"]!.x != b["\(bl)l"]!.x {
                 t["duct-l"]!
-                    .rotationEffect(Angle(degrees: getAng(.left, d, b)))
+                    .rotationEffect(isBack ? drAng : dlAng)
                     //                .rotationEffect(Angle(degrees: lAng))
-                    .position(
-                        CGPoint(x: b["bl"]!.x + abs(d["bl"]!.x.distance(to: d["tl"]!.x)) / 2, y: d["tl"]!.y)
-                            .translate(x: 15)
-                            .translate(y: d["tl"]!.y.distance(to: d["bl"]!.y) / 2))
+                    .position(isBack ? drPos : dlPos)
             }
             if d["\(br)r"]!.x != b["\(br)r"]!.x {
                 t["duct-r"]!
-                    .rotationEffect(Angle(degrees: getAng(.right, d, b)))
+                    .rotationEffect(isBack ? dlAng : drAng)
                     //                .rotationEffect(Angle(degrees: rAng))
-                    .position(
-                        CGPoint(x: b["br"]!.x - abs(d["br"]!.x.distance(to: d["tr"]!.x)) / 2, y: d["tr"]!.y)
-                            .translate(x: -15)
-                            .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2))
+                    .position(isBack ? dlPos : drPos)
             }
             t["duct-t"]!
                 .position(b["tl"]!.translate(x: b["tl"]!.x.distance(to: d["tr"]!.x) / 2).translate(y: -tS))

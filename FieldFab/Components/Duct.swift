@@ -75,14 +75,6 @@ struct Ductwork {
     }
     
     static func getQuadGeoFromFile(_ d: Dimensions) -> SCNNode {
-        let outer = Ductwork.getVertices3D(
-            d.length,
-            d.width,
-            d.depth,
-            d.offsetX,
-            d.offsetY,
-            d.tWidth,
-            d.tDepth)
         let newD = Ductwork(d.length, d.width, d.depth, d.offsetX, d.offsetY, d.tWidth, d.tDepth, 0.5)
         
         return newD.getQuadGeometry(d.offsetX, d.offsetY, options: [.sideTextShown], tabs: Tabs())
@@ -200,6 +192,10 @@ struct Ductwork {
             let b = SCNNode(geometry: bText)
             let l = SCNNode(geometry: lText)
             let r = SCNNode(geometry: rText)
+            f.name = "h-front"
+            b.name = "h-back"
+            l.name = "h-left"
+            r.name = "h-right"
             
             geometryNode.addChildNode(f)
             geometryNode.addChildNode(b)
