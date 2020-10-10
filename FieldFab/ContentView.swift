@@ -12,33 +12,53 @@ import UIKit
 
 struct ContentView : View {
     @EnvironmentObject var al: AppLogic
+    @EnvironmentObject var db: DB
     var body: some View {
-        TabView {
-            TwoD()
-                .tabItem {
-                    Image(systemName: "view.2d").font(.title)
+        ZStack {
+            TabView {
+                GeometryReader {g in
+                    ThreeD()
+                        .edgesIgnoringSafeArea(.top)
+                        .frame(width: g.size.width, height: g.size.height)
                 }
-            GeometryReader {g in
-                ThreeD()
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(width: g.size.width, height: g.size.height)
-            }
-            .tabItem {
-                Image(systemName: "view.3d").font(.title)
-            }
-            ARContentView()
-            .tabItem {
-                Image(systemName: "camera.viewfinder").font(.title)
-            }
-            Controls()
                 .tabItem {
-                    Image(systemName: "gear").font(.title)
+                    Image(systemName: "view.3d").font(.title)
                 }
+                ARContentView()
+                    .tabItem {
+                        Image(systemName: "camera.viewfinder").font(.title)
+                    }
+                Controls()
+                    .tabItem {
+                        Image(systemName: "gear").font(.title)
+                    }
+            }
+            .padding(0)
+            EmptyView()
+                .sheet(isPresented: $al.shareSheetShown, content: {
+                    ActivityView(activityItems: al.shareSheetContent!, applicationActivities: nil)
+                })
+            EmptyView()
+                .sheet(isPresented: $al.threeDMenuShown, content: {
+                    ThreeDMenuSheet().environmentObject(al)
+                })
+            EmptyView()
+                .sheet(isPresented: $al.helpViewShown, content: {
+                    HelpView()
+                })
+            EmptyView()
+                .sheet(isPresented: $al.aboutViewShown, content: {
+                    AboutView()
+                })
+            EmptyView()
+                .sheet(isPresented: $al.loadDuctworkViewShown, content: {
+                    LoadDuctworkView().environmentObject(al).environmentObject(db)
+                })
+            EmptyView()
+                .sheet(isPresented: $al.arMenuSheetShown, content: {
+                    ARMenuSheet()
+                })
         }
-        .padding(0)
-        .sheet(isPresented: $al.shareSheetShown, content: {
-            ActivityView(activityItems: al.shareSheetContent!, applicationActivities: nil)
-        })
             // 
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE0D5421252DE20500D89C32 /* ARMenuSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */; };
 		EE29E40C2505794D007F4036 /* 2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40B2505794D007F4036 /* 2D.swift */; };
 		EE29E40E25057CF1007F4036 /* DuctSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40D25057CF1007F4036 /* DuctSideView.swift */; };
 		EE29E4192505F6CA007F4036 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4182505F6CA007F4036 /* ControlView.swift */; };
@@ -57,7 +58,7 @@
 		EEFB99162527BBDB008AB605 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
 		EEFB992F2527DCF0008AB605 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB992E2527DCF0008AB605 /* CarouselView.swift */; };
 		EEFB993A252A6F6B008AB605 /* ButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */; };
-		EEFB993F252C1A15008AB605 /* MakeSideFlatSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB993E252C1A15008AB605 /* MakeSideFlatSheet.swift */; };
+		EEFB993F252C1A15008AB605 /* ThreeDMenuSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMenuSheet.swift; sourceTree = "<group>"; };
 		EE29E40B2505794D007F4036 /* 2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2D.swift; sourceTree = "<group>"; };
 		EE29E40D25057CF1007F4036 /* DuctSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctSideView.swift; sourceTree = "<group>"; };
 		EE29E4182505F6CA007F4036 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
@@ -134,7 +136,7 @@
 		EEFB99152527BBDB008AB605 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		EEFB992E2527DCF0008AB605 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
-		EEFB993E252C1A15008AB605 /* MakeSideFlatSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeSideFlatSheet.swift; sourceTree = "<group>"; };
+		EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDMenuSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +182,8 @@
 				EEFB99102527B9EC008AB605 /* HelpView.swift */,
 				EEFB99152527BBDB008AB605 /* AboutView.swift */,
 				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
-				EEFB993E252C1A15008AB605 /* MakeSideFlatSheet.swift */,
+				EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */,
+				EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				EEFB99162527BBDB008AB605 /* AboutView.swift in Sources */,
 				EEFB990C25277BBC008AB605 /* ScenePreview.swift in Sources */,
 				EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */,
+				EE0D5421252DE20500D89C32 /* ARMenuSheet.swift in Sources */,
 				EED1CE7F251FFCB9003E6F08 /* HeaderView.swift in Sources */,
 				EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */,
 				EEDCE8432520E97A00F21FAF /* ARViewContainer.swift in Sources */,
@@ -486,7 +490,7 @@
 				EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */,
 				EED1CE60251F8C26003E6F08 /* Quad.swift in Sources */,
 				EED1CE65251F8D99003E6F08 /* SCNUtils.swift in Sources */,
-				EEFB993F252C1A15008AB605 /* MakeSideFlatSheet.swift in Sources */,
+				EEFB993F252C1A15008AB605 /* ThreeDMenuSheet.swift in Sources */,
 				EEAF2B332516581F0074A516 /* Line.swift in Sources */,
 				EEFB98E32526D061008AB605 /* Tabs.swift in Sources */,
 				EEDCE8362520D9C200F21FAF /* Colors.swift in Sources */,

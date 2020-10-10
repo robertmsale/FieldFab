@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AboutView: View {
-    @Binding var shown: Bool
+    @EnvironmentObject var al: AppLogic
     
     func bd() -> Date {
         if let infoPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
@@ -62,10 +62,11 @@ struct AboutView: View {
             }
             Spacer()
             Button(action: {
-                shown.toggle()
+                al.aboutViewShown.toggle()
             }, label: {
-                Text("Return To Settings").font(.title)
+                Text("Return To Settings").font(.title3)
             })
+            .foregroundColor(.red)
             Spacer()
             Text("© Copyright \(copyrightFormat.string(from: Date())), Robert M. Sale")
             Text("All rights reserved")
@@ -85,9 +86,7 @@ struct AboutView: View {
 #if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        StatefulPreviewWrapper(true) {
-            AboutView(shown: $0)
-        }
+        AboutView().environmentObject(AppLogic())
     }
 }
 #endif

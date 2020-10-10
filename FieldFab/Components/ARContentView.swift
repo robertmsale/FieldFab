@@ -12,7 +12,7 @@ import UIKit
 
 class ARData: ObservableObject {
     @Published var ductPos: SCNVector3 = SCNVector3(0.0, 0.0, 0.0)
-    @Published var ductRotation = SCNVector3(0, 0, 0)
+    @Published var ductRotation: Float = 0
     @Published var resetAR: Bool = false
 }
 
@@ -25,9 +25,9 @@ enum ARMoveMode {
 
 struct ARContentView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var al: AppLogic
     @ObservedObject var arData = ARData()
     @State var textHelperShown = false
-    @State var rotationMode: ARRotationMode = .x
     @State var rotateActive: Bool = false
     @State var previousAngle: Angle = Angle(degrees: 0)
     @State var moveMode: ARMoveMode = .xz
@@ -62,13 +62,36 @@ struct ARContentView: View {
     var body: some View {
         GeometryReader {g in
             ZStack {
-                ARViewContainer(ductPosition: $arData.ductPos, ductRotation: $arData.ductRotation, rotationMode: rotationMode, textHelperShown: textHelperShown, reset: $arData.resetAR)
+                ARViewContainer()
                     .edgesIgnoringSafeArea(.all)
                     .frame(width: g.size.width, height: g.size.height)
                     .zIndex(-1)
+                    .gesture(
+                        DragGesture().onChanged({ v in
+                            print("dragging")
+                            switch moveMode {
+                                case .xz:
+                                    al.arDuctPosition = al.arDuctPosition.translate(x: v.translation.width * 0.0005 * 0.0254).translate(z: v.translation.height * 0.0005 * 0.0254)
+                                case .y:
+                                    al.arDuctPosition = al.arDuctPosition.translate(y: -v.translation.height * 0.0005 * 0.0254)
+                            }
+                        })
+                    )
+                    .gesture(
+                        RotationGesture().onChanged({ a in
+                            print("rotating")
+                            if !rotateActive {
+                                previousAngle = a
+                                rotateActive = true
+                            }
+                            al.arDuctRotation += a > previousAngle ? -0.002 : 0.002
+                            previousAngle = a
+                        })
+                    )
                 VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light))
-                    .frame(width: g.size.width, height: 32, alignment: .center)
+                    .edgesIgnoringSafeArea(.horizontal)
                     .edgesIgnoringSafeArea(.top)
+                    .frame(width: g.size.width, height: 32, alignment: .center)
                     .position(x: g.size.width / 2, y: 0)
 //                PlaneAdjustmentView(xz: $arData.xz)
 //                    .frame(width: 100, height: 100)
@@ -76,70 +99,44 @@ struct ARContentView: View {
 //                PlaneAdjustmentView(xz: $arData.y, axis: .y)
 //                    .frame(width: 100, height: 100)
 //                    .position(x: g.size.width - 80, y: g.size.height - 60)
-                Button(action: { self.textHelperShown.toggle() }, label: {
-                    Text(textHelperShown ? "Hide\nHelpers" : "Show\nHelpers")
-                        .multilineTextAlignment(.center)
+                Button(action: {
+                    al.arMenuSheetShown = true
+                }, label: {
+                    Image(systemName: "pencil")
+                        .font(.title)
+                        .frame(width: 25, height: 25)
                         .padding()
+                        .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
+                        .cornerRadius(90)
                 })
-                .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
-                .cornerRadius(15)
-                .position(CGPoint(x: 62, y: g.size.height - 48))
+                .position(CGPoint(x: 40, y: g.size.height - 40))
                 .zIndex(3)
-                VStack {
-                    Text("Rotation Mode")
-                    ButtonGroup<ARRotationMode>(data: [.x, .y, .z], dataTitles: ["X", "Y", "Z"], wrappedValue: $rotationMode)
-                }
-                .frame(width: 120, height: 80)
-                .zIndex(4)
-                .position(x: g.size.width - 80, y: g.size.height - 60)
+//                VStack {
+//                    Text("Rotation Mode")
+//                    ButtonGroup<ARRotationMode>(data: [.x, .y, .z], dataTitles: ["X", "Y", "Z"], wrappedValue: $rotationMode)
+//                }
+//                .frame(width: 120, height: 80)
+//                .zIndex(4)
+//                .position(x: g.size.width - 80, y: g.size.height - 60)
                 VStack {
                     Text("Move Mode")
                     ButtonGroup<ARMoveMode>(data: [.xz, .y], dataTitles: ["XZ", "Y"], wrappedValue: $moveMode)
                 }
                 .frame(width: 120, height: 80)
                 .zIndex(5)
-                .position(x: g.size.width - 80, y: g.size.height - 200)
+                .position(x: g.size.width - 80, y: g.size.height - 60)
                 
                 ResetViewButton()
                     .frame(width: 60, height: 60)
                     .position(x: g.size.width / 2, y: g.size.height - 40)
                     .onTapGesture(count: 1, perform: {
-                        self.arData.resetAR = true
-                        self.arData.ductPos = SCNVector3(0, 0, 0)
-                        self.arData.ductRotation = SCNVector3(0, 0, 0)
+                        al.arViewReset = true
+                        al.arDuctPosition = SCNVector3(0, 0, 0)
+                        al.arDuctRotation = 0.0
                     })
                     
             }
-            .gesture(DragGesture().onChanged({ v in
-                switch moveMode {
-                    case .xz:
-                        arData.ductPos = arData.ductPos.translate(x: v.translation.width * 0.0005 * 0.0254).translate(z: v.translation.height * 0.0005 * 0.0254)
-                    case .y:
-                        arData.ductPos = arData.ductPos.translate(y: -v.translation.height * 0.0005 * 0.0254)
-                }
-            }))
-            .gesture(RotationGesture().onChanged({ a in
-                if !rotateActive {
-                    previousAngle = a
-                    rotateActive = true
-                }
-                switch rotationMode {
-                    case .x:
-                        arData.ductRotation = arData.ductRotation.translate(x: a > previousAngle ? 0.0002 : -0.0002)
-                    case .y:
-                        arData.ductRotation = arData.ductRotation.translate(y: a > previousAngle ? -0.0002 : 0.0002)
-                    case .z:
-                        arData.ductRotation = arData.ductRotation.translate(z: a > previousAngle ? -0.0002 : 0.0002)
-                }
-                previousAngle = a
-            }).onEnded({ _ in
-                rotateActive = false
-                switch rotationMode {
-                    case .x: arData.ductRotation = arData.ductRotation.set(x: findNearestAngle(arData.ductRotation.x))
-                    case .y: arData.ductRotation = arData.ductRotation.set(y: findNearestAngle(arData.ductRotation.y))
-                    case .z: arData.ductRotation = arData.ductRotation.set(z: findNearestAngle(arData.ductRotation.z))
-                }
-            }))
+            
         }
     }
 }

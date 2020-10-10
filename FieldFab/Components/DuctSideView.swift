@@ -59,8 +59,8 @@ struct DuctSideView: View {
     @EnvironmentObject var aL: AppLogic
     var g: GeometryProxy
     var side: DuctSides
-    @State var shapePos: CGPoint = CGPoint(x: 0.0, y: 0.0)
-    @State var shapeScale: CGFloat = 0.8
+    var shapePos: CGPoint = CGPoint(x: 0.0, y: 0.0)
+    var shapeScale: CGFloat = 0.8
     
     func applyTransforms(_ v: [String: CGPoint]) -> [String: CGPoint] {
         let center = self.g.size.center
@@ -68,13 +68,15 @@ struct DuctSideView: View {
         let shapeH = v["tl"]!.y.distance(to: v["bl"]!.y)
         let sMax = max(shapeH, shapeW)
         let cMin = min(self.g.size.width, self.g.size.height)
+        let xMin = 0 + (cMin - (cMin * shapeScale)) / 2
+        let xMax = cMin - xMin
         let b4p = [
             "bl": v["bl"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25)),
             "br": v["br"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25)),
             "tl": v["tl"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25)),
             "tr": v["tr"]!.multiplyScalar(cMin / sMax * max(self.shapeScale, 0.25))
         ]
-        let p = [
+        var p = [
             "bl": center.translate(b4p["bl"]!),
 //                .addScalar(cMin / sMax * self.shapeScale),
 //                .translate(self.shapePos),
@@ -88,6 +90,20 @@ struct DuctSideView: View {
 //                .addScalar(cMin / sMax * self.shapeScale)
 //                .translate(self.shapePos)
         ]
+        var transLeft: CGFloat = 0
+        var transRight: CGFloat = 0
+        for (k, v) in p {
+            switch k {
+                case "bl", "tl":
+                    if v.x < xMin { transLeft = v.x.distance(to: xMin) }
+                case "br", "tr":
+                    if v.x > xMax { transRight = -xMax.distance(to: v.x) }
+                default: break
+            }
+        }
+        for (k, v) in p {
+            p[k] = v.translate(x: transLeft).translate(x: transRight)
+        }
         return p
     }
     
@@ -192,35 +208,33 @@ struct DuctSideView: View {
         let drPos = CGPoint(x: b["br"]!.x - abs(d["br"]!.x.distance(to: d["tr"]!.x)) / 2, y: d["tr"]!.y)
             .translate(x: -15)
             .translate(y: d["tr"]!.y.distance(to: d["br"]!.y) / 2)
-        let isBack = self.side == .back
+//        let isBack = self.side == .back
         return ZStack {
             t["bounding-l"]!
                 .rotationEffect(Angle(degrees: 90))
                 .position(b["t\(lol)"]!.translate(y: b["t\(lol)"]!.y.distance(to: b["b\(lol)"]!.y) / 2).translate(x: -tS))
             if b["\(bl)l"]!.x != d["\(bl)l"]!.x {
                 t["bounding-el"]!
-                    .position(isBack ? berPos : belPos)
+                    .position(/*isBack ? berPos : */belPos)
             }
             if b["\(br)r"]!.x != d["\(br)r"]!.x {
                 t["bounding-er"]!
-                    .position(isBack ? belPos : berPos)
+                    .position(/*isBack ? belPos : */berPos)
             }
             if d["\(bl)l"]!.x != b["\(bl)l"]!.x {
                 t["duct-l"]!
-                    .rotationEffect(isBack ? drAng : dlAng)
-                    //                .rotationEffect(Angle(degrees: lAng))
-                    .position(isBack ? drPos : dlPos)
+                    .rotationEffect(/*isBack ? drAng : */dlAng)
+                    .position(/*isBack ? drPos : */dlPos)
             }
             if d["\(br)r"]!.x != b["\(br)r"]!.x {
                 t["duct-r"]!
-                    .rotationEffect(isBack ? dlAng : drAng)
-                    //                .rotationEffect(Angle(degrees: rAng))
-                    .position(isBack ? dlPos : drPos)
+                    .rotationEffect(/*isBack ? dlAng : */drAng)
+                    .position(/*isBack ? dlPos : */drPos)
             }
             t["duct-t"]!
-                .position(b["tl"]!.translate(x: b["tl"]!.x.distance(to: d["tr"]!.x) / 2).translate(y: -tS))
+                .position(d["tl"]!.translate(x: d["tl"]!.x.distance(to: d["tr"]!.x) / 2).translate(y: -tS))
             t["duct-b"]!
-                .position(b["bl"]!.translate(x: b["bl"]!.x.distance(to: d["br"]!.x) / 2).translate(y: tS))
+                .position(d["bl"]!.translate(x: d["bl"]!.x.distance(to: d["br"]!.x) / 2).translate(y: tS))
             
         }
     }
@@ -244,55 +258,40 @@ struct DuctSideView: View {
         let bPath = self.genPath(bPoints)
         return ZStack() {
             ductPath
-            .stroke(lineWidth: 1.0)
-            .position(self.shapePos)
-//            .scaleEffect(self.shapeScale)
+                .stroke(lineWidth: 1.0)
             
             ductPath
-            .fill(ImagePaint(image: Image("sheetmetal")))
-            .position(self.shapePos)
-            .gesture(DragGesture().onChanged({v in
-                if
-                    v.location.x < 15.0 ||
-                    v.location.x > self.g.size.width - 15 ||
-                    v.location.y < 15.0 ||
-                    v.location.y > self.g.size.height - 15 {
-                    return
-                } else {
-                    self.shapePos = v.location
-                }
-            }))
-            .gesture(MagnificationGesture().onChanged({v in
-                self.shapeScale = v
-            }))
-            .opacity(/*@START_MENU_TOKEN@*/0.5/*@END_MENU_TOKEN@*/)
-//            .scaleEffect(self.shapeScale)
+                .fill(ImagePaint(image: Image("sheetmetal")))
+                .opacity(/*@START_MENU_TOKEN@*/0.5/*@END_MENU_TOKEN@*/)
             
             bPath
-            .stroke(style: StrokeStyle(lineWidth: 1.0, lineCap: .round, lineJoin: .bevel, miterLimit: 0.0, dash: [10.0, 10.0, 10.0, 10.0], dashPhase: 5.0))
-            .position(self.shapePos)
-//            .scaleEffect(self.shapeScale)
+                .stroke(
+                    style: StrokeStyle(
+                        lineWidth: 1.0,
+                        lineCap: .round,
+                        lineJoin: .bevel,
+                        miterLimit: 0.0,
+                        dash: [10.0, 10.0, 10.0, 10.0],
+                        dashPhase: 5.0)
+                )
             
             textZStack
-            .position(self.shapePos)
-//            .scaleEffect(self.shapeScale)
         }
-        .onAppear(perform: {
-            self.shapePos = CGPoint(x: self.g.size.width / 2, y: self.g.size.height / 2)
-        })
     }
 }
 
 struct DuctSideView_Previews: PreviewProvider {
     static var previews: some View {
         let aL = AppLogic()
-        aL.width.original = 3.0
-        aL.depth.original = 4.0
-        aL.length.original = 2.0
-        aL.offsetX.original = 0.5
-        aL.offsetY.original = 0.0
-        aL.tWidth.original = 3.0
-        aL.tDepth.original = 4.0
-        return ContentView().environmentObject(aL)
+        aL.width.original = 20
+        aL.depth.original = 18
+        aL.length.original = 12
+        aL.offsetX.original = -8
+        aL.offsetY.original = 11
+        aL.tWidth.original = 12
+        aL.tDepth.original = 12
+        return GeometryReader { g in
+            DuctSideView(g: g, side: .back).environmentObject(aL)
+        }
     }
 }

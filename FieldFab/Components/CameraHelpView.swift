@@ -69,14 +69,15 @@ struct CameraHelpView: View {
 //            .opacity(0.8)
             .zIndex(2.0)
             Button(action: { self.visible = false }, label: {
-                Image(systemName: "xmark").font(.title)
+                Image(systemName: "xmark")
+                    .font(.title)
+                    .frame(width: 25, height: 25)
+                    .padding()
+                    .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
+                    .cornerRadius(45.0)
             })
-            .frame(width: 48, height: 48)
-            .background(AppColors.ControlBG[colorScheme])
-            .cornerRadius(45.0)
-            .foregroundColor(.blue)
             .zIndex(3.0)
-            .position(CGPoint(x: self.g.size.width - 32, y: self.g.size.height - 40))
+            .position(CGPoint(x: self.g.size.width - 40, y: self.g.size.height - 40))
         }
     }
 }

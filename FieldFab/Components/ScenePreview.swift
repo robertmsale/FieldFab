@@ -65,10 +65,10 @@ struct ScenePreview: UIViewRepresentable {
         scene.rootNode.addChildNode(camNode)
         
         let node = Ductwork.getQuadGeoFromFile(dimensions)
-        node.name = "duct"
-        node.castsShadow = true
         
-        scene.rootNode.addChildNode(node)
+        for v in node {
+            scene.rootNode.addChildNode(v)
+        }
         
         sceneView.scene = scene
         return sceneView

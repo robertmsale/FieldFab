@@ -8,6 +8,7 @@
 
 import Combine
 import SwiftUI
+import SceneKit
 
 enum AppLogicField {
     case width
@@ -71,24 +72,51 @@ class AppLogic : ObservableObject {
         } }
     @Published var increments: FractionStepAmount
     @Published var duct: Ductwork
-    @Published var tabs: Tabs { didSet {
+    @Published var tabs: TabsData { didSet {
         do {
         UserDefaults.standard.set(
-            try JSONEncoder().encode(
-                TabsData(
-                    front: self.tabs.front?.toData(),
-                    back: self.tabs.back?.toData(),
-                    left: self.tabs.left?.toData(),
-                    right: self.tabs.right?.toData())),
-            forKey: "tabs")
+            try JSONEncoder().encode(tabs), forKey: "tabs")
         } catch { print("Problem encoding tabs to JSON") }
+        self.updateDuct()
     }}
+    @Published var threeDMeasurementsDidChange: Bool = false
+    @Published var arMeasurementsDidChange: Bool = false
+    @Published var tabSideSelected: TabSide = .top
     @Published var sessionName: String { didSet {
         UserDefaults.standard.set(self.sessionName, forKey: "sessionName")
     }}
     @Published var shareSheetContent: [Any]?
     @Published var shareSheetShown: Bool = false
-    @Published var makeSideFlatShown: Bool = false
+    @Published var threeDMenuShown: Bool = false
+    @Published var helpViewShown: Bool = false
+    @Published var aboutViewShown: Bool = false
+    @Published var threeDViewHelpersShown: Bool = false
+    @Published var selectedSide = DuctFace.front
+    @Published var selectedRoundTo = PickerRoundTo.sixteenth {
+        didSet {
+            roundTo = selectedRoundTo.rawValue
+        }
+    }
+    @Published var loadDuctworkViewShown: Bool = false
+    @Published var selectedTabSide: TabSide = .top
+    @Published var selectedTabType: TabType = .none {
+        didSet {
+            tabs[selectedSide][selectedTabSide][1] = selectedTabType
+        }
+    }
+    @Published var selectedTabLength: TabLength = .none {
+        didSet {
+            tabs[selectedSide][selectedTabSide][1.0] = selectedTabLength
+        }
+    }
+    
+    @Published var arViewHelpersShown: Bool = false
+    @Published var arViewFlowDirection: FlowDirection = .up
+    @Published var arViewReset: Bool = false
+    @Published var arMenuSheetShown: Bool = false
+    @Published var arDuctPosition: SCNVector3 = SCNVector3(0, 0, 0) { didSet { print("position: \(arDuctPosition)") }}
+    @Published var arDuctRotation: Float = 0.0 { didSet { print("rotation: \(arDuctRotation)") }}
+    
     var url: URL {
         get {
             var url = "fieldfab://load?width=\(self.width.original.description)&"
@@ -110,10 +138,10 @@ class AppLogic : ObservableObject {
                 offsetY = Fraction((depth.original - tDepth.original) / 2, roundTo: roundTo)
             case .back:
                 offsetY = Fraction(-((depth.original - tDepth.original) / 2), roundTo: roundTo)
-            case .left:
-                offsetX = Fraction((width.original - tWidth.original) / 2, roundTo: roundTo)
             case .right:
-                offsetX = Fraction(-((width.original - tWidth.original) / 2))
+                offsetX = Fraction((width.original - tWidth.original) / 2, roundTo: roundTo)
+            case .left:
+                offsetX = Fraction(-((width.original - tWidth.original) / 2), roundTo: roundTo)
         }
     }
     
@@ -127,6 +155,8 @@ class AppLogic : ObservableObject {
             self.tWidth.original,
             self.tDepth.original,
             self.roundTo)
+        threeDMeasurementsDidChange = true
+        arMeasurementsDidChange = true
     }
 
     
@@ -144,6 +174,7 @@ class AppLogic : ObservableObject {
 //        self.isTransition = ud.bool(forKey: "roundTo")
         let d = WD()
         self.roundTo = d.rT
+        self.selectedRoundTo = PickerRoundTo(rawValue: d.rT) ?? PickerRoundTo.sixteenth
         self.width = Fraction(d.w, roundTo: d.rT)
         self.depth = Fraction(d.d, roundTo: d.rT)
         self.length = Fraction(d.l, roundTo: d.rT)
@@ -156,6 +187,8 @@ class AppLogic : ObservableObject {
         self.duct = Ductwork(d.l, d.w, d.d, d.oX, d.oY, d.tW, d.tD, d.rT)
         self.sessionName = d.s
         self.tabs = d.t
+        selectedTabType = d.t.front.top[1]
+        selectedTabLength = d.t.front.top[1.0]
     }
     
     func toggleTransition() {
@@ -178,7 +211,7 @@ struct WD {
     var rT: CGFloat
     var i: FractionStepAmount
     var s: String
-    var t: Tabs
+    var t: TabsData
     
     init() {
         self.w = UserDefaults.standard.object(forKey: "width") as? CGFloat ?? 16.0
@@ -193,10 +226,16 @@ struct WD {
         self.i = FractionStepAmount.quarter
         self.s = UserDefaults.standard.object(forKey: "sessionName") as? String ?? "Ductwork"
         do {
-            self.t = Tabs(from: try JSONDecoder().decode(TabsData.self, from: Data((UserDefaults.standard.object(forKey: "tabs") as? String ?? "").utf8)))
+            self.t = try TabsData(from: try JSONDecoder().decode(TabsData.self, from: Data((UserDefaults.standard.object(forKey: "tabs") as? String ?? "").utf8)) as! Decoder)
         } catch {
             print("Could not decode Tabs user defaults from JSON")
-            self.t = Tabs()
+            self.t = TabsData()
         }
+    }
+}
+
+struct Logic_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct HelpView: View {
-    @Binding var shown: Bool
+    @EnvironmentObject var al: AppLogic
     var body: some View {
         VStack {
             Image("HelpOrientation")
@@ -23,7 +23,7 @@ struct HelpView: View {
             Text("You must input all measurements as if the ductwork is being designed for an upflow application.")
                 .multilineTextAlignment(.center).padding(.bottom, 40)
             Spacer()
-            Button(action: {shown.toggle()}, label: {
+            Button(action: { al.helpViewShown = false }, label: {
                 Text("Return to Settings").font(.title)
             })
         }
@@ -33,9 +33,7 @@ struct HelpView: View {
 #if DEBUG
 struct HelpView_Previews: PreviewProvider {
     static var previews: some View {
-        StatefulPreviewWrapper(true) {
-            HelpView(shown: $0)
-        }
+        HelpView().environmentObject(AppLogic())
     }
 }
 #endif

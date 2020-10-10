@@ -74,17 +74,17 @@ struct Ductwork {
         self.measurements = m
     }
     
-    static func getQuadGeoFromFile(_ d: Dimensions) -> SCNNode {
+    static func getQuadGeoFromFile(_ d: Dimensions) -> [SCNNode] {
         let newD = Ductwork(d.length, d.width, d.depth, d.offsetX, d.offsetY, d.tWidth, d.tDepth, 0.5)
         
-        return newD.getQuadGeometry(d.offsetX, d.offsetY, options: [.sideTextShown], tabs: Tabs())
+        return newD.getQuadGeometry(d.offsetX, d.offsetY, options: [.sideTextShown], tabs: TabsData())
     }
     
     enum GetGeometryOptions {
         case isAR, sideTextShown
     }
     
-    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, options opt: [GetGeometryOptions] = [], tabs: Tabs) -> SCNNode {
+    func getQuadGeometry(_ oX: CGFloat, _ oY: CGFloat, options opt: [GetGeometryOptions] = [], tabs: TabsData) -> [SCNNode] {
         let options = Set(opt)
         var outer = self.v3D
         for (k, v) in outer {
@@ -135,75 +135,131 @@ struct Ductwork {
         
         
         let geometry = GeometryBuilder(quads: quads).getGeometry()
-        geometry.firstMaterial?.diffuse.contents = UIImage(named: "metal-diffuse")
-        geometry.firstMaterial?.normal.contents = UIImage(named: "metal-normal")
-        geometry.firstMaterial?.ambientOcclusion.contents = UIImage(named: "metal-ao")
-        geometry.firstMaterial?.metalness.contents = UIImage(named: "metal-metallic")
-        geometry.firstMaterial?.roughness.contents = UIImage(named: "metal-roughness")
-        geometry.firstMaterial?.lightingModel = .physicallyBased
+        let material = SCNMaterial()
+        material.diffuse.contents = UIImage(named: "metal-diffuse")
+        material.normal.contents = UIImage(named: "metal-normal")
+        material.ambientOcclusion.contents = UIImage(named: "metal-ao")
+        material.metalness.contents = UIImage(named: "metal-metallic")
+        material.roughness.contents = UIImage(named: "metal-roughness")
+        material.lightingModel = .physicallyBased
+        geometry.firstMaterial = material
         
         let geometryNode = SCNNode(geometry: geometry)
+        geometryNode.name = "duct"
         
+        
+        let tr: CGFloat = options.contains(.isAR) ? 0.1 * 0.0254 : 0.1
+        let fText = GeometryBuilder(quads: [
+            Quad(
+                outer["ftr"]!.translate(z: 1 * tr).set(x: 0).translate(x: min(outer["fbr"]!.x, outer["ftr"]!.x).cg),
+                outer["ftl"]!.translate(z: 1 * tr).set(x: 0).translate(x: max(outer["ftl"]!.x, outer["fbl"]!.x).cg),
+                outer["fbl"]!.translate(z: 1 * tr).set(x: 0).translate(x: max(outer["ftl"]!.x, outer["fbl"]!.x).cg),
+                outer["fbr"]!.translate(z: 1 * tr).set(x: 0).translate(x: min(outer["fbr"]!.x, outer["ftr"]!.x).cg))
+            ]).getGeometry()
+        let bText = GeometryBuilder(quads: [
+            Quad(
+                outer["btl"]!.translate(z: -1 * tr).set(x: 0).translate(x: max(outer["btl"]!.x, outer["bbl"]!.x).cg),
+                outer["btr"]!.translate(z: -1 * tr).set(x: 0).translate(x: min(outer["bbr"]!.x, outer["btr"]!.x).cg),
+                outer["bbr"]!.translate(z: -1 * tr).set(x: 0).translate(x: min(outer["bbr"]!.x, outer["btr"]!.x).cg),
+                outer["bbl"]!.translate(z: -1 * tr).set(x: 0).translate(x: max(outer["btl"]!.x, outer["bbl"]!.x).cg))
+            ]).getGeometry()
+        let lText = GeometryBuilder(quads: [
+            Quad(
+                outer["ftl"]!.translate(x: -1 * tr).set(z: 0).translate(z: min(outer["fbl"]!.z, outer["ftl"]!.z).cg),
+                outer["btl"]!.translate(x: -1 * tr).set(z: 0).translate(z: max(outer["btl"]!.z, outer["bbl"]!.z).cg),
+                outer["bbl"]!.translate(x: -1 * tr).set(z: 0).translate(z: max(outer["btl"]!.z, outer["bbl"]!.z).cg),
+                outer["fbl"]!.translate(x: -1 * tr).set(z: 0).translate(z: min(outer["ftl"]!.z, outer["fbl"]!.z).cg))
+            ]).getGeometry()
+        let rText = GeometryBuilder(quads: [
+            Quad(
+                outer["btr"]!.translate(x: 1 * tr).set(z: 0).translate(z: max(outer["btr"]!.z, outer["bbr"]!.z).cg),
+                outer["ftr"]!.translate(x: 1 * tr).set(z: 0).translate(z: min(outer["fbr"]!.z, outer["ftr"]!.z).cg),
+                outer["fbr"]!.translate(x: 1 * tr).set(z: 0).translate(z: min(outer["fbr"]!.z, outer["ftr"]!.z).cg),
+                outer["bbr"]!.translate(x: 1 * tr).set(z: 0).translate(z: max(outer["btr"]!.z, outer["bbr"]!.z).cg))
+            ]).getGeometry()
+        
+        fText.firstMaterial?.diffuse.contents = UIColor.green
+        bText.firstMaterial?.diffuse.contents = UIColor.yellow
+        lText.firstMaterial?.diffuse.contents = UIColor.cyan
+        rText.firstMaterial?.diffuse.contents = UIColor.red
         if options.contains(.sideTextShown) {
-            let tr: CGFloat = options.contains(.isAR) ? 0.1 * 0.0254 : 0.1
-            let fText = GeometryBuilder(quads: [
-                Quad(
-                    outer["ftr"]!.translate(z: 1 * tr).set(x: 0).translate(x: min(outer["fbr"]!.x, outer["ftr"]!.x).cg),
-                    outer["ftl"]!.translate(z: 1 * tr).set(x: 0).translate(x: max(outer["ftl"]!.x, outer["fbl"]!.x).cg),
-                    outer["fbl"]!.translate(z: 1 * tr).set(x: 0).translate(x: max(outer["ftl"]!.x, outer["fbl"]!.x).cg),
-                    outer["fbr"]!.translate(z: 1 * tr).set(x: 0).translate(x: min(outer["fbr"]!.x, outer["ftr"]!.x).cg))
-                ]).getGeometry()
-            let bText = GeometryBuilder(quads: [
-                Quad(
-                    outer["btl"]!.translate(z: -1 * tr).set(x: 0).translate(x: max(outer["btl"]!.x, outer["bbl"]!.x).cg),
-                    outer["btr"]!.translate(z: -1 * tr).set(x: 0).translate(x: min(outer["bbr"]!.x, outer["btr"]!.x).cg),
-                    outer["bbr"]!.translate(z: -1 * tr).set(x: 0).translate(x: min(outer["bbr"]!.x, outer["btr"]!.x).cg),
-                    outer["bbl"]!.translate(z: -1 * tr).set(x: 0).translate(x: max(outer["btl"]!.x, outer["bbl"]!.x).cg))
-                ]).getGeometry()
-            let lText = GeometryBuilder(quads: [
-                Quad(
-                    outer["ftl"]!.translate(x: -1 * tr).set(z: 0).translate(z: min(outer["fbl"]!.z, outer["ftl"]!.z).cg),
-                    outer["btl"]!.translate(x: -1 * tr).set(z: 0).translate(z: max(outer["btl"]!.z, outer["bbl"]!.z).cg),
-                    outer["bbl"]!.translate(x: -1 * tr).set(z: 0).translate(z: max(outer["btl"]!.z, outer["bbl"]!.z).cg),
-                    outer["fbl"]!.translate(x: -1 * tr).set(z: 0).translate(z: min(outer["ftl"]!.z, outer["fbl"]!.z).cg))
-                ]).getGeometry()
-            let rText = GeometryBuilder(quads: [
-                Quad(
-                    outer["btr"]!.translate(x: 1 * tr).set(z: 0).translate(z: max(outer["btr"]!.z, outer["bbr"]!.z).cg),
-                    outer["ftr"]!.translate(x: 1 * tr).set(z: 0).translate(z: min(outer["fbr"]!.z, outer["ftr"]!.z).cg),
-                    outer["fbr"]!.translate(x: 1 * tr).set(z: 0).translate(z: min(outer["fbr"]!.z, outer["ftr"]!.z).cg),
-                    outer["bbr"]!.translate(x: 1 * tr).set(z: 0).translate(z: max(outer["btr"]!.z, outer["bbr"]!.z).cg))
-                ]).getGeometry()
-            
-            fText.firstMaterial?.diffuse.contents = UIColor.green
-            bText.firstMaterial?.diffuse.contents = UIColor.yellow
-            lText.firstMaterial?.diffuse.contents = UIColor.cyan
-            rText.firstMaterial?.diffuse.contents = UIColor.red
             fText.firstMaterial?.transparent.contents = UIImage(named: "F")
             bText.firstMaterial?.transparent.contents = UIImage(named: "B")
             lText.firstMaterial?.transparent.contents = UIImage(named: "L")
             rText.firstMaterial?.transparent.contents = UIImage(named: "R")
-            fText.firstMaterial?.transparencyMode = .rgbZero
-            bText.firstMaterial?.transparencyMode = .rgbZero
-            lText.firstMaterial?.transparencyMode = .rgbZero
-            rText.firstMaterial?.transparencyMode = .rgbZero
-            
-            let f = SCNNode(geometry: fText)
-            let b = SCNNode(geometry: bText)
-            let l = SCNNode(geometry: lText)
-            let r = SCNNode(geometry: rText)
-            f.name = "h-front"
-            b.name = "h-back"
-            l.name = "h-left"
-            r.name = "h-right"
-            
-            geometryNode.addChildNode(f)
-            geometryNode.addChildNode(b)
-            geometryNode.addChildNode(l)
-            geometryNode.addChildNode(r)
+        } else {
+            fText.firstMaterial?.transparent.contents = UIColor.white
+            bText.firstMaterial?.transparent.contents = UIColor.white
+            lText.firstMaterial?.transparent.contents = UIColor.white
+            rText.firstMaterial?.transparent.contents = UIColor.white
         }
+        fText.firstMaterial?.transparencyMode = .rgbZero
+        bText.firstMaterial?.transparencyMode = .rgbZero
+        lText.firstMaterial?.transparencyMode = .rgbZero
+        rText.firstMaterial?.transparencyMode = .rgbZero
         
-        return geometryNode
+        let f = SCNNode(geometry: fText)
+        let b = SCNNode(geometry: bText)
+        let l = SCNNode(geometry: lText)
+        let r = SCNNode(geometry: rText)
+        f.name = "h-front"
+        b.name = "h-back"
+        l.name = "h-left"
+        r.name = "h-right"
+        
+        
+//        var rend: [DuctFace: [TabSide: TabData]] = [:]
+//        for face in DuctFace.allCases {
+//            for side in TabSide.allCases {
+//
+//            }
+//        }
+        var result = [geometryNode, f, b, l, r]
+        result.append(contentsOf: generateTabs(outer: outer, inner: inner, tabs: tabs, material: material))
+        return result
+    }
+    
+    func generateTabs(outer: [String: V3], inner: [String: V3], tabs: TabsData, material: SCNMaterial) -> [SCNNode] {
+        var quads: [Quad] = []
+        print("Generating tabs")
+        if tabs.front.top.getLength() != .none {
+            let len = tabs.front.top.getLength().rawValue
+            switch tabs.front.top.getType() {
+                case .straight:
+                    print("made to switch case")
+                    quads.append(contentsOf: [
+                        Quad(
+                            outer["ftr"]!.translate(y: len),
+                            outer["ftl"]!.translate(y: len),
+                            outer["ftl"]!,
+                            outer["ftr"]!),
+                        Quad(
+                            inner["ftl"]!.translate(y: len),
+                            inner["ftr"]!.translate(y: len),
+                            inner["ftr"]!,
+                            inner["ftl"]!),
+                        Quad(
+                            outer["ftl"]!.translate(y: len),
+                            inner["ftl"]!.translate(y: len),
+                            inner["ftl"]!,
+                            outer["ftl"]!)
+                    ])
+                default: return []
+            }
+        }
+        if quads.count > 0 {
+            let geo = GeometryBuilder(quads: quads).getGeometry()
+            geo.firstMaterial = material
+            let node = SCNNode(geometry: geo)
+            node.name = "tabs"
+            return [node]
+        } else {
+            return []
+        }
+    }
+    
+    enum TabFacing {
+        case plusX, minusX, plusZ, minusZ
     }
     
     static func getMeasurements(_ v: [String: V3], _ rT: F) -> [String: Fraction] {
@@ -216,12 +272,12 @@ struct Ductwork {
         lol["front-duct-l"] = v["fbl"]!.distance(v["ftl"]!).toFraction(rT)
         lol["front-duct-r"] = v["fbr"]!.distance(v["ftr"]!).toFraction(rT)
         lol["back-bounding-l"] = v["bbl"]!.zero(.x).distance(v["btl"]!.zero(.x)).isLTZ()?.toFraction(rT)
-        lol["back-bounding-el"] = v["ftl"]!.zero(.y, .z).distance(v["fbl"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
-        lol["back-bounding-er"] = v["ftr"]!.zero(.y, .z).distance(v["fbr"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
-        lol["back-duct-t"] = v["ftr"]!.distance(v["ftl"]!).toFraction(rT)
-        lol["back-duct-b"] = v["fbr"]!.distance(v["fbl"]!).toFraction(rT)
-        lol["back-duct-l"] = v["fbl"]!.distance(v["ftl"]!).toFraction(rT)
-        lol["back-duct-r"] = v["fbr"]!.distance(v["ftr"]!).toFraction(rT)
+        lol["back-bounding-el"] = v["bbr"]!.zero(.y, .z).distance(v["btr"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
+        lol["back-bounding-er"] = v["bbl"]!.zero(.y, .z).distance(v["btl"]!.zero(.y, .z)).isLTZ()?.toFraction(rT)
+        lol["back-duct-t"] = v["btr"]!.distance(v["btl"]!).toFraction(rT)
+        lol["back-duct-b"] = v["bbr"]!.distance(v["bbl"]!).toFraction(rT)
+        lol["back-duct-l"] = v["bbr"]!.distance(v["btr"]!).toFraction(rT)
+        lol["back-duct-r"] = v["bbl"]!.distance(v["btl"]!).toFraction(rT)
         lol["left-bounding-l"] = v["bbl"]!.zero(.z).distance(v["btl"]!.zero(.z)).isLTZ()?.toFraction(rT)
         lol["left-bounding-el"] = v["btl"]!.zero(.y, .x).distance(v["bbl"]!.zero(.y, .x)).isLTZ()?.toFraction(rT)
         lol["left-bounding-er"] = v["ftl"]!.zero(.y, .x).distance(v["fbl"]!.zero(.y, .x)).isLTZ()?.toFraction(rT)

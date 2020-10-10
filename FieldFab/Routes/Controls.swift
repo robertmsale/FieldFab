@@ -13,13 +13,10 @@ func returnBinding(_ x: AppLogicField) -> Binding<AppLogicField> {
 }
 
 struct Controls: View {
-    @EnvironmentObject var aL: AppLogic
+    @EnvironmentObject var al: AppLogic
     @EnvironmentObject var db: DB
     @Environment(\.colorScheme) var colorScheme
     @State var incrementIndex: Int = 0
-    @State var loadShown = false
-    @State var aboutShown = false
-    @State var helpShown = false
     
     var body: some View {
         
@@ -33,17 +30,17 @@ struct Controls: View {
                                 HStack() {
                                     Button(action: {
                                         let d = DimensionsData(
-                                            name: aL.sessionName,
+                                            name: al.sessionName,
                                             createdOn: Date(),
                                             tabs: TabsData(),
-                                            length: aL.length.original,
-                                            width: aL.width.original,
-                                            depth: aL.depth.original,
-                                            offsetX: aL.offsetX.original,
-                                            offsetY: aL.offsetY.original,
-                                            isTransition: aL.isTransition,
-                                            tWidth: aL.tWidth.original,
-                                            tDepth: aL.tDepth.original,
+                                            length: al.length.original,
+                                            width: al.width.original,
+                                            depth: al.depth.original,
+                                            offsetX: al.offsetX.original,
+                                            offsetY: al.offsetY.original,
+                                            isTransition: al.isTransition,
+                                            tWidth: al.tWidth.original,
+                                            tDepth: al.tDepth.original,
                                             id: UUID())
                                         db.dimensions.append(d)
                                         db.persist()
@@ -52,14 +49,14 @@ struct Controls: View {
                                     })
                                     Spacer()
                                     Button(action: {
-                                        self.aL.shareSheetContent = [self.aL.url]
-                                        self.aL.shareSheetShown.toggle()
+                                        al.shareSheetContent = [al.url]
+                                        al.shareSheetShown.toggle()
                                     }, label: {
                                         Image(systemName: "square.and.arrow.up").font(.title)
                                     })
                                     Spacer()
                                     Button(action: {
-                                        loadShown = true
+                                        al.loadDuctworkViewShown = true
                                     }, label: {
                                         Text("Load").font(.title)
                                     })
@@ -69,7 +66,7 @@ struct Controls: View {
                                         Text("Session Name").font(.headline)
                                         Spacer()
                                     }
-                                    TextField("Session Name", text: $aL.sessionName)
+                                    TextField("Session Name", text: $al.sessionName)
                                         .padding(.vertical, 8)
                                         .padding(.horizontal, 10)
                                         .background(AppColors.ControlBG[colorScheme])
@@ -82,26 +79,26 @@ struct Controls: View {
                                     Spacer()
                                     HStack(alignment: .center) {
                                         Button(action: {
-                                            switch self.aL.increments {
-                                                case .half: self.aL.increments = .quarter
-                                                case .quarter: self.aL.increments = .eighth
-                                                case .eighth: self.aL.increments = .sixteenth
-                                                case .sixteenth: self.aL.increments = .thirtysecond
-                                                default: self.aL.increments = .half
+                                            switch al.increments {
+                                                case .half: al.increments = .quarter
+                                                case .quarter: al.increments = .eighth
+                                                case .eighth: al.increments = .sixteenth
+                                                case .sixteenth: al.increments = .thirtysecond
+                                                default: al.increments = .half
                                             }
                                         }, label: {
                                             Image(systemName: "arrow.left")
                                         })
                                         Spacer()
-                                        Text(Fraction(self.aL.increments.rawValue).text("n/d"))
+                                        Text(Fraction(al.increments.rawValue).text("n/d"))
                                         Spacer()
                                         Button(action: {
-                                            switch self.aL.increments {
-                                                case .half: self.aL.increments = .thirtysecond
-                                                case .quarter: self.aL.increments = .half
-                                                case .eighth: self.aL.increments = .quarter
-                                                case .sixteenth: self.aL.increments = .eighth
-                                                default: self.aL.increments = .sixteenth
+                                            switch al.increments {
+                                                case .half: al.increments = .thirtysecond
+                                                case .quarter: al.increments = .half
+                                                case .eighth: al.increments = .quarter
+                                                case .sixteenth: al.increments = .eighth
+                                                default: al.increments = .sixteenth
                                             }
                                         }, label: {
                                             Image(systemName: "arrow.right")
@@ -119,35 +116,35 @@ struct Controls: View {
                                         Text("Width").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.width, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal)
+                                    FStepper(val: $al.width, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal)
                                     HStack {
                                         Text("Depth").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.depth, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal)
+                                    FStepper(val: $al.depth, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal)
                                     HStack {
                                         Text("Length").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.length, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal)
+                                    FStepper(val: $al.length, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal)
                                     HStack {
                                         Text("Offset X").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.offsetX, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal)
+                                    FStepper(val: $al.offsetX, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal)
                                     HStack {
                                         Text("Offset Y").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.offsetY, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal)
+                                    FStepper(val: $al.offsetY, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal)
                                 }
                                 Divider()
                                 HStack {
                                     Text("Is Transition?")
                                     Spacer()
-                                    Toggle("", isOn: $aL.isTransition)
+                                    Toggle("", isOn: $al.isTransition)
                                         .gesture(TapGesture().onEnded({_ in
-                                            self.aL.toggleTransition()
+                                            al.toggleTransition()
                                         }))
                                         .padding(.trailing, 2)
                                 }
@@ -157,12 +154,12 @@ struct Controls: View {
                                         Text("Transition Width").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.tWidth, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal).disabled(!self.aL.isTransition)
+                                    FStepper(val: $al.tWidth, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal).disabled(!self.al.isTransition)
                                     HStack {
                                         Text("Transition Depth").font(.headline)
                                         Spacer()
                                     }
-                                    FStepper(val: $aL.tDepth, fullStep: true, stepSize: self.aL.increments).frame(height: 42).padding(.horizontal).disabled(!self.aL.isTransition)
+                                    FStepper(val: $al.tDepth, fullStep: true, stepSize: al.increments).frame(height: 42).padding(.horizontal).disabled(!self.al.isTransition)
                                 }
                             }
                             Spacer()
@@ -170,11 +167,11 @@ struct Controls: View {
                         .padding(.horizontal, 20)
                         Divider()
                         HStack {
-                            Button(action: {helpShown.toggle()}, label: {
+                            Button(action: {al.helpViewShown.toggle()}, label: {
                                 Image(systemName: "questionmark.circle")
                             })
                             Spacer()
-                            Button(action: {aboutShown.toggle()}, label: {
+                            Button(action: {al.aboutViewShown.toggle()}, label: {
                                 Text("About")
                             })
                         }.font(.title).padding(.horizontal, 30)
@@ -182,39 +179,6 @@ struct Controls: View {
                     }
                     .frame(width: min(g.size.width, 520), height: g.size.height)
                     .position(x: g.size.width / 2, y: g.size.height / 2)
-                    ScrollView {
-                        VStack(spacing: 8) {
-                            Spacer(minLength: 100)
-                            LoadDuctworkView(shown: $loadShown)
-                            Spacer(minLength: 100)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .frame(width: g.size.width)
-                    .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
-                    .position(loadShown ?
-                        CGPoint(x: g.size.width / 2, y: g.size.height / 2) :
-                        CGPoint(x: g.size.width / 2, y: g.size.height * 2))
-                    .animation(.easeInOut, value: loadShown)
-                    ScrollView {
-                        VStack(spacing: 8) {
-                            Spacer(minLength: 50)
-                            AboutView(shown: $aboutShown)
-                            Spacer(minLength: 100)
-                        }
-                        .frame(width: g.size.width, height: g.size.height)
-                        .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
-                    }
-                    .position(CGPoint(x: g.size.width / 2, y: aboutShown ? g.size.height / 2 : g.size.height * 2))
-                    .animation(.easeInOut, value: aboutShown)
-                    VStack {
-                        Spacer(minLength: 100)
-                        HelpView(shown: $helpShown)
-                        Spacer(minLength: 100)
-                    }
-                    .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
-                    .position(CGPoint(x: g.size.width / 2, y: helpShown ? g.size.height / 2 : g.size.height * 2))
-                    .animation(.easeInOut, value: helpShown)
                     
                 }
 //                .edgesIgnoringSafeArea(.top)

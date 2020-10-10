@@ -11,7 +11,7 @@ import SwiftUI
 struct LoadDuctworkView: View {
     @EnvironmentObject var al: AppLogic
     @EnvironmentObject var db: DB
-    @Binding var shown: Bool
+    @Environment(\.colorScheme) var colorScheme
     
     func renderList() -> AnyView {
         let data = db.dimensions.sorted(by: {(prev, next) in
@@ -26,13 +26,21 @@ struct LoadDuctworkView: View {
     }
     
     var body: some View {
-        VStack {
-            Button(action: {
-                shown = false
-            }, label: {
-                Text("Cancel")
-            })
-            renderList()
+        ScrollView {
+            VStack {
+                renderList()
+                Button(action: {
+                    al.loadDuctworkViewShown = false
+                }, label: {
+                    Text("Cancel")
+                })
+                .font(.title3)
+                .foregroundColor(.red)
+                .padding()
+                .background(AppColors.ControlBG[colorScheme])
+            }
+            .padding(.horizontal)
+            .padding(.top)
         }
     }
 }
@@ -56,11 +64,9 @@ struct LoadDuctworkView_Previews: PreviewProvider {
                 id: UUID())
         ])
         
-        return StatefulPreviewWrapper(false) {
-            LoadDuctworkView(shown: $0)
+        return LoadDuctworkView()
                 .environmentObject(db)
                 .environmentObject(AppLogic())
-        }
     }
 }
 #endif
