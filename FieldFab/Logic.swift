@@ -21,7 +21,7 @@ enum AppLogicField {
     case isTransition
 }
 
-class AppLogic : ObservableObject {
+class AppLogic: ObservableObject {
     @Published var width: Fraction {
         didSet {
             if !self.isTransition {
@@ -45,37 +45,38 @@ class AppLogic : ObservableObject {
     @Published var length: Fraction { didSet {
         UserDefaults.standard.set(self.length.original, forKey: "length")
         self.updateDuct()
-        } }
+    } }
     @Published var offsetX: Fraction { didSet {
         UserDefaults.standard.set(self.offsetX.original, forKey: "offsetX")
         self.updateDuct()
-        } }
+    } }
     @Published var offsetY: Fraction { didSet {
         UserDefaults.standard.set(self.offsetY.original, forKey: "offsetY")
         self.updateDuct()
-        } }
+    } }
     @Published var tWidth: Fraction { didSet {
         UserDefaults.standard.set(self.tWidth.original, forKey: "tWidth")
         self.updateDuct()
-        } }
+    } }
     @Published var tDepth: Fraction { didSet {
         UserDefaults.standard.set(self.tDepth.original, forKey: "tDepth")
         self.updateDuct()
-        } }
+    } }
     @Published var isTransition: Bool { didSet {
         UserDefaults.standard.set(self.isTransition, forKey: "isTransition")
         self.updateDuct()
-        } }
+    } }
     @Published var roundTo: CGFloat { didSet {
         UserDefaults.standard.set(self.roundTo, forKey: "roundTo")
         self.duct.updateMeasurements(self.roundTo)
-        } }
+    } }
     @Published var increments: FractionStepAmount
     @Published var duct: Ductwork
     @Published var tabs: TabsData { didSet {
         do {
-        UserDefaults.standard.set(
-            try JSONEncoder().encode(tabs), forKey: "tabs")
+            print(String(data: try JSONEncoder().encode(tabs), encoding: .utf8))
+            UserDefaults.standard.set(
+                String(data: try JSONEncoder().encode(tabs), encoding: .utf8), forKey: "tabs")
         } catch { print("Problem encoding tabs to JSON") }
         self.updateDuct()
     }}
@@ -109,14 +110,14 @@ class AppLogic : ObservableObject {
             tabs[selectedSide][selectedTabSide][1.0] = selectedTabLength
         }
     }
-    
+
     @Published var arViewHelpersShown: Bool = false
     @Published var arViewFlowDirection: FlowDirection = .up
     @Published var arViewReset: Bool = false
     @Published var arMenuSheetShown: Bool = false
     @Published var arDuctPosition: SCNVector3 = SCNVector3(0, 0, 0) { didSet { print("position: \(arDuctPosition)") }}
     @Published var arDuctRotation: Float = 0.0 { didSet { print("rotation: \(arDuctRotation)") }}
-    
+
     var url: URL {
         get {
             var url = "fieldfab://load?width=\(self.width.original.description)&"
@@ -130,21 +131,21 @@ class AppLogic : ObservableObject {
             return URL(string: url)!
         }
     }
-//    @Published var tabs: TabsDB
-    
+    //    @Published var tabs: TabsDB
+
     func makeSideFlat(side: DuctSides) {
         switch side {
-            case .front:
-                offsetY = Fraction((depth.original - tDepth.original) / 2, roundTo: roundTo)
-            case .back:
-                offsetY = Fraction(-((depth.original - tDepth.original) / 2), roundTo: roundTo)
-            case .right:
-                offsetX = Fraction((width.original - tWidth.original) / 2, roundTo: roundTo)
-            case .left:
-                offsetX = Fraction(-((width.original - tWidth.original) / 2), roundTo: roundTo)
+        case .front:
+            offsetY = Fraction((depth.original - tDepth.original) / 2, roundTo: roundTo)
+        case .back:
+            offsetY = Fraction(-((depth.original - tDepth.original) / 2), roundTo: roundTo)
+        case .right:
+            offsetX = Fraction((width.original - tWidth.original) / 2, roundTo: roundTo)
+        case .left:
+            offsetX = Fraction(-((width.original - tWidth.original) / 2), roundTo: roundTo)
         }
     }
-    
+
     func updateDuct() {
         self.duct.update(
             self.length.original,
@@ -159,19 +160,18 @@ class AppLogic : ObservableObject {
         arMeasurementsDidChange = true
     }
 
-    
     init() {
-//        let ud = UserDefaults.standard
-//        let rt = CGFloat(ud.double(forKey: "roundTo"))
-//        self.roundTo = rt
-//        self.width = Fraction(CGFloat(ud.double(forKey: "width")), roundTo: rt)
-//        self.depth = Fraction(CGFloat(ud.double(forKey: "depth")), roundTo: rt)
-//        self.length = Fraction(CGFloat(ud.double(forKey: "length")), roundTo: rt)
-//        self.offsetX = Fraction(CGFloat(ud.double(forKey: "offsetX")), roundTo: rt)
-//        self.offsetY = Fraction(CGFloat(ud.double(forKey: "offsetY")), roundTo: rt)
-//        self.tWidth = Fraction(CGFloat(ud.double(forKey: "tWidth")), roundTo: rt)
-//        self.tDepth = Fraction(CGFloat(ud.double(forKey: "tDepth")), roundTo: rt)
-//        self.isTransition = ud.bool(forKey: "roundTo")
+        //        let ud = UserDefaults.standard
+        //        let rt = CGFloat(ud.double(forKey: "roundTo"))
+        //        self.roundTo = rt
+        //        self.width = Fraction(CGFloat(ud.double(forKey: "width")), roundTo: rt)
+        //        self.depth = Fraction(CGFloat(ud.double(forKey: "depth")), roundTo: rt)
+        //        self.length = Fraction(CGFloat(ud.double(forKey: "length")), roundTo: rt)
+        //        self.offsetX = Fraction(CGFloat(ud.double(forKey: "offsetX")), roundTo: rt)
+        //        self.offsetY = Fraction(CGFloat(ud.double(forKey: "offsetY")), roundTo: rt)
+        //        self.tWidth = Fraction(CGFloat(ud.double(forKey: "tWidth")), roundTo: rt)
+        //        self.tDepth = Fraction(CGFloat(ud.double(forKey: "tDepth")), roundTo: rt)
+        //        self.isTransition = ud.bool(forKey: "roundTo")
         let d = WD()
         self.roundTo = d.rT
         self.selectedRoundTo = PickerRoundTo(rawValue: d.rT) ?? PickerRoundTo.sixteenth
@@ -190,7 +190,7 @@ class AppLogic : ObservableObject {
         selectedTabType = d.t.front.top[1]
         selectedTabLength = d.t.front.top[1.0]
     }
-    
+
     func toggleTransition() {
         if self.isTransition {
             self.tWidth.original = self.width.original
@@ -212,7 +212,7 @@ struct WD {
     var i: FractionStepAmount
     var s: String
     var t: TabsData
-    
+
     init() {
         self.w = UserDefaults.standard.object(forKey: "width") as? CGFloat ?? 16.0
         self.d = UserDefaults.standard.object(forKey: "depth") as? CGFloat ?? 20.0
@@ -226,7 +226,11 @@ struct WD {
         self.i = FractionStepAmount.quarter
         self.s = UserDefaults.standard.object(forKey: "sessionName") as? String ?? "Ductwork"
         do {
-            self.t = try TabsData(from: try JSONDecoder().decode(TabsData.self, from: Data((UserDefaults.standard.object(forKey: "tabs") as? String ?? "").utf8)) as! Decoder)
+            let jsd = (UserDefaults.standard.object(forKey: "tabs") as? String ?? "")
+            print(jsd)
+            let decoder = JSONDecoder()
+            let data = jsd.data(using: .utf8)
+            self.t = try decoder.decode(TabsData.self, from: data ?? Data())
         } catch {
             print("Could not decode Tabs user defaults from JSON")
             self.t = TabsData()

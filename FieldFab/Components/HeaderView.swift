@@ -13,27 +13,25 @@ enum IndexerMutate {
 }
 
 final class Indexer<T>: ObservableObject {
-    
+
     @Published var data: [T]
     @Published var index: Int
-//    @Published var previous: Int
-    
+    //    @Published var previous: Int
+
     var current: T {
         get { data[index] }
     }
-    
+
     func mutate(_ dir: IndexerMutate) {
-//        self.previous = self.index
+        //        self.previous = self.index
         switch dir {
-            case .inc:
-                if self.index == self.data.count - 1 { self.index = 0 }
-                else { self.index += 1 }
-            case .dec:
-                if self.index == 0 { self.index = self.data.count - 1 }
-                else { self.index -= 1 }
+        case .inc:
+            if self.index == self.data.count - 1 { self.index = 0 } else { self.index += 1 }
+        case .dec:
+            if self.index == 0 { self.index = self.data.count - 1 } else { self.index -= 1 }
         }
     }
-    
+
     init(_ data: [T]) {
         self.data = data
         self.index = 0
@@ -53,21 +51,21 @@ struct TopBarView<Content: View, TBC: View>: View {
     let topbarContent: TBC
     var options: Set<TopBarOptions> = []
     @Environment(\.colorScheme) var colorScheme
-    
-    init(_ options: TopBarOptions..., @ViewBuilder topbarContent: () -> TBC,  @ViewBuilder content: () -> Content) {
+
+    init(_ options: TopBarOptions..., @ViewBuilder topbarContent: () -> TBC, @ViewBuilder content: () -> Content) {
         self.content = content()
         for opt in options {
             self.options.insert(opt)
         }
         self.topbarContent = topbarContent()
     }
-    
+
     init(_ options: Set<TopBarOptions>, @ViewBuilder topbarContent: () -> TBC, @ViewBuilder content: () -> Content) {
         self.content = content()
         self.options = options
         self.topbarContent = topbarContent()
     }
-    
+
     func renderTopBar(_ g: GeometryProxy) -> AnyView {
         if self.options.contains(.overlay) {
             print(self.options.description)
@@ -77,7 +75,7 @@ struct TopBarView<Content: View, TBC: View>: View {
                         .zIndex(1)
                         .edgesIgnoringSafeArea(.all)
                         .frame(width: g.size.width, height: g.size.height)
-//                        .background(Color.gray)
+                    //                        .background(Color.gray)
                     AnyView(
                         HStack {
                             self.topbarContent
@@ -92,7 +90,7 @@ struct TopBarView<Content: View, TBC: View>: View {
                         effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)
                     ))
                     .edgesIgnoringSafeArea(self.options.contains(.fillTopEdge) ? .top : .leading)
-                    
+
                 }
             )
         } else {
@@ -110,7 +108,7 @@ struct TopBarView<Content: View, TBC: View>: View {
             )
         }
     }
-    
+
     var body: some View {
         GeometryReader { g in
             renderTopBar(g)
@@ -122,7 +120,7 @@ struct HeaderView<Content: View>: View {
     var title: String
     var options: Set<TopBarOptions>
     var content: Content
-    
+
     init(_ title: String, opt: Set<TopBarOptions>, @ViewBuilder content: () -> Content) {
         self.content = content()
         self.title = title
@@ -131,7 +129,7 @@ struct HeaderView<Content: View>: View {
     init(_ title: String, @ViewBuilder content: () -> Content) {
         self.init(title, opt: [], content: content)
     }
-    
+
     var body: some View {
         TopBarView(options, topbarContent: { Text(title) }, content: {
             self.content
@@ -144,7 +142,7 @@ struct NextPrevHeaderView<Content: View>: View {
     var title: String
     var options: Set<TopBarOptions> = []
     var content: Content
-    
+
     init(_ title: String, action: @escaping (IndexerMutate) -> Void, opt: Set<TopBarOptions>, @ViewBuilder content: () -> Content) {
         self.title = title
         self.content = content()
@@ -154,7 +152,7 @@ struct NextPrevHeaderView<Content: View>: View {
     init(_ title: String, action: @escaping (IndexerMutate) -> Void, @ViewBuilder content: () -> Content) {
         self.init(title, action: action, opt: [], content: content)
     }
-    
+
     var body: some View {
         TopBarView(.overlay, .fillTopEdge, topbarContent: {
             Button(action: {
@@ -178,7 +176,7 @@ struct NextPrevHeaderView<Content: View>: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-//        let id = Indexer(["Front", "Right", "Back", "Left"])
+        //        let id = Indexer(["Front", "Right", "Back", "Left"])
         return HeaderView("Ayyyy", opt: [.fillTopEdge]) {
             Text("Ayyyyy")
         }.environment(\.colorScheme, .light)

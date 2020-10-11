@@ -10,7 +10,7 @@ import SwiftUI
 import ARKit
 import UIKit
 
-struct ContentView : View {
+struct ContentView: View {
     @EnvironmentObject var al: AppLogic
     @EnvironmentObject var db: DB
     var body: some View {
@@ -59,26 +59,24 @@ struct ContentView : View {
                     ARMenuSheet()
                 })
         }
-            // 
+        //
     }
 }
 
 struct ActivityView: UIViewControllerRepresentable {
     let activityItems: [Any]
     let applicationActivities: [UIActivity]?
-    
+
     func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityView>) -> UIActivityViewController {
         return UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
     }
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityView>) {
-        
+
     }
 }
 
-
-
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().environmentObject(AppLogic())
     }

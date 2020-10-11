@@ -14,21 +14,21 @@ struct GridView: View {
     @Binding var scale: CGFloat
     @Binding var offset: CGPoint
     let minScale: CGFloat = 0.1
-    
+
     func makeV(g: GeometryProxy) -> Path {
         let p = CGMutablePath()
         p.move(to: P(x: g.size.width / 2, y: 0.0))
         p.addLine(to: P(x: g.size.width / 2, y: g.size.height))
         return Path(p)
     }
-    
+
     func makeH(g: GeometryProxy) -> Path {
         let p = CGMutablePath()
         p.move(to: P(x: 0.0, y: g.size.height / 2))
         p.addLine(to: P(x: g.size.width, y: g.size.height / 2))
         return Path(p)
     }
-    
+
     func makeLinePoints(g: GeometryProxy) -> [CGMutablePath] {
         let vLines = (g.size.width / 10 * max(self.minScale, self.scale)).ceil()
         let hLines = (g.size.height / 10 * max(self.minScale, self.scale)).ceil()
@@ -62,7 +62,7 @@ struct GridView: View {
         }
         return paths
     }
-    
+
     var body: some View {
         GeometryReader { g in
             ForEach(self.makeLinePoints(g: g), id: \.self) { p in

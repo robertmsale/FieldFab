@@ -12,36 +12,36 @@ struct PlaneAdjustmentView: View {
     @Binding var xz: CGPoint
     var axis: Axis = .xy
     @Environment(\.colorScheme) var colorScheme
-    
+
     enum Axis { case x, y, xy }
-    
+
     enum Direction {
         case up, down, left, right
     }
-    
+
     func renderChevron(_ g: GeometryProxy, direction: Direction) -> Path {
         return Path { p in
             switch direction {
-                case .up:
-                    p.move(to: CGPoint(x: g.size.width * 0.2, y: g.size.height * 0.5))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.25))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.8, y: g.size.height * 0.5))
-                case .down:
-                    p.move(to: CGPoint(x: g.size.width * 0.2, y: g.size.height * 0.5))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.75))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.8, y: g.size.height * 0.5))
-                case .left:
-                    p.move(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.2))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.25, y: g.size.height * 0.5))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.8))
-                case .right:
-                    p.move(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.2))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.75, y: g.size.height * 0.5))
-                    p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.8))
+            case .up:
+                p.move(to: CGPoint(x: g.size.width * 0.2, y: g.size.height * 0.5))
+                p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.25))
+                p.addLine(to: CGPoint(x: g.size.width * 0.8, y: g.size.height * 0.5))
+            case .down:
+                p.move(to: CGPoint(x: g.size.width * 0.2, y: g.size.height * 0.5))
+                p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.75))
+                p.addLine(to: CGPoint(x: g.size.width * 0.8, y: g.size.height * 0.5))
+            case .left:
+                p.move(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.2))
+                p.addLine(to: CGPoint(x: g.size.width * 0.25, y: g.size.height * 0.5))
+                p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.8))
+            case .right:
+                p.move(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.2))
+                p.addLine(to: CGPoint(x: g.size.width * 0.75, y: g.size.height * 0.5))
+                p.addLine(to: CGPoint(x: g.size.width * 0.5, y: g.size.height * 0.8))
             }
         }
     }
-    
+
     func renderCBox(_ d: Direction, _ minC: CGFloat) -> some View {
         return GeometryReader { g in
             ZStack {
@@ -59,14 +59,14 @@ struct PlaneAdjustmentView: View {
                     .foregroundColor(.blue)
                     .zIndex(2.0)
             }
-            
+
         }
     }
-    
+
     func renderBackingBG() -> VisualEffectView {
         return VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light))
     }
-    
+
     func renderBacking(_ g: GeometryProxy, _ minC: CGFloat) -> some View {
         return ZStack {
             Rectangle()
@@ -104,26 +104,26 @@ struct PlaneAdjustmentView: View {
             }
         }
     }
-    
+
     func bindGesture(_ d: Direction, _ c: Int) -> some Gesture {
         var magnitude: CGFloat = 0.0
         switch c {
-            case 1: magnitude = 0.0254 / 8
-            case 2: magnitude = 0.0254 / 2
-            case 3: magnitude = 0.0254
-            default: magnitude = 0.0254 / 8
+        case 1: magnitude = 0.0254 / 8
+        case 2: magnitude = 0.0254 / 2
+        case 3: magnitude = 0.0254
+        default: magnitude = 0.0254 / 8
         }
         switch d {
-            case .up: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(y: magnitude) }
-            case .down: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(y: -magnitude) }
-            case .left: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(x: -magnitude) }
-            case .right: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(x: magnitude) }
+        case .up: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(y: magnitude) }
+        case .down: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(y: -magnitude) }
+        case .left: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(x: -magnitude) }
+        case .right: return TapGesture(count: c).onEnded { self.xz = self.xz.translate(x: magnitude) }
         }
     }
-    
+
     func renderControls(_ g: GeometryProxy) -> some View {
         let minC = min(g.size.width, g.size.height)
-        
+
         return ZStack {
             if axis == .y || axis == .xy {
                 renderCBox(.up, minC)
@@ -158,11 +158,10 @@ struct PlaneAdjustmentView: View {
                     .gesture(bindGesture(.right, 3))
             }
             renderBacking(g, minC)
-            
-            
+
         }.frame(width: minC, height: minC)
     }
-    
+
     var body: some View {
         GeometryReader { g in
             renderControls(g)

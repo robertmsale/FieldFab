@@ -13,7 +13,7 @@ enum PickerSide: String, CaseIterable, Identifiable {
     case back
     case left
     case right
-    
+
     var id: String { self.rawValue }
 }
 enum PickerRoundTo: CGFloat, CaseIterable, Identifiable {
@@ -22,7 +22,7 @@ enum PickerRoundTo: CGFloat, CaseIterable, Identifiable {
     case eighth = 0.125
     case sixteenth = 0.0625
     case thirtySecond = 0.03125
-    
+
     var id: CGFloat { self.rawValue }
 }
 
@@ -31,57 +31,40 @@ struct ThreeDMenuSheet: View {
     @Environment(\.colorScheme) var colorScheme
     @State var tabSideSelected: TabSide = .top
     @State var tabMenuState: TabMenuShowing = .main
-    
+
     enum TabMenuShowing {
         case main, length, type
     }
-    
-    func tabMenu() -> AnyView {
-        switch tabMenuState {
-            case .main:
-                return AnyView(
-                    Text("Main")
-                )
-            case .type:
-                return AnyView(
-                    Text("Type")
-                )
-            case .length:
-                return AnyView(
-                    Text("Length")
-                )
-        }
-    }
-    
+
     func getSideText() -> DuctSides {
         switch al.selectedSide {
-            case .back: return .back
-            case .front: return .front
-            case .left: return .left
-            case .right: return .right
+        case .back: return .back
+        case .front: return .front
+        case .left: return .left
+        case .right: return .right
         }
     }
-    
+
     func getRoundToText() -> String {
         switch al.selectedRoundTo {
-            case .half: return "1/2"
-            case .quarter: return "1/4"
-            case .eighth: return "1/8"
-            case .sixteenth: return "1/16"
-            case .thirtySecond: return "1/32"
+        case .half: return "1/2"
+        case .quarter: return "1/4"
+        case .eighth: return "1/8"
+        case .sixteenth: return "1/16"
+        case .thirtySecond: return "1/32"
         }
     }
-    
+
     func renderMainControls(g: GeometryProxy) -> some View {
         return VStack {
             Picker("Side", selection: $al.selectedSide) {
                 Text("Front").tag( DuctFace.front )
-                Text("Back").tag ( DuctFace.back  )
-                Text("Left").tag ( DuctFace.left  )
+                Text("Back").tag( DuctFace.back  )
+                Text("Left").tag( DuctFace.left  )
                 Text("Right").tag( DuctFace.right )
             }.pickerStyle(SegmentedPickerStyle())
             GeometryReader { bg in
-                DuctSideView(g: bg, side: getSideText()).environmentObject(al)
+                DuctSideView(g: bg, side: al.selectedSide).environmentObject(al)
             }
             .frame(width: min(g.size.width, g.size.height) * 0.8, height: min(g.size.height, g.size.width) * 0.8)
             HStack {
@@ -107,10 +90,10 @@ struct ThreeDMenuSheet: View {
             HStack {
                 Button(action: {
                     switch al.selectedSide {
-                        case .front: al.makeSideFlat(side: .front)
-                        case .back: al.makeSideFlat(side: .back)
-                        case .left: al.makeSideFlat(side: .left)
-                        case .right: al.makeSideFlat(side: .right)
+                    case .front: al.makeSideFlat(side: .front)
+                    case .back: al.makeSideFlat(side: .back)
+                    case .left: al.makeSideFlat(side: .left)
+                    case .right: al.makeSideFlat(side: .right)
                     }
                     al.threeDMenuShown = false
                 }, label: {
@@ -122,34 +105,51 @@ struct ThreeDMenuSheet: View {
             }
         }
     }
-    
+
     func genTypePicker() -> AnyView {
         switch tabSideSelected {
-            case .top, .bottom: return AnyView(
-                Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1], label: Text(al.tabs[al.selectedSide, tabSideSelected, 1].asText), content: {
-                    Text(TabType.none.asText).tag(TabType.none)
-                    Text(TabType.straight.asText).tag(TabType.straight)
-                    Text(TabType.tapered.asText).tag(TabType.tapered)
-                    Text(TabType.slock.asText).tag(TabType.slock)
-                    Text(TabType.drive.asText).tag(TabType.drive)
-                    Text(TabType.foldIn.asText).tag(TabType.foldIn)
-                    Text(TabType.foldOut.asText).tag(TabType.foldOut)
+        case .top, .bottom: return AnyView(
+            Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1], label: Text(al.tabs[al.selectedSide, tabSideSelected, 1].asText), content: {
+                Text(TabType.none.asText).tag(TabType.none)
+                Text(TabType.straight.asText).tag(TabType.straight)
+                Text(TabType.tapered.asText).tag(TabType.tapered)
+                Text(TabType.slock.asText).tag(TabType.slock)
+                Text(TabType.drive.asText).tag(TabType.drive)
+                Text(TabType.foldIn.asText).tag(TabType.foldIn)
+                Text(TabType.foldOut.asText).tag(TabType.foldOut)
+            })
+        )
+        case .left, .right: return AnyView(
+            Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1], label: Text(al.tabs[al.selectedSide, tabSideSelected, 1].asText), content: {
+                Text(TabType.none.asText).tag(TabType.none)
+                Text(TabType.slock.asText).tag(TabType.slock)
+                Text(TabType.foldIn.asText).tag(TabType.foldIn)
+            })
+        )
+        }
+    }
+
+    func genLengthPicker() -> AnyView {
+        switch al.tabs[al.selectedSide, tabSideSelected, 1] {
+        case .drive:
+            return AnyView(
+                Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1.0], label: Text(al.tabs[al.selectedSide, tabSideSelected, 1.0].asText), content: {
+                    Text(TabLength.none.asText).tag(TabLength.none)
+                    Text(TabLength.inch.asText).tag(TabLength.inch)
                 })
-                .frame(width: 200, height: 60)
-                .clipped()
             )
-            case .left, .right: return AnyView(
-                Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1], label: Text(al.tabs[al.selectedSide, tabSideSelected, 1].asText), content: {
-                    Text(TabType.none.asText).tag(TabType.none)
-                    Text(TabType.slock.asText).tag(TabType.slock)
-                    Text(TabType.foldIn.asText).tag(TabType.foldIn)
+        default:
+            return AnyView(
+                Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1.0], label: Text(al.tabs[al.selectedSide, tabSideSelected, 1.0].asText), content: {
+                    Text(TabLength.none.asText).tag(TabLength.none)
+                    Text(TabLength.inch.asText).tag(TabLength.inch)
+                    Text(TabLength.half.asText).tag(TabLength.half)
+                    Text(TabLength.threeEighth.asText).tag(TabLength.threeEighth)
                 })
-                .frame(width: 200, height: 60)
-                .clipped()
             )
         }
     }
-    
+
     var body: some View {
         GeometryReader { g in
             ScrollView {
@@ -171,24 +171,21 @@ struct ThreeDMenuSheet: View {
                                 Text("Type")
                                 Spacer()
                                 genTypePicker()
+                                    .frame(width: 200, height: 60)
+                                    .clipped()
                             }
                             Divider()
                             HStack {
                                 Text("Length")
                                 Spacer()
-                                Picker(selection: $al.tabs[al.selectedSide, tabSideSelected, 1.0], label: Text(""), content: {
-                                    Text(TabLength.none.asText).tag(TabLength.none)
-                                    Text(TabLength.inch.asText).tag(TabLength.inch)
-                                    Text(TabLength.half.asText).tag(TabLength.half)
-                                    Text(TabLength.threeEighth.asText).tag(TabLength.threeEighth)
-                                })
-                                .frame(width: 200, height: 60)
-                                .clipped()
+                                genLengthPicker()
+                                    .frame(width: 200, height: 60)
+                                    .clipped()
                             }
                         }.padding()
                     }
                     Spacer()
-                    
+
                 }.padding()
             }
         }

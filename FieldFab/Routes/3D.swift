@@ -15,10 +15,10 @@ struct ThreeD: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var al: AppLogic
     @GestureState var lol = false
-    
+
     var body: some View {
         GeometryReader {g in
-            ZStack{
+            ZStack {
                 SceneView(geo: g, textShown: al.threeDViewHelpersShown)
                     .edgesIgnoringSafeArea(.all)
                 Button(action: { self.helpVisible = true }, label: {
@@ -76,7 +76,7 @@ struct _D_Previews: PreviewProvider {
         aL.offsetY = Fraction(1)
         aL.tWidth = Fraction(20)
         aL.tDepth = Fraction(16)
-        return GeometryReader { g in
+        return GeometryReader { _ in
             ThreeD().environmentObject(aL)
         }
     }
@@ -87,18 +87,20 @@ struct SceneView: UIViewRepresentable {
     var textShown: Bool
     @EnvironmentObject var aL: AppLogic
     typealias V3 = SCNVector3
-    
+
     func makeUIView(context: Context) -> SCNView {
         let bounding = min(self.geo.size.width, self.geo.size.height)
         let sceneView = SCNView(frame: CGRect(x: 0.0, y: 0.0, width: bounding, height: bounding))
-        
+
         sceneView.allowsCameraControl = true
         sceneView.rendersContinuously = true
         guard let scene = SCNScene(named: "ductwork.scn", inDirectory: "main.scnassets")
-            else { fatalError("Derp") }
-        
+        else { fatalError("Derp") }
+        scene.rootNode.childNode(withName: "plane", recursively: false)?.geometry?.firstMaterial?.fillMode = .lines
+
         let camera = SCNCamera()
         camera.fieldOfView = 90
+        camera.zFar = 1000
         let camNode = SCNNode()
         var maxXZ: Float = 0.0
         for (_, v) in self.aL.duct.v3D {
@@ -107,7 +109,7 @@ struct SceneView: UIViewRepresentable {
         camNode.worldPosition = SCNVector3(0.0, 0.0, maxXZ * 4)
         camNode.name = "camera"
         camNode.camera = camera
-        
+
         let geometryNode = self.aL.duct.getQuadGeometry(
             self.aL.offsetX.original,
             self.aL.offsetY.original,
@@ -116,15 +118,13 @@ struct SceneView: UIViewRepresentable {
         for v in geometryNode {
             scene.rootNode.addChildNode(v)
         }
-        
+
         scene.rootNode.addChildNode(camNode)
-        
+
         sceneView.scene = scene
         return sceneView
     }
-    
-    
-    
+
     func updateUIView(_ uiView: SCNView, context: Context) {
         if aL.threeDMeasurementsDidChange {
             uiView.scene?.rootNode.childNode(withName: "duct", recursively: false)?.removeFromParentNode()
@@ -133,9 +133,12 @@ struct SceneView: UIViewRepresentable {
             uiView.scene?.rootNode.childNode(withName: "h-back", recursively: false)?.removeFromParentNode()
             uiView.scene?.rootNode.childNode(withName: "h-left", recursively: false)?.removeFromParentNode()
             uiView.scene?.rootNode.childNode(withName: "h-right", recursively: false)?.removeFromParentNode()
-            uiView.scene?.rootNode.childNode(withName: "tabs", recursively: false)?.removeFromParentNode()
-            
-            
+            uiView.scene?.rootNode.childNode(withName: "tab-ft", recursively: false)?.removeFromParentNode()
+            let tabnames = ["ft", "fb", "fl", "fr", "bt", "bb", "bl", "br", "lt", "lb", "ll", "lr", "rt", "rb", "rl", "rr"]
+            for i in tabnames {
+                uiView.scene?.rootNode.childNode(withName: "tab-\(i)", recursively: false)?.removeFromParentNode()
+            }
+
             let camera = SCNCamera()
             camera.fieldOfView = 90
             let camNode = SCNNode()
@@ -146,18 +149,17 @@ struct SceneView: UIViewRepresentable {
             camNode.worldPosition = SCNVector3(0.0, 0.0, maxXZ * 4)
             camNode.name = "camera"
             camNode.camera = camera
-            
-            
+
             let geometryNode = self.aL.duct.getQuadGeometry(
                 self.aL.offsetX.original,
                 self.aL.offsetY.original,
                 options: textShown ? [.sideTextShown] : [],
                 tabs: aL.tabs)
-            
+
             for v in geometryNode {
                 uiView.scene?.rootNode.addChildNode(v)
             }
-            
+
             uiView.scene?.rootNode.addChildNode(camNode)
             aL.threeDMeasurementsDidChange = false
         } else {

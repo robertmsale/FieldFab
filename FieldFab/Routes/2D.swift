@@ -14,52 +14,50 @@ struct TwoD: View {
     @State var roundToIndex = 1
     @ObservedObject var id: Indexer = Indexer(["Front", "Right", "Back", "Left"])
     @Environment(\.colorScheme) var colorScheme
-    
+
     var body: some View {
         return GeometryReader { g in
             NextPrevHeaderView(self.id.current, action: self.id.mutate, opt: [.overlay, .fillTopEdge]) {
                 ZStack(content: {
                     switch self.id.current {
-                        case "Front":
-                            DuctSideView(g: g, side: .front)
-                                .zIndex(-1)
-                        case "Left":
-                            DuctSideView(g: g, side: .left)
-                                .zIndex(-1)
-                        case "Right":
-                            DuctSideView(g: g, side: .right)
-                                .zIndex(-1)
-                        default:
-                            DuctSideView(g: g, side: .back)
-                                .zIndex(-1)
+                    case "Front":
+                        DuctSideView(g: g, side: .front)
+                            .zIndex(-1)
+                    case "Left":
+                        DuctSideView(g: g, side: .left)
+                            .zIndex(-1)
+                    case "Right":
+                        DuctSideView(g: g, side: .right)
+                            .zIndex(-1)
+                    default:
+                        DuctSideView(g: g, side: .back)
+                            .zIndex(-1)
                     }
-                    HStack() {
+                    HStack {
                         Text("Round To")
                         ZStack {
                             HStack(alignment: .center) {
-                                
+
                                 Rectangle()
                                     .fill(Color(.sRGB, white: 0, opacity: 0.01))
                                     .background(Image(systemName: "arrow.left"))
                                     .foregroundColor(.blue)
-                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                    .frame(width: 30, height: 30, alignment: .center/*@END_MENU_TOKEN@*/)
                                     .onTapGesture(count: 1, perform: {
-                                        if self.roundToIndex == 0 { self.roundToIndex = 4 }
-                                        else { self.roundToIndex -= 1}
+                                        if self.roundToIndex == 0 { self.roundToIndex = 4 } else { self.roundToIndex -= 1}
                                         self.aL.roundTo = Math.INCREMENTS[self.roundToIndex]
                                     })
                                 Spacer()
                                 Text(Math.INCREMENTSTRINGS[self.roundToIndex])
                                 Spacer()
-                                
+
                                 Rectangle()
                                     .fill(Color(.sRGB, white: 0, opacity: 0.01))
                                     .background(Image(systemName: "arrow.right"))
                                     .foregroundColor(.blue)
-                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                    .frame(width: 30, height: 30, alignment: .center/*@END_MENU_TOKEN@*/)
                                     .onTapGesture(count: 1, perform: {
-                                        if self.roundToIndex == 4 { self.roundToIndex = 0 }
-                                        else { self.roundToIndex += 1}
+                                        if self.roundToIndex == 4 { self.roundToIndex = 0 } else { self.roundToIndex += 1}
                                         self.aL.roundTo = Math.INCREMENTS[self.roundToIndex]
                                     })
                             }
@@ -73,7 +71,7 @@ struct TwoD: View {
                     }
                     .position(x: g.size.width / 2, y: g.size.height)
                 })
-                
+
             }
         }
     }

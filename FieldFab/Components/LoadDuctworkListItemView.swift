@@ -15,7 +15,7 @@ struct LoadDuctworkListItemView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var al: AppLogic
     @EnvironmentObject var db: DB
-    
+
     func fmtDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -23,7 +23,7 @@ struct LoadDuctworkListItemView: View {
         dateFormatter.locale = Locale(identifier: "en_US")
         return dateFormatter.string(from: dimensions.createdOn)
     }
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
@@ -54,6 +54,7 @@ struct LoadDuctworkListItemView: View {
                     al.tDepth = dimensions.tDepth.toFraction(al.roundTo)
                     al.isTransition = dimensions.isTransition
                     al.sessionName = dimensions.name
+                    al.tabs = dimensions.tabs
                 }, label: {
                     Text("Load")
                 })
@@ -130,9 +131,9 @@ struct LoadDuctworkListItemView: View {
                 Text("Show Preview")
             })
             .opacity(!previewShown ? 1 : 0)
-            
+
             if previewShown {
-                ThreeDPreview(dimensions: Dimensions(from: dimensions), shown: $previewShown)
+                ThreeDPreview(dimensions: dimensions, shown: $previewShown)
                     .frame(height: 200)
                     .transition(.scale)
             }
@@ -145,21 +146,21 @@ struct LoadDuctworkListItemView: View {
 
 struct LoadDuctworkListItemView_Previews: PreviewProvider {
     static var previews: some View {
-            LoadDuctworkListItemView(dimensions:
-                DimensionsData(
-                name: "DerpaSherpa",
-                createdOn: Date(),
-                tabs: TabsData(),
-                length: 5,
-                width: 16.5,
-                depth: 20,
-                offsetX: 1,
-                offsetY: 0,
-                isTransition: true,
-                tWidth: 20,
-                tDepth: 16,
-                id: UUID()))
-                .environment(\.colorScheme, .dark)
-                .environmentObject(AppLogic())
+        LoadDuctworkListItemView(dimensions:
+                                    DimensionsData(
+                                        name: "DerpaSherpa",
+                                        createdOn: Date(),
+                                        tabs: TabsData(),
+                                        length: 5,
+                                        width: 16.5,
+                                        depth: 20,
+                                        offsetX: 1,
+                                        offsetY: 0,
+                                        isTransition: true,
+                                        tWidth: 20,
+                                        tDepth: 16,
+                                        id: UUID()))
+            .environment(\.colorScheme, .dark)
+            .environmentObject(AppLogic())
     }
 }

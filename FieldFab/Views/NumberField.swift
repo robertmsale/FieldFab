@@ -11,7 +11,7 @@ import Foundation
 
 struct NumberField: View {
     @Binding var data: Double
-    
+
     var body: some View {
         TextField(
             "type something...",

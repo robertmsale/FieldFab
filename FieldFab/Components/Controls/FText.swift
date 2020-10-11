@@ -11,12 +11,12 @@ import SwiftUI
 struct FText: View {
     var fraction: Fraction
     var isMeasurement: Bool
-    
+
     init(_ f: Fraction, _ im: Bool = false) {
         self.fraction = f
         self.isMeasurement = im
     }
-    
+
     func getWholeText() -> String {
         let isNegative = self.fraction.whole == 0 && self.fraction.original < 0 ? "-" : ""
         let isWholeNotZero = (self.fraction.whole != 0) || (self.fraction.whole == 0 && self.fraction.parts.d == 1)
@@ -24,7 +24,7 @@ struct FText: View {
         let shouldAddSpace = self.fraction.isFraction ? " " : ""
         return "\(isNegative)\(isWholeNotZero)\(shouldAddSpace)"
     }
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 0.0, content: {
             Text(getWholeText()).font(.headline)

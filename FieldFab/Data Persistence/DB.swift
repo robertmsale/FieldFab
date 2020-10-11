@@ -11,7 +11,7 @@ import Disk
 
 class DB: ObservableObject {
     @Published var dimensions: [DimensionsData]
-    
+
     func persist() {
         do {
             try Disk.save(self.dimensions, to: .caches, as: "saved-dimensions.json")
@@ -19,7 +19,7 @@ class DB: ObservableObject {
             print("Data could not be saved")
         }
     }
-    
+
     func getURL(_ id: UUID) -> URL? {
         var index = 0
         if dimensions.count < 1 { return nil }
@@ -36,7 +36,7 @@ class DB: ObservableObject {
         url += "isTransition=\(dimensions[index].isTransition.description)"
         return URL(string: url)!
     }
-    
+
     init() {
         let defaultDimensions = [
             DimensionsData(
@@ -64,7 +64,7 @@ class DB: ObservableObject {
                 isTransition: true,
                 tWidth: 20,
                 tDepth: 20,
-                id: UUID()),
+                id: UUID())
         ]
         do {
             self.dimensions = try Disk.retrieve("saved-dimensions.json", from: .caches, as: [DimensionsData].self)

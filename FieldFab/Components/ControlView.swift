@@ -10,15 +10,15 @@ import SwiftUI
 
 struct ControlButtonImage: View {
     let icon: String
-    
+
     var body: some View {
         Image(systemName: self.icon)
             .font(.title)
-//            .padding(10)
-//            .background(Color.blue)
-//            .cornerRadius(40)
-//            .foregroundColor(Color.white)
-        
+        //            .padding(10)
+        //            .background(Color.blue)
+        //            .cornerRadius(40)
+        //            .foregroundColor(Color.white)
+
     }
 }
 
@@ -26,14 +26,14 @@ struct ControlViewItem: View {
     @Binding var data: Fraction
     @Binding var increments: CGFloat
     var label: String
-    
+
     var body: some View {
         VStack(alignment: .center) {
             HStack {
                 Text(self.label).font(.system(size: 24.0))
                 Spacer()
             }
-//            Divider()
+            //            Divider()
             HStack(alignment: .center) {
                 Button(action: {
                     self.data.original = self.data.original - 1.0
@@ -46,7 +46,7 @@ struct ControlViewItem: View {
                     ControlButtonImage(icon: "arrow.left")
                 })
                 Spacer()
-                HStack() {
+                HStack {
                     Text("\(self.data.whole)").font(.system(size: 20.0))
                     if self.data.parts.d != 1 {
                         Text("\(self.data.parts.n)/\(self.data.parts.d)").font(.system(size: 14.0))

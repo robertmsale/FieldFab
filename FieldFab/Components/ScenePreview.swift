@@ -10,10 +10,10 @@ import SwiftUI
 import SceneKit
 
 struct ThreeDPreview: View {
-    var dimensions: Dimensions
+    var dimensions: DimensionsData
     @Binding var shown: Bool
     @Environment(\.colorScheme) var cs
-    
+
     var body: some View {
         GeometryReader { g in
             ZStack {
@@ -34,9 +34,9 @@ struct ThreeDPreview: View {
 
 struct ScenePreview: UIViewRepresentable {
     var geo: GeometryProxy
-    var dimensions: Dimensions
+    var dimensions: DimensionsData
     @Binding var shown: Bool
-    
+
     func makeUIView(context: Context) -> some UIView {
         let sceneView = SCNView(frame: CGRect(x: 0, y: 0, width: geo.size.width, height: geo.size.height))
         sceneView.allowsCameraControl = true
@@ -51,7 +51,7 @@ struct ScenePreview: UIViewRepresentable {
             dimensions.offsetY,
             dimensions.tWidth,
             dimensions.tDepth)
-        
+
         let camera = SCNCamera()
         camera.fieldOfView = 90
         let camNode = SCNNode()
@@ -63,17 +63,17 @@ struct ScenePreview: UIViewRepresentable {
         camNode.name = "camera"
         camNode.camera = camera
         scene.rootNode.addChildNode(camNode)
-        
+
         let node = Ductwork.getQuadGeoFromFile(dimensions)
-        
+
         for v in node {
             scene.rootNode.addChildNode(v)
         }
-        
+
         sceneView.scene = scene
         return sceneView
     }
-    
+
     func updateUIView(_ uiView: UIViewType, context: Context) {
         if !shown { uiView.removeFromSuperview() }
     }
@@ -82,20 +82,7 @@ struct ScenePreview: UIViewRepresentable {
 #if DEBUG
 struct ScenePreview_Previews: PreviewProvider {
     static var previews: some View {
-        StatefulPreviewWrapper(true) {
-            ThreeDPreview(
-                dimensions: Dimensions(
-                    l: 5,
-                    w: 30,
-                    d: 20,
-                    oX: 1,
-                    oY: 0,
-                    iT: true,
-                    tW: 20,
-                    tD: 16),
-                shown: $0)
-                .frame(width: 350, height: 200)
-        }
+        Text("Ayyyyy")
     }
 }
 #endif

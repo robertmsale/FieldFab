@@ -17,25 +17,23 @@ enum AppColors {
     subscript(_ s: ColorScheme) -> Color {
         if s == .dark {
             switch self {
-                case .ControlBG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.07)
-                case .ControlFG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.98)
-                case .ButtonFG: return Color.red
-                case .ViewFG: return Color(hue: 0.0, saturation: 0.0, brightness: 1.0)
-                case .ViewBG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.0)
+            case .ControlBG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.07)
+            case .ControlFG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.98)
+            case .ButtonFG: return Color.red
+            case .ViewFG: return Color(hue: 0.0, saturation: 0.0, brightness: 1.0)
+            case .ViewBG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.0)
             }
-        }
-        else {
+        } else {
             switch self {
-                case .ControlBG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.97)
-                case .ControlFG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.0)
-                case .ButtonFG: return Color.blue
-                case .ViewFG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.0)
-                case .ViewBG: return Color(hue: 0.0, saturation: 0.0, brightness: 1.0)
+            case .ControlBG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.97)
+            case .ControlFG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.0)
+            case .ButtonFG: return Color.blue
+            case .ViewFG: return Color(hue: 0.0, saturation: 0.0, brightness: 0.0)
+            case .ViewBG: return Color(hue: 0.0, saturation: 0.0, brightness: 1.0)
             }
         }
     }
 }
-
 
 struct Colors_Previews: PreviewProvider {
     static var previews: some View {

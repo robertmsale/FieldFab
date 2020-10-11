@@ -14,22 +14,22 @@ enum FlowDirection: UInt64, CaseIterable, Identifiable {
     case down = 1
     case left = 2
     case right = 3
-    
+
     var id: UInt64 { self.rawValue }
-    
+
     func getVector() -> SCNVector3 {
         switch self {
-            case .up: return SCNVector3(x: 0, y: 0, z: 0)
-            case .left: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: -90))
-            case .right: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 90))
-            case .down: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 180))
+        case .up: return SCNVector3(x: 0, y: 0, z: 0)
+        case .left: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: -90))
+        case .right: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 90))
+        case .down: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 180))
         }
     }
 }
 
 struct ARMenuSheet: View {
     @EnvironmentObject var al: AppLogic
-    
+
     var body: some View {
         ScrollView {
             VStack {

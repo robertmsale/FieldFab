@@ -17,22 +17,22 @@ struct Controls: View {
     @EnvironmentObject var db: DB
     @Environment(\.colorScheme) var colorScheme
     @State var incrementIndex: Int = 0
-    
+
     var body: some View {
-        
+
         HeaderView("Settings", opt: [.fillTopEdge, .overlay]) {
             GeometryReader { g in
                 ZStack {
                     ScrollView {
                         Spacer(minLength: 100)
                         VStack(alignment: .center, spacing: 8.0) {
-                            VStack() {
-                                HStack() {
+                            VStack {
+                                HStack {
                                     Button(action: {
                                         let d = DimensionsData(
                                             name: al.sessionName,
                                             createdOn: Date(),
-                                            tabs: TabsData(),
+                                            tabs: al.tabs,
                                             length: al.length.original,
                                             width: al.width.original,
                                             depth: al.depth.original,
@@ -74,17 +74,17 @@ struct Controls: View {
                                 }
                                 .padding(.bottom)
                                 Divider()
-                                HStack() {
+                                HStack {
                                     Text("Increment by")
                                     Spacer()
                                     HStack(alignment: .center) {
                                         Button(action: {
                                             switch al.increments {
-                                                case .half: al.increments = .quarter
-                                                case .quarter: al.increments = .eighth
-                                                case .eighth: al.increments = .sixteenth
-                                                case .sixteenth: al.increments = .thirtysecond
-                                                default: al.increments = .half
+                                            case .half: al.increments = .quarter
+                                            case .quarter: al.increments = .eighth
+                                            case .eighth: al.increments = .sixteenth
+                                            case .sixteenth: al.increments = .thirtysecond
+                                            default: al.increments = .half
                                             }
                                         }, label: {
                                             Image(systemName: "arrow.left")
@@ -94,11 +94,11 @@ struct Controls: View {
                                         Spacer()
                                         Button(action: {
                                             switch al.increments {
-                                                case .half: al.increments = .thirtysecond
-                                                case .quarter: al.increments = .half
-                                                case .eighth: al.increments = .quarter
-                                                case .sixteenth: al.increments = .eighth
-                                                default: al.increments = .sixteenth
+                                            case .half: al.increments = .thirtysecond
+                                            case .quarter: al.increments = .half
+                                            case .eighth: al.increments = .quarter
+                                            case .sixteenth: al.increments = .eighth
+                                            default: al.increments = .sixteenth
                                             }
                                         }, label: {
                                             Image(systemName: "arrow.right")
@@ -179,17 +179,15 @@ struct Controls: View {
                     }
                     .frame(width: min(g.size.width, 520), height: g.size.height)
                     .position(x: g.size.width / 2, y: g.size.height / 2)
-                    
+
                 }
-//                .edgesIgnoringSafeArea(.top)
-//                .padding(.horizontal, 20)
-//                .padding(.vertical, 100)
+                //                .edgesIgnoringSafeArea(.top)
+                //                .padding(.horizontal, 20)
+                //                .padding(.vertical, 100)
             }
         }
     }
 }
-    
-
 
 struct Controls_Previews: PreviewProvider {
     static var previews: some View {

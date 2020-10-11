@@ -16,7 +16,7 @@ struct FStepper: View {
     var isMeasurement: Bool = true
     var big: Bool = true
     @Environment(\.colorScheme) var colorScheme
-    
+
     var body: some View {
         GeometryReader { g in
             ZStack {
@@ -43,20 +43,19 @@ struct FStepper: View {
                         .gesture(DragGesture().onChanged({v in
                             if prevStep == CGPoint.zero {
                                 prevStep = v.location
-                                if v.translation.width > 1 { val.mutate(.whole, .increment) }
-                                else { val.mutate(.whole, .decrement) }
+                                if v.translation.width > 1 { val.mutate(.whole, .increment) } else { val.mutate(.whole, .decrement) }
                             } else {
                                 switch (prevStep, v.location) {
-                                    case let (x, y) where x.x < y.x && Int(y.x) % 3 == 0:
-                                        val.mutate(.whole, .increment)
-                                        prevStep = v.location
-                                    case let (x, y) where x.x > y.x && Int(y.x) % 3 == 0:
-                                        val.mutate(.whole, .decrement)
-                                        prevStep = v.location
-                                    default: break
+                                case let (x, y) where x.x < y.x && Int(y.x) % 3 == 0:
+                                    val.mutate(.whole, .increment)
+                                    prevStep = v.location
+                                case let (x, y) where x.x > y.x && Int(y.x) % 3 == 0:
+                                    val.mutate(.whole, .decrement)
+                                    prevStep = v.location
+                                default: break
                                 }
                             }
-                        }).onEnded({v in
+                        }).onEnded({_ in
                             prevStep = CGPoint.zero
                         }))
                     Spacer()
@@ -73,7 +72,7 @@ struct FStepper: View {
                         })
                     }
                 }
-                .frame(width: g.size.width, height: g.size.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .frame(width: g.size.width, height: g.size.height, alignment: .center/*@END_MENU_TOKEN@*/)
                 .padding(.horizontal)
                 .background(Color(hue: 1, saturation: 0, brightness: 0.5, opacity: 0.1))
                 .cornerRadius(15)
@@ -87,12 +86,12 @@ struct FStepper: View {
 #if DEBUG
 struct FStepper_Previews: PreviewProvider {
     static var previews: some View {
-        
+
         return VStack {
             StatefulPreviewWrapper(Fraction(22.5)) {
                 FStepper(val: $0, fullStep: true, big: false)
             }
-        }.frame(width: 300, height: 64, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        }.frame(width: 300, height: 64, alignment: .center/*@END_MENU_TOKEN@*/)
     }
 }
 #endif

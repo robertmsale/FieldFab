@@ -12,25 +12,24 @@ struct RotateButtonView: View {
     @Environment(\.colorScheme) var colorScheme
     var side: Side
     typealias V2 = CGPoint
-    
+
     enum Side {
         case top, bottom, left, right
     }
-    
+
     func renderBacking(_ minC: CGFloat) -> some View {
         var wm: CGFloat = 1.0
         var hm: CGFloat = 1.0
-        if side == .top || side == .bottom { hm = 0.5 }
-        else { wm = 0.5}
+        if side == .top || side == .bottom { hm = 0.5 } else { wm = 0.5}
         return Rectangle()
             .fill(AppColors.ControlBG[.dark])
             .opacity(colorScheme == .dark ? 0.05 : 0.1)
             .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
             .cornerRadius(minC * 0.1)
-            .frame(width: minC * wm, height: minC * hm, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .frame(width: minC * wm, height: minC * hm, alignment: .center/*@END_MENU_TOKEN@*/)
             .position(x: minC / 2, y: minC / 2)
     }
-    
+
     func renderArrow(_ minC: CGFloat) -> Path {
         var p = Path()
         if side == .bottom || side == .left {
@@ -68,36 +67,36 @@ struct RotateButtonView: View {
         }
         return p
     }
-    
+
     func renderButton (_ g: GeometryProxy) -> some View {
         let minC = min(g.size.width, g.size.height)
         var d: Double = 0
         var p: CGPoint = CGPoint(x: 0.0, y: 0.0)
         switch side {
-            case .left:
-                d = 110
-                p = V2(x: minC / 3 * 2, y: minC / 2)
-            case .top:
-                d = 160
-                p = V2(x: minC / 2, y: minC / 3 * 2)
-            case .right:
-                d = 250
-                p = V2(x: minC / 3, y: minC / 2)
-            case .bottom:
-                d = 20
-                p = V2(x: minC / 2, y: minC / 3)
+        case .left:
+            d = 110
+            p = V2(x: minC / 3 * 2, y: minC / 2)
+        case .top:
+            d = 160
+            p = V2(x: minC / 2, y: minC / 3 * 2)
+        case .right:
+            d = 250
+            p = V2(x: minC / 3, y: minC / 2)
+        case .bottom:
+            d = 20
+            p = V2(x: minC / 2, y: minC / 3)
         }
         return ZStack {
             renderBacking(minC)
                 .zIndex(-1)
             renderArrow(minC)
                 .fill(Color.blue)
-                .frame(width: minC, height: minC, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .frame(width: minC, height: minC, alignment: .center/*@END_MENU_TOKEN@*/)
                 .rotationEffect(Angle(degrees: d))
                 .position(p)
         }
     }
-    
+
     var body: some View {
         GeometryReader { g in
             renderButton(g)

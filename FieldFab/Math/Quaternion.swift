@@ -13,6 +13,6 @@ struct Quaternion {
     var y: CGFloat
     var z: CGFloat
     var w: CGFloat
-    
-//    mutating func set(_ from: Vector3, _ to: Vector3)
+
+    //    mutating func set(_ from: Vector3, _ to: Vector3)
 }

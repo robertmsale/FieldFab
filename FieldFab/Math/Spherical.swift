@@ -13,7 +13,7 @@ struct Spherical {
     var radius: CGFloat
     var phi: CGFloat
     var theta: CGFloat
-    
+
     init<T: BinaryFloatingPoint>(_ r: T, _ p: T, _ t: T) {
         self.radius = CGFloat(r)
         self.phi = CGFloat(p)
@@ -29,12 +29,12 @@ struct Spherical {
         self.phi = v.y.cg
         self.theta = v.z.cg
     }
-    
+
     mutating func makeSafe() {
         let EPS = CGFloat(0.000001)
         self.phi = max( EPS, min( CGFloat.pi - EPS, self.phi ) )
     }
-    
+
     mutating func set<T: BinaryFloatingPoint> (x: T, y: T, z: T) {
         let xx = x * x
         let yy = y * y
@@ -42,7 +42,7 @@ struct Spherical {
         let radius = CGFloat(sqrt(xx + yy + zz))
         var theta: CGFloat = 0.0
         var phi: CGFloat = 0.0
-        
+
         if radius != 0.0 {
             theta = atan2( CGFloat(x), CGFloat(z) )
             phi = acos( Math.clamp(value: CGFloat(y) / radius, min: -1, max: 1 ) )
@@ -51,7 +51,7 @@ struct Spherical {
         self.theta = theta
         self.phi = phi
     }
-    
+
     mutating func set(_ v: SCNVector3) {
         self.set(x: v.x.cg, y: v.y.cg, z: v.z.cg)
     }

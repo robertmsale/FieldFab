@@ -14,10 +14,10 @@ struct ARViewContainer: UIViewRepresentable {
     @EnvironmentObject var al: AppLogic
     @State var oldRotation: SCNVector3 = SCNVector3()
     @State var rotating = false
-//    var rotationMode: ARRotationMode
-//    var textHelperShown: Bool
+    //    var rotationMode: ARRotationMode
+    //    var textHelperShown: Bool
     typealias V3 = SCNVector3
-    
+
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
         guard let scene = SCNScene(named: "ductwork.scn", inDirectory: "main.scnassets")
@@ -36,13 +36,13 @@ struct ARViewContainer: UIViewRepresentable {
             scene.rootNode.addChildNode(v)
             v.eulerAngles = al.arViewFlowDirection.getVector()
         }
-        
+
         arView.scene = scene
-        
+
         return arView
-        
+
     }
-    
+
     func applyTransforms(_ nodes: [SCNNode]) {
         for n in nodes {
             n.position = al.arDuctPosition
@@ -50,11 +50,11 @@ struct ARViewContainer: UIViewRepresentable {
             n.simdRotate(
                 by: simd_quatf(
                     angle: al.arDuctRotation,
-                            axis: simd_normalize(SIMD3(0, 1, 0))),
+                    axis: simd_normalize(SIMD3(0, 1, 0))),
                 aroundTarget: SIMD3(al.arDuctPosition))
         }
     }
-    
+
     func updateUIView(_ uiView: ARSCNView, context: Context) {
         if al.arViewReset {
             uiView.session = ARSession()
@@ -74,13 +74,13 @@ struct ARViewContainer: UIViewRepresentable {
             hback?.removeFromParentNode()
             hleft?.removeFromParentNode()
             hright?.removeFromParentNode()
-            
+
             let geometryNode = al.duct.getQuadGeometry(
                 al.offsetX.original,
                 al.offsetY.original,
                 options: al.arViewHelpersShown ? [.isAR, .sideTextShown] : [.isAR],
                 tabs: TabsData())
-            
+
             for v in geometryNode {
                 v.position = al.arDuctPosition
                 v.eulerAngles = al.arViewFlowDirection.getVector()
@@ -101,7 +101,7 @@ struct ARViewContainer: UIViewRepresentable {
             hright?.geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "R") : UIColor.white
         }
     }
-    
+
 }
 
 //struct ARViewContainer_Previews: PreviewProvider {

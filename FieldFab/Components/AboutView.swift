@@ -10,16 +10,16 @@ import SwiftUI
 
 struct AboutView: View {
     @EnvironmentObject var al: AppLogic
-    
+
     func bd() -> Date {
         if let infoPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
-            let infoAttr = try? FileManager.default.attributesOfItem(atPath: infoPath),
-            let infoDate = infoAttr[.modificationDate] as? Date {
+           let infoAttr = try? FileManager.default.attributesOfItem(atPath: infoPath),
+           let infoDate = infoAttr[.modificationDate] as? Date {
             return infoDate
         }
         return Date()
     }
-    
+
     func render(_ g: GeometryProxy) -> some View {
         let cmin = min(g.size.width, g.size.height)
         let copyrightFormat = DateFormatter()
@@ -27,7 +27,7 @@ struct AboutView: View {
         let df = DateFormatter()
         df.dateStyle = .medium
         df.timeStyle = .medium
-        
+
         return VStack(alignment: .center) {
             Image("FieldFab Logo")
                 .scaleEffect(0.6)
@@ -75,7 +75,7 @@ struct AboutView: View {
         .padding(.top, 50)
         .frame(width: g.size.width, height: g.size.height)
     }
-    
+
     var body: some View {
         GeometryReader { g in
             render(g)

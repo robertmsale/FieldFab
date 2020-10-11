@@ -12,21 +12,20 @@ struct CameraHelpView: View {
     var g: GeometryProxy
     @Binding var visible: Bool
     @Environment(\.colorScheme) var colorScheme
-    
+
     func rImage(_ i: String) -> Image {
         if colorScheme == .dark {
             return Image("\(i) Inverted")
-        }
-        else {
+        } else {
             return Image(i)
         }
     }
-    
+
     var body: some View {
-        ZStack{
+        ZStack {
             VStack(alignment: .center, spacing: 24.0) {
                 Spacer()
-                HStack(alignment: .center){
+                HStack(alignment: .center) {
                     rImage("Drag")
                     Spacer()
                     Text("Drag finger to rotate camera around the ductwork").multilineTextAlignment(.center)
@@ -34,21 +33,21 @@ struct CameraHelpView: View {
                 .padding(.horizontal, 24.0)
                 .padding(.top, 24.0)
                 Divider().background(Color.white)
-                HStack(alignment: .center){
+                HStack(alignment: .center) {
                     rImage("Rotate")
                     Spacer()
                     Text("Rotate with two fingers to roll the camera").multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 24.0)
                 Divider().background(Color.white)
-                HStack(alignment: .center){
+                HStack(alignment: .center) {
                     rImage("Drag")
                     Spacer()
                     Text("Pinch and spread fingers to zoom").multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 24.0)
                 Divider().background(Color.white)
-                HStack(alignment: .center){
+                HStack(alignment: .center) {
                     VStack {
                         rImage("HScroll")
                         rImage("VScroll")
@@ -60,13 +59,13 @@ struct CameraHelpView: View {
                 Spacer()
             }
             .frame(width: self.g.size.width, height: self.g.size.height, alignment: .center)
-//            .background(
-//                Rectangle()
-//                    .fill(Color.black)
-//                    .frame(width: self.g.size.width, height: self.g.size.height, alignment: .center)
-//            )
+            //            .background(
+            //                Rectangle()
+            //                    .fill(Color.black)
+            //                    .frame(width: self.g.size.width, height: self.g.size.height, alignment: .center)
+            //            )
             .foregroundColor(colorScheme == .dark ? .white : .black)
-//            .opacity(0.8)
+            //            .opacity(0.8)
             .zIndex(2.0)
             Button(action: { self.visible = false }, label: {
                 Image(systemName: "xmark")

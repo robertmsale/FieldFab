@@ -15,23 +15,21 @@ enum DistanceUnit {
 class Math {
     static var DEGRAD: CGFloat = CGFloat.pi / 180
     static var RADDEG: CGFloat = 180 / CGFloat.pi
-    
-    static let INCREMENTS: Array<CGFloat> = [0.03125, 0.0625, 0.125, 0.25, 0.5]
-    static let INCREMENTSTRINGS: Array<String> = ["1/32", "1/16", "1/8", "1/4", "1/2"]
-    
+
+    static let INCREMENTS: [CGFloat] = [0.03125, 0.0625, 0.125, 0.25, 0.5]
+    static let INCREMENTSTRINGS: [String] = ["1/32", "1/16", "1/8", "1/4", "1/2"]
+
     static func roundNumber(_ x: CGFloat, roundTo rT: CGFloat) -> CGFloat {
         let r = abs(x).truncatingRemainder(dividingBy: rT)
         if x < 0 {
-            if r < (rT / 2) { return -(abs(x) - r) }
-            else { return -(abs(x) + (rT - r))}
+            if r < (rT / 2) { return -(abs(x) - r) } else { return -(abs(x) + (rT - r))}
         } else if x == 0.0 {
             return 0.0
         } else {
-            if r < (rT / 2) { return x - r }
-            else { return x + (rT - r)}
+            if r < (rT / 2) { return x - r } else { return x + (rT - r)}
         }
     }
-    
+
     static func extractND(_ x: CGFloat) -> ND {
         switch abs(x).truncatingRemainder(dividingBy: 1.0) {
         case 0.03125: return ND(1, 32)
@@ -68,62 +66,61 @@ class Math {
         default: return ND(1, 1)
         }
     }
-    
+
     static func getWhole(_ x: CGFloat) -> Int {
         return Int(x - x.truncatingRemainder(dividingBy: 1.0))
     }
-    
+
     static func clamp( value v: CGFloat, min mi: CGFloat, max ma: CGFloat) -> CGFloat {
         return max( mi, min( ma, v ))
     }
-    
+
     static func euclideanModulo(_ n: CGFloat, _ m: CGFloat) -> CGFloat {
         return ( (n.truncatingRemainder(dividingBy: m)) + m ).truncatingRemainder(dividingBy: m)
     }
-    
+
     static func mapLinear(x: CGFloat, a1: CGFloat, a2: CGFloat, b1: CGFloat, b2: CGFloat ) -> CGFloat {
         return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 )
     }
-    
+
     static func lerp(x: CGFloat, y: CGFloat, t: CGFloat) -> CGFloat {
         return ( 1.0 - t ) * x + t * y
     }
-    
+
     static func smoothstep(x: CGFloat, min mi: CGFloat, max ma: CGFloat) -> CGFloat {
         if x <= mi { return 0.0 }
         if x >= ma { return 1.0 }
         let dx = ( x - mi ) / ( ma - mi )
         return dx * dx * ( 3.0 - 2.0 * dx )
     }
-    
+
     static func smootherstep(x: CGFloat, min mi: CGFloat, max ma: CGFloat) -> CGFloat {
         if x <= mi { return 0.0 }
         if x >= ma { return 1.0 }
         let dx = ( x - mi ) / ( ma - mi )
         return dx * dx * dx * ( dx * ( x * 6.0 - 15.0 ) + 10.0 )
     }
-    
+
     static func floor<T: BinaryFloatingPoint> (_ x: T) -> T {
         return x - x.truncatingRemainder(dividingBy: 1.0)
     }
-    
+
     static func ceil<T: BinaryFloatingPoint>(_ x: T) -> T {
         return x + (1.0 - x.truncatingRemainder(dividingBy: 1.0))
     }
-    
+
     static func degToRad<T: BinaryFloatingPoint>(degrees d: T) -> T {
         return d * T(Math.DEGRAD)
     }
-    
+
     static func radToDeg<T: BinaryFloatingPoint>(rads r: T) -> T {
         return r * T(Math.RADDEG)
     }
-    
+
     static func invertDeg(_ d: CGFloat) -> CGFloat {
-        if d > 180 { return abs(360 - d) }
-        else { return 180 + d }
+        if d > 180 { return abs(360 - d) } else { return 180 + d }
     }
-    
+
     static func reduce(data: [CGFloat], completionHandler: (_ a: CGFloat, _ b: CGFloat) -> CGFloat) -> CGFloat {
         var reduced: CGFloat = 0.0
         for i in 0...data.count - 1 {
@@ -134,29 +131,28 @@ class Math {
         }
         return reduced
     }
-    
+
     static func setQuaternionFromProperEuler() {
-        
+
     }
 }
 
 extension CGFloat {
-    
+
     func toRad() -> CGFloat { return self * Math.DEGRAD }
     func toDeg() -> CGFloat { return self * Math.RADDEG }
-    
+
     func toDouble() -> Double { return Double(self) }
-    
+
     func floor() -> CGFloat { return Math.floor(self) }
     func ceil() -> CGFloat { return Math.ceil(self) }
-    
+
     func toFraction(_ roundTo: CGFloat = 0.03125) -> Fraction {
         return Fraction(self, roundTo: roundTo)
     }
-    
+
     func isLTZ() -> CGFloat? {
-        if self <= 0.0 { return nil }
-        else { return self }
+        if self <= 0.0 { return nil } else { return self }
     }
 }
 

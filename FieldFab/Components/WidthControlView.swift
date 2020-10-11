@@ -10,7 +10,7 @@ import SwiftUI
 
 struct WidthControlView: View {
     @EnvironmentObject var aL: AppLogic
-    
+
     var body: some View {
         TextField("derp", value: $aL.depth, formatter: numFmt())
     }

@@ -11,12 +11,12 @@ import SwiftUI
 //struct UnitText: View {
 //    var units: DistanceUnit
 //    var number: CGFloat
-//    
+//
 //    init(_ n: CGFloat, units: DistanceUnit = .inches) {
 //        number = n
 //        self.units = units
 //    }
-//    
+//
 //    func getFractionString() -> String {
 //        let f = Fraction(number)
 //        let isNegative = f.whole == 0 && f.original < 0 ? "-" : ""
@@ -25,14 +25,14 @@ import SwiftUI
 //        let shouldAddSpace = f.isFraction ? " " : ""
 //        return "\(isNegative)\(isWholeNotZero)\(shouldAddSpace)"
 //    }
-//    
+//
 //    func getText() -> Text {
 //        switch units {
 //            case .inches: Text(getFractionString())
 //            case .feet: Text("\(number.description)")
 //        }
 //    }
-//    
+//
 //    var body: some View {
 //        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
 //    }

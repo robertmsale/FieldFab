@@ -12,7 +12,7 @@ struct LoadDuctworkView: View {
     @EnvironmentObject var al: AppLogic
     @EnvironmentObject var db: DB
     @Environment(\.colorScheme) var colorScheme
-    
+
     func renderList() -> AnyView {
         let data = db.dimensions.sorted(by: {(prev, next) in
             prev.createdOn > next.createdOn
@@ -24,7 +24,7 @@ struct LoadDuctworkView: View {
             LoadDuctworkListItemView(dimensions: data[d])
         })
     }
-    
+
     var body: some View {
         ScrollView {
             VStack {
@@ -63,10 +63,10 @@ struct LoadDuctworkView_Previews: PreviewProvider {
                 tDepth: 16,
                 id: UUID())
         ])
-        
+
         return LoadDuctworkView()
-                .environmentObject(db)
-                .environmentObject(AppLogic())
+            .environmentObject(db)
+            .environmentObject(AppLogic())
     }
 }
 #endif
