@@ -20,8 +20,8 @@ enum FlowDirection: UInt64, CaseIterable, Identifiable {
     func getVector() -> SCNVector3 {
         switch self {
         case .up: return SCNVector3(x: 0, y: 0, z: 0)
-        case .left: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: -90))
-        case .right: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 90))
+        case .left: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 90))
+        case .right: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: -90))
         case .down: return SCNVector3(x: 0, y: 0, z: Math.degToRad(degrees: 180))
         }
     }

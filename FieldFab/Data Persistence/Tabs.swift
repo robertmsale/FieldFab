@@ -36,6 +36,15 @@ enum TabLength: CGFloat, CaseIterable, Identifiable {
     case half        = 0.5
     case threeEighth = 0.375
     case none = 0.0
+    
+    init(url: Int) {
+        switch url {
+            case 3: self = .inch
+            case 2: self = .half
+            case 1: self = .threeEighth
+            default: self = .none
+        }
+    }
 
     var id: CGFloat { self.rawValue }
     var asText: String {
@@ -44,6 +53,14 @@ enum TabLength: CGFloat, CaseIterable, Identifiable {
         case .half: return "Half Inch"
         case .threeEighth: return "Three Eighth"
         case .none: return "None"
+        }
+    }
+    var asURL: Int {
+        switch self {
+            case .inch: return 3
+            case .half: return 2
+            case .threeEighth: return 1
+            case .none: return 0
         }
     }
 }
@@ -80,6 +97,105 @@ struct TabsData: Codable {
     var back: TabSidesData
     var left: TabSidesData
     var right: TabSidesData
+    
+    func toURL() -> String {
+        var url = ""
+        url += "ftT\(self[.front,.top,1].rawValue)L\(self[   .front,.top,1.0].asURL),"
+        url += "fbT\(self[.front,.bottom,1].rawValue)L\(self[.front,.bottom,1.0].asURL),"
+        url += "flT\(self[.front,.left,1].rawValue)L\(self[  .front,.left,1.0].asURL),"
+        url += "frT\(self[.front,.right,1].rawValue)L\(self[ .front,.right,1.0].asURL),"
+        url += "btT\(self[.back, .top,1].rawValue)L\(self[   .back, .top,1.0].asURL),"
+        url += "bbT\(self[.back, .bottom,1].rawValue)L\(self[.back, .bottom,1.0].asURL),"
+        url += "blT\(self[.back, .left,1].rawValue)L\(self[  .back, .left,1.0].asURL),"
+        url += "brT\(self[.back, .right,1].rawValue)L\(self[ .back, .right,1.0].asURL),"
+        url += "ltT\(self[.left, .top,1].rawValue)L\(self[   .left, .top,1.0].asURL),"
+        url += "lbT\(self[.left, .bottom,1].rawValue)L\(self[.left, .bottom,1.0].asURL),"
+        url += "llT\(self[.left, .left,1].rawValue)L\(self[  .left, .left,1.0].asURL),"
+        url += "lrT\(self[.left, .right,1].rawValue)L\(self[ .left, .right,1.0].asURL),"
+        url += "rtT\(self[.right,.top,1].rawValue)L\(self[   .right,.top,1.0].asURL),"
+        url += "rbT\(self[.right,.bottom,1].rawValue)L\(self[.right,.bottom,1.0].asURL),"
+        url += "rlT\(self[.right,.left,1].rawValue)L\(self[  .right,.left,1.0].asURL),"
+        url += "rrT\(self[.right,.right,1].rawValue)L\(self[ .right,.right,1.0].asURL)"
+        return url
+    }
+    
+    init(url: String) {
+        let iter = url.split(separator: ",")
+        var front = TabSidesData()
+        var back = TabSidesData()
+        var left = TabSidesData()
+        var right = TabSidesData()
+        for i in iter {
+            let type = NumberFormatter().number(from: "\(i[3])")?.intValue ?? 6
+            let length = NumberFormatter().number(from: "\(i[5])")?.intValue ?? 0
+            switch i[0] {
+                case "f":
+                    switch i[1] {
+                        case "t":
+                            front.top.type = type
+                            front.top.length = TabLength(url: length).rawValue
+                        case "b":
+                            front.bottom.type = type
+                            front.bottom.length = TabLength(url: length).rawValue
+                        case "l":
+                            front.left.type = type
+                            front.left.length = TabLength(url: length).rawValue
+                        default:
+                            front.right.type = type
+                            front.right.length = TabLength(url: length).rawValue
+                    }
+                case "b":
+                    switch i[1] {
+                        case "t":
+                            back.top.type = type
+                            back.top.length = TabLength(url: length).rawValue
+                        case "b":
+                            back.bottom.type = type
+                            back.bottom.length = TabLength(url: length).rawValue
+                        case "l":
+                            back.left.type = type
+                            back.left.length = TabLength(url: length).rawValue
+                        default:
+                            back.right.type = type
+                            back.right.length = TabLength(url: length).rawValue
+                    }
+                case "l":
+                    switch i[1] {
+                        case "t":
+                            left.top.type = type
+                            left.top.length = TabLength(url: length).rawValue
+                        case "b":
+                            left.bottom.type = type
+                            left.bottom.length = TabLength(url: length).rawValue
+                        case "l":
+                            left.left.type = type
+                            left.left.length = TabLength(url: length).rawValue
+                        default:
+                            left.right.type = type
+                            left.right.length = TabLength(url: length).rawValue
+                    }
+                default:
+                    switch i[1] {
+                        case "t":
+                            right.top.type = type
+                            right.top.length = TabLength(url: length).rawValue
+                        case "b":
+                            right.bottom.type = type
+                            right.bottom.length = TabLength(url: length).rawValue
+                        case "l":
+                            right.left.type = type
+                            right.left.length = TabLength(url: length).rawValue
+                        default:
+                            right.right.type = type
+                            right.right.length = TabLength(url: length).rawValue
+                    }
+            }
+        }
+        self.front = front
+        self.back = back
+        self.left = left
+        self.right = right
+    }
 
     init() {
         front = TabSidesData()

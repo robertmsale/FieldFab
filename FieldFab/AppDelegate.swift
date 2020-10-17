@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var al: AppLogic?
     var db: DB?
+    var lsd: LoadSharedDimensions?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
@@ -23,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let contentView = ContentView()
         al = AppLogic()
         db = DB()
+        lsd = LoadSharedDimensions()
 
         // Use a UIHostingController as window root view controller.
         let window = UIWindow(frame: UIScreen.main.bounds)
@@ -31,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 contentView
                 .environmentObject(al!)
                 .environmentObject(db!)
+                .environmentObject(lsd!)
         )
         self.window = window
         window.makeKeyAndVisible()
@@ -46,15 +49,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 parameters[$0.name] = $0.value
             }
             if view == "load" {
-                al!.sessionName = parameters["name"] ?? "Ductwork"
-                al!.width = Fraction(NumberFormatter().number(from: parameters["width"] ?? "16")?.floatValue.cg ?? 16)
-                al!.depth = Fraction(NumberFormatter().number(from: parameters["depth"] ?? "20")?.floatValue.cg ?? 20)
-                al!.length = Fraction(NumberFormatter().number(from: parameters["length"] ?? "5")?.floatValue.cg ?? 5)
-                al!.offsetX = Fraction(NumberFormatter().number(from: parameters["offsetX"] ?? "1")?.floatValue.cg ?? 1)
-                al!.offsetY = Fraction(NumberFormatter().number(from: parameters["offsetY"] ?? "0")?.floatValue.cg ?? 0)
-                al!.tWidth = Fraction(NumberFormatter().number(from: parameters["tWidth"] ?? "20")?.floatValue.cg ?? 20)
-                al!.tDepth = Fraction(NumberFormatter().number(from: parameters["tDepth"] ?? "16")?.floatValue.cg ?? 16)
-                al!.isTransition = parameters["isTransition"] == "true" ? true : false
+                lsd?.dimensions = DimensionsData(
+                    n: parameters["name"] ?? "Ductwork",
+                    c: Date(),
+                    t: TabsData(url: parameters["tabs"] ?? ""),
+                    l: NumberFormatter().number(from: parameters["length"] ?? "5")?.floatValue.cg ?? 5,
+                    w: NumberFormatter().number(from: parameters["width"] ?? "16")?.floatValue.cg ?? 16,
+                    d: NumberFormatter().number(from: parameters["depth"] ?? "20")?.floatValue.cg ?? 20,
+                    oX: NumberFormatter().number(from: parameters["offsetX"] ?? "1")?.floatValue.cg ?? 1,
+                    oY: NumberFormatter().number(from: parameters["offsetY"] ?? "0")?.floatValue.cg ?? 0,
+                    iT: parameters["isTransition"] == "true" ? true : false,
+                    tW: NumberFormatter().number(from: parameters["tWidth"] ?? "20")?.floatValue.cg ?? 20,
+                    tD: NumberFormatter().number(from: parameters["tDepth"] ?? "16")?.floatValue.cg ?? 16)
+                al?.shareSheetShown = false
+                al?.arMenuSheetShown = false
+                al?.helpViewShown = false
+                al?.aboutViewShown = false
+                al?.threeDMenuShown = false
+                al?.loadSharedSheetShown = true
             }
         }
         return true

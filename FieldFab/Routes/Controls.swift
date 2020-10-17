@@ -30,18 +30,17 @@ struct Controls: View {
                                 HStack {
                                     Button(action: {
                                         let d = DimensionsData(
-                                            name: al.sessionName,
-                                            createdOn: Date(),
-                                            tabs: al.tabs,
-                                            length: al.length.original,
-                                            width: al.width.original,
-                                            depth: al.depth.original,
-                                            offsetX: al.offsetX.original,
-                                            offsetY: al.offsetY.original,
-                                            isTransition: al.isTransition,
-                                            tWidth: al.tWidth.original,
-                                            tDepth: al.tDepth.original,
-                                            id: UUID())
+                                            n: al.sessionName,
+                                            c: Date(),
+                                            t: al.tabs,
+                                            l: al.length.original,
+                                            w: al.width.original,
+                                            d: al.depth.original,
+                                            oX: al.offsetX.original,
+                                            oY: al.offsetY.original,
+                                            iT: al.isTransition,
+                                            tW: al.tWidth.original,
+                                            tD: al.tDepth.original)
                                         db.dimensions.append(d)
                                         db.persist()
                                     }, label: {
@@ -197,18 +196,17 @@ struct Controls_Previews: PreviewProvider {
                 .environmentObject(
                     DB([
                         DimensionsData(
-                            name: "Derpa",
-                            createdOn: Date(),
-                            tabs: TabsData(),
-                            length: 5,
-                            width: 16,
-                            depth: 20,
-                            offsetX: 1,
-                            offsetY: 0,
-                            isTransition: true,
-                            tWidth: 20,
-                            tDepth: 16,
-                            id: UUID())
+                            n: "Derpa",
+                            c: Date(),
+                            t: TabsData(),
+                            l: 5,
+                            w: 16,
+                            d: 20,
+                            oX: 1,
+                            oY: 0,
+                            iT: true,
+                            tW: 20,
+                            tD: 16)
                     ]))
         }
     }

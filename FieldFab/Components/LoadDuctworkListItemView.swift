@@ -55,6 +55,7 @@ struct LoadDuctworkListItemView: View {
                     al.isTransition = dimensions.isTransition
                     al.sessionName = dimensions.name
                     al.tabs = dimensions.tabs
+                    al.loadDuctworkViewShown = false
                 }, label: {
                     Text("Load")
                 })
@@ -148,18 +149,17 @@ struct LoadDuctworkListItemView_Previews: PreviewProvider {
     static var previews: some View {
         LoadDuctworkListItemView(dimensions:
                                     DimensionsData(
-                                        name: "DerpaSherpa",
-                                        createdOn: Date(),
-                                        tabs: TabsData(),
-                                        length: 5,
-                                        width: 16.5,
-                                        depth: 20,
-                                        offsetX: 1,
-                                        offsetY: 0,
-                                        isTransition: true,
-                                        tWidth: 20,
-                                        tDepth: 16,
-                                        id: UUID()))
+                                        n: "DerpaSherpa",
+                                        c: Date(),
+                                        t: TabsData(),
+                                        l: 5,
+                                        w: 16.5,
+                                        d: 20,
+                                        oX: 1,
+                                        oY: 0,
+                                        iT: true,
+                                        tW: 20,
+                                        tD: 16))
             .environment(\.colorScheme, .dark)
             .environmentObject(AppLogic())
     }

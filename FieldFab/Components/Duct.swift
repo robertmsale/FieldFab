@@ -137,7 +137,7 @@ struct Ductwork {
         let material = SCNMaterial()
         material.diffuse.contents = UIImage(named: "metal-diffuse")
         material.normal.contents = UIImage(named: "metal-normal")
-        material.ambientOcclusion.contents = UIImage(named: "metal-ao")
+//        material.ambientOcclusion.contents = UIImage(named: "metal-ao")
         material.metalness.contents = UIImage(named: "metal-metallic")
         material.roughness.contents = UIImage(named: "metal-roughness")
         material.lightingModel = .physicallyBased
@@ -217,6 +217,7 @@ struct Ductwork {
     }
 
     func genShape(len: Float, width: Float, type: TabType, thickness: Float, material: SCNMaterial, taper: Float = 1) -> SCNGeometry {
+        
         switch type {
         case .straight:
             let path = CGMutablePath()
@@ -658,7 +659,7 @@ struct Ductwork {
             node.name = "tab-lb"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, material: material)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: Math.degToRad(degrees: -90), z: 0)

@@ -50,18 +50,17 @@ struct LoadDuctworkView_Previews: PreviewProvider {
     static var previews: some View {
         let db = DB([
             DimensionsData(
-                name: "Derpa",
-                createdOn: Date(),
-                tabs: TabsData(),
-                length: 5,
-                width: 16,
-                depth: 20,
-                offsetX: 1,
-                offsetY: 0,
-                isTransition: true,
-                tWidth: 20,
-                tDepth: 16,
-                id: UUID())
+                n: "Derpa",
+                c: Date(),
+                t: TabsData(),
+                l: 5,
+                w: 16,
+                d: 20,
+                oX: 1,
+                oY: 0,
+                iT: true,
+                tW: 20,
+                tD: 16)
         ])
 
         return LoadDuctworkView()

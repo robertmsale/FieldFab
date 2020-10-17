@@ -21,6 +21,10 @@ enum AppLogicField {
     case isTransition
 }
 
+class LoadSharedDimensions: ObservableObject {
+    @Published var dimensions: DimensionsData = DimensionsData()
+}
+
 class AppLogic: ObservableObject {
     @Published var width: Fraction {
         didSet {
@@ -74,7 +78,7 @@ class AppLogic: ObservableObject {
     @Published var duct: Ductwork
     @Published var tabs: TabsData { didSet {
         do {
-            print(String(data: try JSONEncoder().encode(tabs), encoding: .utf8))
+//            print(String(data: try JSONEncoder().encode(tabs), encoding: .utf8))
             UserDefaults.standard.set(
                 String(data: try JSONEncoder().encode(tabs), encoding: .utf8), forKey: "tabs")
         } catch { print("Problem encoding tabs to JSON") }
@@ -117,6 +121,7 @@ class AppLogic: ObservableObject {
     @Published var arMenuSheetShown: Bool = false
     @Published var arDuctPosition: SCNVector3 = SCNVector3(0, 0, 0) { didSet { print("position: \(arDuctPosition)") }}
     @Published var arDuctRotation: Float = 0.0 { didSet { print("rotation: \(arDuctRotation)") }}
+    @Published var loadSharedSheetShown: Bool = false
 
     var url: URL {
         get {
@@ -127,7 +132,9 @@ class AppLogic: ObservableObject {
             url += "offsetY=\(self.offsetY.original.description)&"
             url += "tWidth=\(self.tWidth.original.description)&"
             url += "tDepth=\(self.tDepth.original.description)&"
-            url += "isTransition=\(self.isTransition.description)"
+            url += "isTransition=\(self.isTransition.description)&"
+            url += "name=\(self.sessionName)&"
+            url += "tabs=\(self.tabs.toURL())"
             return URL(string: url)!
         }
     }
@@ -237,6 +244,8 @@ struct WD {
         }
     }
 }
+
+
 
 struct Logic_Previews: PreviewProvider {
     static var previews: some View {

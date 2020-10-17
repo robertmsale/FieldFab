@@ -13,6 +13,7 @@ import UIKit
 struct ContentView: View {
     @EnvironmentObject var al: AppLogic
     @EnvironmentObject var db: DB
+    @EnvironmentObject var lsd: LoadSharedDimensions
     var body: some View {
         ZStack {
             TabView {
@@ -57,6 +58,10 @@ struct ContentView: View {
             EmptyView()
                 .sheet(isPresented: $al.arMenuSheetShown, content: {
                     ARMenuSheet()
+                })
+            EmptyView()
+                .sheet(isPresented: $al.loadSharedSheetShown, content: {
+                    LoadSharedView().environmentObject(al).environmentObject(lsd)
                 })
         }
         //

@@ -33,38 +33,38 @@ class DB: ObservableObject {
         url += "offsetY=\(dimensions[index].offsetY.description)&"
         url += "tWidth=\(dimensions[index].tWidth.description)&"
         url += "tDepth=\(dimensions[index].tDepth.description)&"
-        url += "isTransition=\(dimensions[index].isTransition.description)"
+        url += "isTransition=\(dimensions[index].isTransition.description)&"
+        url += "name=\(dimensions[index].name)&"
+        url += "tabs=\(dimensions[index].tabs.toURL())"
         return URL(string: url)!
     }
 
     init() {
         let defaultDimensions = [
             DimensionsData(
-                name: "16x20 to 20x20",
-                createdOn: Date(),
-                tabs: TabsData(),
-                length: 6,
-                width: 16,
-                depth: 20,
-                offsetX: 0,
-                offsetY: 0,
-                isTransition: true,
-                tWidth: 20,
-                tDepth: 20,
-                id: UUID()),
+                n: "16x20 to 20x20",
+                c: Date(),
+                t: TabsData(),
+                l: 6,
+                w: 16,
+                d: 20,
+                oX: 0,
+                oY: 0,
+                iT: true,
+                tW: 20,
+                tD: 20),
             DimensionsData(
-                name: "16x20 to 20x20 w/ offset",
-                createdOn: Date(),
-                tabs: TabsData(),
-                length: 8,
-                width: 16,
-                depth: 20,
-                offsetX: 2,
-                offsetY: 1,
-                isTransition: true,
-                tWidth: 20,
-                tDepth: 20,
-                id: UUID())
+                n: "16x20 to 20x20 w/ offset",
+                c: Date(),
+                t: TabsData(),
+                l: 8,
+                w: 16,
+                d: 20,
+                oX: 2,
+                oY: 1,
+                iT: true,
+                tW: 20,
+                tD: 20)
         ]
         do {
             self.dimensions = try Disk.retrieve("saved-dimensions.json", from: .caches, as: [DimensionsData].self)

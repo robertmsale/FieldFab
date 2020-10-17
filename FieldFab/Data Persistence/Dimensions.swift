@@ -21,6 +21,36 @@ struct DimensionsData {
     let tWidth: CGFloat
     let tDepth: CGFloat
     let id: UUID
+    
+    init(n: String, c: Date, t: TabsData, l: CGFloat, w: CGFloat, d: CGFloat, oX: CGFloat, oY: CGFloat, iT: Bool, tW: CGFloat, tD: CGFloat) {
+        name = n
+        createdOn = c
+        tabs = t
+        length = l
+        width = w
+        depth = d
+        offsetX = oX
+        offsetY = oY
+        isTransition = iT
+        tWidth = tW
+        tDepth = tD
+        id = UUID()
+    }
+    
+    init() {
+        name = ""
+        createdOn = Date()
+        tabs = TabsData()
+        length = 0
+        width = 0
+        depth = 0
+        offsetX = 0
+        offsetY = 0
+        isTransition = false
+        tWidth = 0
+        tDepth = 0
+        id = UUID()
+    }
 }
 
 extension DimensionsData: Codable, Identifiable {}
