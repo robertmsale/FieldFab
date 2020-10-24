@@ -134,7 +134,8 @@ struct SceneView: UIViewRepresentable {
             uiView.scene?.rootNode.childNode(withName: "h-left", recursively: false)?.removeFromParentNode()
             uiView.scene?.rootNode.childNode(withName: "h-right", recursively: false)?.removeFromParentNode()
             uiView.scene?.rootNode.childNode(withName: "tab-ft", recursively: false)?.removeFromParentNode()
-            let tabnames = ["ft", "fb", "fl", "fr", "bt", "bb", "bl", "br", "lt", "lb", "ll", "lr", "rt", "rb", "rl", "rr"]
+            var tabnames = ["ft", "fb", "fl", "fr", "bt", "bb", "bl"]
+            tabnames.append(contentsOf: ["br", "lt", "lb", "ll", "lr", "rt", "rb", "rl", "rr"])
             for i in tabnames {
                 uiView.scene?.rootNode.childNode(withName: "tab-\(i)", recursively: false)?.removeFromParentNode()
             }

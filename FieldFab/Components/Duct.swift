@@ -518,16 +518,16 @@ struct Ductwork {
         switch tabs.back.left.getType() {
             case .slock, .foldIn:
                 var v = [
-                    outer["btl"]!.translate(z: taper),
-                    outer["btl"]!,
-                    outer["bbl"]!,
-                    outer["bbl"]!.translate(z: taper),
+                    outer["btr"]!.translate(z: taper),
+                    outer["btr"]!,
+                    outer["bbr"]!,
+                    outer["bbr"]!.translate(z: taper),
                 ]
                 v.append(contentsOf: [
-                    v[0].translate(x: -thickness),
-                    v[1].translate(x: -thickness),
-                    v[2].translate(x: -thickness),
-                    v[3].translate(x: -thickness),
+                    v[0].translate(x: thickness),
+                    v[1].translate(x: thickness),
+                    v[2].translate(x: thickness),
+                    v[3].translate(x: thickness),
                 ])
                 let quads = [
                     Quad(v[4], v[5], v[6], v[7]),
@@ -547,16 +547,16 @@ struct Ductwork {
         switch tabs.back.right.getType() {
             case .slock, .foldIn:
                 var v = [
-                    outer["btr"]!,
-                    outer["btr"]!.translate(z: taper),
-                    outer["bbr"]!.translate(z: taper),
-                    outer["bbr"]!,
+                    outer["btl"]!.translate(z: taper),
+                    outer["btl"]!,
+                    outer["bbl"]!,
+                    outer["bbl"]!.translate(z: taper),
                 ]
                 v.append(contentsOf: [
-                    v[0].translate(x: thickness),
-                    v[1].translate(x: thickness),
-                    v[2].translate(x: thickness),
-                    v[3].translate(x: thickness),
+                    v[0].translate(x: -thickness),
+                    v[1].translate(x: -thickness),
+                    v[2].translate(x: -thickness),
+                    v[3].translate(x: -thickness),
                 ])
                 let quads = [
                     Quad(v[4], v[5], v[6], v[7]),
