@@ -8,21 +8,28 @@
 
 import SwiftUI
 
+enum FractionalMode {
+    case inch
+    case feet
+    case yard
+}
+
 protocol Fractional {
-    var original: CGFloat { get set }
+    var rawValue: CGFloat { get set }
+    var mode: FractionalMode { get set }
 }
 
 extension Fractional {
     var whole: Int {
-        get { return Math.getWhole(self.original) }
+        get { return Math.getWhole(self.rawValue) }
         set(v) {
-            let round = CGFloat(Int(self.original))
-            self.original = (self.original - round) + CGFloat(v)
+            let round = CGFloat(Int(self.rawValue))
+            self.rawValue = (self.rawValue - round) + CGFloat(v)
         }
     }
     var parts: ND? {
         get {
-            switch abs(self.original).truncatingRemainder(dividingBy: 1.0) {
+            switch abs(self.rawValue).truncatingRemainder(dividingBy: 1.0) {
             case 0.03125: return ND(1, 32)
             case 0.0625: return ND(1, 16)
             case 0.09375: return ND(3, 32)

@@ -63,17 +63,13 @@ struct ARViewContainer: UIViewRepresentable {
             uiView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
             al.arViewReset = false
         }
-        let duct = uiView.scene.rootNode.childNode(withName: "duct", recursively: false)
-        let hfront = uiView.scene.rootNode.childNode(withName: "h-front", recursively: false)
-        let hback = uiView.scene.rootNode.childNode(withName: "h-back", recursively: false)
-        let hleft = uiView.scene.rootNode.childNode(withName: "h-left", recursively: false)
-        let hright = uiView.scene.rootNode.childNode(withName: "h-right", recursively: false)
+        let geos: [String] = ["front", "back", "left", "right", "h-front", "h-back", "h-left", "h-right"]
+        var geoNodes: [SCNNode] = []
+        for g in geos {
+            geoNodes.append(uiView.scene.rootNode.childNode(withName: g, recursively: false)!)
+        }
         if al.arMeasurementsDidChange {
-            duct?.removeFromParentNode()
-            hfront?.removeFromParentNode()
-            hback?.removeFromParentNode()
-            hleft?.removeFromParentNode()
-            hright?.removeFromParentNode()
+            for n in geoNodes { n.removeFromParentNode() }
 
             let geometryNode = al.duct.getQuadGeometry(
                 al.offsetX.original,
@@ -94,11 +90,11 @@ struct ARViewContainer: UIViewRepresentable {
             for v in geometryNode { uiView.scene.rootNode.addChildNode(v) }
             al.arMeasurementsDidChange = false
         } else {
-            applyTransforms([duct!, hfront!, hback!, hleft!, hright!])
-            hfront?.geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "F") : UIColor.white
-            hback?.geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "B") : UIColor.white
-            hleft?.geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "L") : UIColor.white
-            hright?.geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "R") : UIColor.white
+            applyTransforms(geoNodes)
+            geoNodes[4].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "F") : UIColor.white
+            geoNodes[5].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "B") : UIColor.white
+            geoNodes[6].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "L") : UIColor.white
+            geoNodes[7].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "R") : UIColor.white
         }
     }
 

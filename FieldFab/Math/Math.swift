@@ -8,10 +8,6 @@
 
 import SwiftUI
 
-enum DistanceUnit {
-    case inches, feet, meters, centimeters, millimeters
-}
-
 class Math {
     static var DEGRAD: CGFloat = CGFloat.pi / 180
     static var RADDEG: CGFloat = 180 / CGFloat.pi

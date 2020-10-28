@@ -13,7 +13,7 @@
 		EE29E40C2505794D007F4036 /* 2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40B2505794D007F4036 /* 2D.swift */; };
 		EE29E40E25057CF1007F4036 /* DuctSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E40D25057CF1007F4036 /* DuctSideView.swift */; };
 		EE29E4192505F6CA007F4036 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4182505F6CA007F4036 /* ControlView.swift */; };
-		EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41A2506A02F007F4036 /* Vector3.swift */; };
+		EE29E41B2506A02F007F4036 /* VectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41A2506A02F007F4036 /* VectorExtensions.swift */; };
 		EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41C2506BF4F007F4036 /* Spherical.swift */; };
 		EE29E4202506BFCB007F4036 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E41F2506BFCB007F4036 /* Fraction.swift */; };
 		EE29E4222506C401007F4036 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4212506C401007F4036 /* Math.swift */; };
@@ -48,6 +48,13 @@
 		EEDCE8482520F99900F21FAF /* PlaneAdjustmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */; };
 		EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */; };
 		EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDCE85125213C7600F21FAF /* RotateButtonView.swift */; };
+		EEDFF2152545CDB100FD9D51 /* DistanceUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF2142545CDB100FD9D51 /* DistanceUnit.swift */; };
+		EEDFF21A2545E63C00FD9D51 /* SelectorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */; };
+		EEDFF21F2546021B00FD9D51 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF21E2546021B00FD9D51 /* VisualEffectView.swift */; };
+		EEDFF2272546145B00FD9D51 /* ExperimentalFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF2262546145B00FD9D51 /* ExperimentalFeatures.swift */; };
+		EEDFF22C25462B7C00FD9D51 /* AdvancedSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF22B25462B7C00FD9D51 /* AdvancedSettingsSheet.swift */; };
+		EEDFF23725464DFC00FD9D51 /* TapWithLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF23625464DFC00FD9D51 /* TapWithLocation.swift */; };
+		EEDFF23C254656FC00FD9D51 /* ObjectHitPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDFF23B254656FC00FD9D51 /* ObjectHitPopup.swift */; };
 		EEFB98D82526CCA8008AB605 /* Disk in Frameworks */ = {isa = PBXBuildFile; productRef = EEFB98D72526CCA8008AB605 /* Disk */; };
 		EEFB98DE2526CF1D008AB605 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98DD2526CF1D008AB605 /* Dimensions.swift */; };
 		EEFB98E32526D061008AB605 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98E22526D061008AB605 /* Tabs.swift */; };
@@ -88,7 +95,7 @@
 		EE29E40B2505794D007F4036 /* 2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2D.swift; sourceTree = "<group>"; };
 		EE29E40D25057CF1007F4036 /* DuctSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctSideView.swift; sourceTree = "<group>"; };
 		EE29E4182505F6CA007F4036 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
-		EE29E41A2506A02F007F4036 /* Vector3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
+		EE29E41A2506A02F007F4036 /* VectorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorExtensions.swift; sourceTree = "<group>"; };
 		EE29E41C2506BF4F007F4036 /* Spherical.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spherical.swift; sourceTree = "<group>"; };
 		EE29E41F2506BFCB007F4036 /* Fraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
 		EE29E4212506C401007F4036 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -130,6 +137,13 @@
 		EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneAdjustmentView.swift; sourceTree = "<group>"; };
 		EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetViewButton.swift; sourceTree = "<group>"; };
 		EEDCE85125213C7600F21FAF /* RotateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateButtonView.swift; sourceTree = "<group>"; };
+		EEDFF2142545CDB100FD9D51 /* DistanceUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUnit.swift; sourceTree = "<group>"; };
+		EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorWheel.swift; sourceTree = "<group>"; };
+		EEDFF21E2546021B00FD9D51 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		EEDFF2262546145B00FD9D51 /* ExperimentalFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentalFeatures.swift; sourceTree = "<group>"; };
+		EEDFF22B25462B7C00FD9D51 /* AdvancedSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsSheet.swift; sourceTree = "<group>"; };
+		EEDFF23625464DFC00FD9D51 /* TapWithLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapWithLocation.swift; sourceTree = "<group>"; };
+		EEDFF23B254656FC00FD9D51 /* ObjectHitPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectHitPopup.swift; sourceTree = "<group>"; };
 		EEFB98DD2526CF1D008AB605 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
 		EEFB98E22526D061008AB605 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		EEFB98E72526D296008AB605 /* DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB.swift; sourceTree = "<group>"; };
@@ -174,24 +188,28 @@
 		EE29E40625053CFD007F4036 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				EE29E40D25057CF1007F4036 /* DuctSideView.swift */,
+				EEFB99152527BBDB008AB605 /* AboutView.swift */,
+				EEDFF22B25462B7C00FD9D51 /* AdvancedSettingsSheet.swift */,
+				EEDCE83D2520E93C00F21FAF /* ARContentView.swift */,
+				EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */,
+				EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */,
+				EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */,
+				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
+				EE8FB6AC252545AE008FA41B /* Controls */,
 				EE29E4182505F6CA007F4036 /* ControlView.swift */,
 				EE9787992517AC9F003DE8E0 /* Duct.swift */,
-				EE8FB6AC252545AE008FA41B /* Controls */,
-				EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */,
-				EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */,
-				EEDCE83D2520E93C00F21FAF /* ARContentView.swift */,
-				EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */,
-				EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */,
-				EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */,
-				EEFB990B25277BBC008AB605 /* ScenePreview.swift */,
-				EEFB99102527B9EC008AB605 /* HelpView.swift */,
-				EEFB99152527BBDB008AB605 /* AboutView.swift */,
-				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
-				EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */,
-				EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */,
+				EE29E40D25057CF1007F4036 /* DuctSideView.swift */,
 				EE99FABF2539D08500F27C2C /* ExamplePreview.swift */,
+				EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */,
+				EEFB99102527B9EC008AB605 /* HelpView.swift */,
+				EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */,
+				EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */,
 				EE1A1439253B5CAD00C4DFAD /* LoadSharedView.swift */,
+				EEFB990B25277BBC008AB605 /* ScenePreview.swift */,
+				EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */,
+				EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */,
+				EEDFF21E2546021B00FD9D51 /* VisualEffectView.swift */,
+				EEDFF23B254656FC00FD9D51 /* ObjectHitPopup.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -199,7 +217,7 @@
 		EE29E41E2506BF7D007F4036 /* Math */ = {
 			isa = PBXGroup;
 			children = (
-				EE29E41A2506A02F007F4036 /* Vector3.swift */,
+				EE29E41A2506A02F007F4036 /* VectorExtensions.swift */,
 				EE29E41C2506BF4F007F4036 /* Spherical.swift */,
 				EE29E41F2506BFCB007F4036 /* Fraction.swift */,
 				EE29E4212506C401007F4036 /* Math.swift */,
@@ -210,6 +228,7 @@
 				EED1CE64251F8D99003E6F08 /* SCNUtils.swift */,
 				EEFB98F12526E2C6008AB605 /* Fractional.swift */,
 				EE1A1434253B574A00C4DFAD /* StringFix.swift */,
+				EEDFF2142545CDB100FD9D51 /* DistanceUnit.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -217,14 +236,14 @@
 		EE8FB6AC252545AE008FA41B /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				EED1CE0F251E775D003E6F08 /* GridView.swift */,
+				EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */,
 				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
 				EED1CE79251FF091003E6F08 /* FText.swift */,
+				EED1CE0F251E775D003E6F08 /* GridView.swift */,
 				EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */,
 				EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */,
 				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
 				EEFB98F92526EA00008AB605 /* UnitText.swift */,
-				EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -252,21 +271,21 @@
 		EEC7CF3425034396003389AB /* FieldFab */ = {
 			isa = PBXGroup;
 			children = (
-				EEFB98DC2526CEDA008AB605 /* Data Persistence */,
-				EEDCE8342520D9AD00F21FAF /* Globals */,
-				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
 				EEC7CF3525034396003389AB /* AppDelegate.swift */,
-				EEC7CF3725034396003389AB /* ContentView.swift */,
-				EEC7CF3925034396003389AB /* Experience.rcproject */,
 				EEC7CF3B25034397003389AB /* Assets.xcassets */,
-				EEC7CF4025034397003389AB /* LaunchScreen.storyboard */,
-				EEC7CF4325034397003389AB /* Info.plist */,
 				EE29E40625053CFD007F4036 /* Components */,
+				EEC7CF3725034396003389AB /* ContentView.swift */,
+				EEFB98DC2526CEDA008AB605 /* Data Persistence */,
+				EEC7CF3925034396003389AB /* Experience.rcproject */,
+				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
+				EEDCE8342520D9AD00F21FAF /* Globals */,
+				EEC7CF4325034397003389AB /* Info.plist */,
+				EEC7CF4025034397003389AB /* LaunchScreen.storyboard */,
+				EEC7CF6C2503E70A003389AB /* Logic.swift */,
+				EE29E431250D2D16007F4036 /* main.scnassets */,
+				EE29E41E2506BF7D007F4036 /* Math */,
 				EEC7CF3D25034397003389AB /* Preview Content */,
 				EEC7CF6825034858003389AB /* Routes */,
-				EEC7CF6C2503E70A003389AB /* Logic.swift */,
-				EE29E41E2506BF7D007F4036 /* Math */,
-				EE29E431250D2D16007F4036 /* main.scnassets */,
 			);
 			path = FieldFab;
 			sourceTree = "<group>";
@@ -312,6 +331,8 @@
 			isa = PBXGroup;
 			children = (
 				EEDCE8352520D9C200F21FAF /* Colors.swift */,
+				EEDFF2262546145B00FD9D51 /* ExperimentalFeatures.swift */,
+				EEDFF23625464DFC00FD9D51 /* TapWithLocation.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -471,6 +492,8 @@
 				EE29E41D2506BF4F007F4036 /* Spherical.swift in Sources */,
 				EED1CE5B251F8BF0003E6F08 /* GeometryBuilder.swift in Sources */,
 				EEFB992F2527DCF0008AB605 /* CarouselView.swift in Sources */,
+				EEDFF2272546145B00FD9D51 /* ExperimentalFeatures.swift in Sources */,
+				EEDFF2152545CDB100FD9D51 /* DistanceUnit.swift in Sources */,
 				EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */,
 				EEFB98FF25275CFA008AB605 /* StatefulPreviewWrapper.swift in Sources */,
 				EEFB98DE2526CF1D008AB605 /* Dimensions.swift in Sources */,
@@ -483,6 +506,7 @@
 				EEFB98F22526E2C6008AB605 /* Fractional.swift in Sources */,
 				EEFB99112527B9EC008AB605 /* HelpView.swift in Sources */,
 				EEC7CF6625034800003389AB /* Controls.swift in Sources */,
+				EEDFF23725464DFC00FD9D51 /* TapWithLocation.swift in Sources */,
 				EED1CE6D251FC876003E6F08 /* CameraHelpView.swift in Sources */,
 				EEDCE83E2520E93C00F21FAF /* ARContentView.swift in Sources */,
 				EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */,
@@ -496,10 +520,14 @@
 				EED1CE7F251FFCB9003E6F08 /* HeaderView.swift in Sources */,
 				EEDCE85225213C7600F21FAF /* RotateButtonView.swift in Sources */,
 				EEDCE8432520E97A00F21FAF /* ARViewContainer.swift in Sources */,
+				EEDFF21F2546021B00FD9D51 /* VisualEffectView.swift in Sources */,
+				EEDFF22C25462B7C00FD9D51 /* AdvancedSettingsSheet.swift in Sources */,
+				EEDFF23C254656FC00FD9D51 /* ObjectHitPopup.swift in Sources */,
+				EEDFF21A2545E63C00FD9D51 /* SelectorWheel.swift in Sources */,
 				EE1A1435253B574A00C4DFAD /* StringFix.swift in Sources */,
 				EEDCE8482520F99900F21FAF /* PlaneAdjustmentView.swift in Sources */,
 				EE29E4222506C401007F4036 /* Math.swift in Sources */,
-				EE29E41B2506A02F007F4036 /* Vector3.swift in Sources */,
+				EE29E41B2506A02F007F4036 /* VectorExtensions.swift in Sources */,
 				EED1CE60251F8C26003E6F08 /* Quad.swift in Sources */,
 				EED1CE65251F8D99003E6F08 /* SCNUtils.swift in Sources */,
 				EEFB993F252C1A15008AB605 /* ThreeDMenuSheet.swift in Sources */,

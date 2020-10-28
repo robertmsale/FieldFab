@@ -132,8 +132,12 @@ struct Ductwork {
             Quad(inner["fbl"]!, outer["fbl"]!, outer["bbl"]!, inner["bbl"]!), // left
             Quad(outer["fbr"]!, inner["fbr"]!, inner["bbr"]!, outer["bbr"]!) // right
         ]
-
-        let geometry = GeometryBuilder(quads: quads).getGeometry()
+        let faces: [DuctFace: SCNGeometry] = [
+            .front: GeometryBuilder(quads: [0, 4, 8, 12].map({v in quads[v]})).getGeometry(),
+            .back: GeometryBuilder(quads: [1, 5, 9, 13].map({v in quads[v]})).getGeometry(),
+            .left: GeometryBuilder(quads: [2, 6, 10, 14].map({v in quads[v]})).getGeometry(),
+            .right: GeometryBuilder(quads: [3, 7, 11, 15].map({v in quads[v]})).getGeometry()
+        ]
         let material = SCNMaterial()
         material.diffuse.contents = UIImage(named: "metal-diffuse")
         material.normal.contents = UIImage(named: "metal-normal")
@@ -141,10 +145,19 @@ struct Ductwork {
         material.metalness.contents = UIImage(named: "metal-metallic")
         material.roughness.contents = UIImage(named: "metal-roughness")
         material.lightingModel = .physicallyBased
-        geometry.firstMaterial = material
+        faces.forEach({ (k, _) in faces[k]?.firstMaterial = material })
 
-        let geometryNode = SCNNode(geometry: geometry)
+        let geometryNode = SCNNode()
         geometryNode.name = "duct"
+        let gNodes: [DuctFace: SCNNode] = faces.compactMapValues({v in SCNNode(geometry: v)})
+        gNodes.forEach({(k,v) in
+            switch k {
+                case .front: gNodes[k]?.name = "front"
+                case .back: gNodes[k]?.name = "back"
+                case .left: gNodes[k]?.name = "left"
+                case .right: gNodes[k]?.name = "right"
+            }
+        })
 
         let tr: CGFloat = options.contains(.isAR) ? 0.1 * 0.0254 : 0.1
         let fText = GeometryBuilder(quads: [
@@ -211,7 +224,9 @@ struct Ductwork {
         //
         //            }
         //        }
-        var result = [geometryNode, f, b, l, r]
+        var result: [SCNNode] = []
+        result.append(contentsOf: [f, b, l, r])
+        result.append(contentsOf: gNodes.map({(_, v) in v}))
         result.append(contentsOf: generateTabs(outer: outer, inner: inner, tabs: tabs, material: material, isAR: options.contains(.isAR)))
         return result
     }

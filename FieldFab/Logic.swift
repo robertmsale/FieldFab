@@ -26,6 +26,9 @@ class LoadSharedDimensions: ObservableObject {
 }
 
 class AppLogic: ObservableObject {
+    // /////////////////////////////////////// //
+    //              Measurements               //
+    // /////////////////////////////////////// //
     @Published var width: Fraction {
         didSet {
             if !self.isTransition {
@@ -70,39 +73,61 @@ class AppLogic: ObservableObject {
         UserDefaults.standard.set(self.isTransition, forKey: "isTransition")
         self.updateDuct()
     } }
+    @Published var sessionName: String { didSet {
+        UserDefaults.standard.set(self.sessionName, forKey: "sessionName")
+    }}
+    // /////////////////////////////////////// //
+    //              Stepper Stuff              //
+    // /////////////////////////////////////// //
     @Published var roundTo: CGFloat { didSet {
         UserDefaults.standard.set(self.roundTo, forKey: "roundTo")
         self.duct.updateMeasurements(self.roundTo)
     } }
     @Published var increments: FractionStepAmount
+    
+    // /////////////////////////////////////// //
+    //                3D Data                  //
+    // /////////////////////////////////////// //
     @Published var duct: Ductwork
     @Published var tabs: TabsData { didSet {
         do {
-//            print(String(data: try JSONEncoder().encode(tabs), encoding: .utf8))
             UserDefaults.standard.set(
                 String(data: try JSONEncoder().encode(tabs), encoding: .utf8), forKey: "tabs")
         } catch { print("Problem encoding tabs to JSON") }
         self.updateDuct()
     }}
+    
+    // /////////////////////////////////////// //
+    //                 Events                  //
+    // /////////////////////////////////////// //
     @Published var threeDMeasurementsDidChange: Bool = false
     @Published var arMeasurementsDidChange: Bool = false
+    @Published var arViewReset: Bool = false
     @Published var tabSideSelected: TabSide = .top
-    @Published var sessionName: String { didSet {
-        UserDefaults.standard.set(self.sessionName, forKey: "sessionName")
-    }}
     @Published var shareSheetContent: [Any]?
+    // /////////////////////////////////////// //
+    //              Sheet Visible              //
+    // /////////////////////////////////////// //
     @Published var shareSheetShown: Bool = false
     @Published var threeDMenuShown: Bool = false
     @Published var helpViewShown: Bool = false
+    @Published var helpWebViewShown: Bool = false
     @Published var aboutViewShown: Bool = false
     @Published var threeDViewHelpersShown: Bool = false
+    @Published var arMenuSheetShown: Bool = false
+    @Published var loadSharedSheetShown: Bool = false
+    @Published var loadDuctworkViewShown: Bool = false
+    @Published var advancedSettingsSheetShown: Bool = false
+    // /////////////////////////////////////// //
+    //               3D View Data              //
+    // /////////////////////////////////////// //
+    @Published var selectorWheelSelection: SelectorWheelSelection = .width
     @Published var selectedSide = DuctFace.front
     @Published var selectedRoundTo = PickerRoundTo.sixteenth {
         didSet {
             roundTo = selectedRoundTo.rawValue
         }
     }
-    @Published var loadDuctworkViewShown: Bool = false
     @Published var selectedTabSide: TabSide = .top
     @Published var selectedTabType: TabType = .none {
         didSet {
@@ -114,14 +139,13 @@ class AppLogic: ObservableObject {
             tabs[selectedSide][selectedTabSide][1.0] = selectedTabLength
         }
     }
-
+    // /////////////////////////////////////// //
+    //             AR Sheet Data               //
+    // /////////////////////////////////////// //
     @Published var arViewHelpersShown: Bool = false
     @Published var arViewFlowDirection: FlowDirection = .up
-    @Published var arViewReset: Bool = false
-    @Published var arMenuSheetShown: Bool = false
     @Published var arDuctPosition: SCNVector3 = SCNVector3(0, 0, 0) { didSet { print("position: \(arDuctPosition)") }}
     @Published var arDuctRotation: Float = 0.0 { didSet { print("rotation: \(arDuctRotation)") }}
-    @Published var loadSharedSheetShown: Bool = false
 
     var url: URL {
         get {
@@ -138,8 +162,21 @@ class AppLogic: ObservableObject {
             return URL(string: url)!
         }
     }
-    //    @Published var tabs: TabsDB
-
+    
+    // /////////////////////////////////////// //
+    //                  Misc                   //
+    // /////////////////////////////////////// //
+    @Published var experimentalFeaturesEnabled: Set<ExperimentalFeatures> {
+        didSet {
+            UserDefaults.standard.setValue(experimentalFeaturesEnabled.map({f in f.rawValue}), forKey: "experimentalFeaturesEnabled")
+        }
+    }
+    @Published var threeDObjectHitPopupShown: Bool = false
+    @Published var threeDObjectHit: SceneObject = .front
+    
+    // /////////////////////////////////////// //
+    //                Functions                //
+    // /////////////////////////////////////// //
     func makeSideFlat(side: DuctSides) {
         switch side {
         case .front:
@@ -168,17 +205,6 @@ class AppLogic: ObservableObject {
     }
 
     init() {
-        //        let ud = UserDefaults.standard
-        //        let rt = CGFloat(ud.double(forKey: "roundTo"))
-        //        self.roundTo = rt
-        //        self.width = Fraction(CGFloat(ud.double(forKey: "width")), roundTo: rt)
-        //        self.depth = Fraction(CGFloat(ud.double(forKey: "depth")), roundTo: rt)
-        //        self.length = Fraction(CGFloat(ud.double(forKey: "length")), roundTo: rt)
-        //        self.offsetX = Fraction(CGFloat(ud.double(forKey: "offsetX")), roundTo: rt)
-        //        self.offsetY = Fraction(CGFloat(ud.double(forKey: "offsetY")), roundTo: rt)
-        //        self.tWidth = Fraction(CGFloat(ud.double(forKey: "tWidth")), roundTo: rt)
-        //        self.tDepth = Fraction(CGFloat(ud.double(forKey: "tDepth")), roundTo: rt)
-        //        self.isTransition = ud.bool(forKey: "roundTo")
         let d = WD()
         self.roundTo = d.rT
         self.selectedRoundTo = PickerRoundTo(rawValue: d.rT) ?? PickerRoundTo.sixteenth
@@ -194,6 +220,7 @@ class AppLogic: ObservableObject {
         self.duct = Ductwork(d.l, d.w, d.d, d.oX, d.oY, d.tW, d.tD, d.rT)
         self.sessionName = d.s
         self.tabs = d.t
+        experimentalFeaturesEnabled = d.e
         selectedTabType = d.t.front.top[1]
         selectedTabLength = d.t.front.top[1.0]
     }
@@ -219,6 +246,7 @@ struct WD {
     var i: FractionStepAmount
     var s: String
     var t: TabsData
+    var e: Set<ExperimentalFeatures>
 
     init() {
         self.w = UserDefaults.standard.object(forKey: "width") as? CGFloat ?? 16.0
@@ -232,6 +260,8 @@ struct WD {
         self.rT = UserDefaults.standard.object(forKey: "roundTo") as? CGFloat ?? 0.0625
         self.i = FractionStepAmount.quarter
         self.s = UserDefaults.standard.object(forKey: "sessionName") as? String ?? "Ductwork"
+        let features = UserDefaults.standard.object(forKey: "experimentalFeaturesEnabled") as? [Int] ?? []
+        e = Set(features.map({f in ExperimentalFeatures.init(rawValue: f)!}))
         do {
             let jsd = (UserDefaults.standard.object(forKey: "tabs") as? String ?? "")
             print(jsd)
@@ -242,13 +272,5 @@ struct WD {
             print("Could not decode Tabs user defaults from JSON")
             self.t = TabsData()
         }
-    }
-}
-
-
-
-struct Logic_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }
