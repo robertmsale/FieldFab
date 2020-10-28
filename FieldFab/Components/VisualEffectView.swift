@@ -31,9 +31,3 @@ struct BlurEffectView: View {
         }
     }
 }
-
-//struct VisualEffectView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        VisualEffectView()
-//    }
-//}

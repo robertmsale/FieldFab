@@ -58,14 +58,7 @@ struct CameraHelpView: View {
                 .padding(.horizontal, 24.0)
                 Spacer()
             }
-            .frame(width: self.g.size.width, height: self.g.size.height, alignment: .center)
-            //            .background(
-            //                Rectangle()
-            //                    .fill(Color.black)
-            //                    .frame(width: self.g.size.width, height: self.g.size.height, alignment: .center)
-            //            )
             .foregroundColor(colorScheme == .dark ? .white : .black)
-            //            .opacity(0.8)
             .zIndex(2.0)
             Button(action: { self.visible = false }, label: {
                 Image(systemName: "xmark")

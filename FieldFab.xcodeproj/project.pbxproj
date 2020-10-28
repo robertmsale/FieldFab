@@ -20,13 +20,13 @@
 		EE29E4242506CBAD007F4036 /* Quaternion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E4232506CBAD007F4036 /* Quaternion.swift */; };
 		EE29E429250BAC9D007F4036 /* 3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29E428250BAC9D007F4036 /* 3D.swift */; };
 		EE29E432250D2D16007F4036 /* main.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = EE29E431250D2D16007F4036 /* main.scnassets */; };
+		EE8A13C92549E1BA00852939 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8A13C82549E1BA00852939 /* Popup.swift */; };
 		EE8FB6B125254E10008FA41B /* LoadDuctworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */; };
 		EE97879A2517AC9F003DE8E0 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9787992517AC9F003DE8E0 /* Duct.swift */; };
 		EE99FAC02539D08500F27C2C /* ExamplePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE99FABF2539D08500F27C2C /* ExamplePreview.swift */; };
 		EEAF2B332516581F0074A516 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF2B322516581F0074A516 /* Line.swift */; };
 		EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3525034396003389AB /* AppDelegate.swift */; };
 		EEC7CF3825034396003389AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3725034396003389AB /* ContentView.swift */; };
-		EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = EEC7CF3925034396003389AB /* Experience.rcproject */; };
 		EEC7CF3C25034397003389AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF3B25034397003389AB /* Assets.xcassets */; };
 		EEC7CF3F25034397003389AB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF3E25034397003389AB /* Preview Assets.xcassets */; };
 		EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF4025034397003389AB /* LaunchScreen.storyboard */; };
@@ -103,6 +103,7 @@
 		EE29E42725086B01007F4036 /* FieldFab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FieldFab.entitlements; sourceTree = "<group>"; };
 		EE29E428250BAC9D007F4036 /* 3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3D.swift; sourceTree = "<group>"; };
 		EE29E431250D2D16007F4036 /* main.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = main.scnassets; sourceTree = "<group>"; };
+		EE8A13C82549E1BA00852939 /* Popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDuctworkView.swift; sourceTree = "<group>"; };
 		EE9787992517AC9F003DE8E0 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
 		EE99FABF2539D08500F27C2C /* ExamplePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePreview.swift; sourceTree = "<group>"; };
@@ -110,7 +111,6 @@
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3525034396003389AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EEC7CF3725034396003389AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		EEC7CF3925034396003389AB /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		EEC7CF3B25034397003389AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEC7CF3E25034397003389AB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		EEC7CF4125034397003389AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -188,28 +188,16 @@
 		EE29E40625053CFD007F4036 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				EEFB99152527BBDB008AB605 /* AboutView.swift */,
-				EEDFF22B25462B7C00FD9D51 /* AdvancedSettingsSheet.swift */,
-				EEDCE83D2520E93C00F21FAF /* ARContentView.swift */,
-				EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */,
-				EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */,
-				EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */,
-				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
-				EE8FB6AC252545AE008FA41B /* Controls */,
-				EE29E4182505F6CA007F4036 /* ControlView.swift */,
-				EE9787992517AC9F003DE8E0 /* Duct.swift */,
-				EE29E40D25057CF1007F4036 /* DuctSideView.swift */,
-				EE99FABF2539D08500F27C2C /* ExamplePreview.swift */,
+				EE8A13D02549EA8F00852939 /* Overlays */,
+				EE8A13C72549E1A000852939 /* Modifiers */,
+				EE8A13D12549EB2D00852939 /* Subviews */,
 				EED1CE7E251FFCB9003E6F08 /* HeaderView.swift */,
-				EEFB99102527B9EC008AB605 /* HelpView.swift */,
-				EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */,
-				EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */,
-				EE1A1439253B5CAD00C4DFAD /* LoadSharedView.swift */,
-				EEFB990B25277BBC008AB605 /* ScenePreview.swift */,
-				EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */,
-				EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */,
-				EEDFF21E2546021B00FD9D51 /* VisualEffectView.swift */,
 				EEDFF23B254656FC00FD9D51 /* ObjectHitPopup.swift */,
+				EEDFF21E2546021B00FD9D51 /* VisualEffectView.swift */,
+				EE8FB6AC252545AE008FA41B /* Controls */,
+				EEC7CF3D25034397003389AB /* Preview Content */,
+				EE8A13BD2549DB8900852939 /* Sheets */,
+				EEC7CF6825034858003389AB /* Tabs */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -233,9 +221,54 @@
 			path = Math;
 			sourceTree = "<group>";
 		};
+		EE8A13BD2549DB8900852939 /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				EEFB99152527BBDB008AB605 /* AboutView.swift */,
+				EEDFF22B25462B7C00FD9D51 /* AdvancedSettingsSheet.swift */,
+				EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */,
+				EEFB99102527B9EC008AB605 /* HelpView.swift */,
+				EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */,
+				EE1A1439253B5CAD00C4DFAD /* LoadSharedView.swift */,
+				EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		EE8A13C72549E1A000852939 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				EE8A13C82549E1BA00852939 /* Popup.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		EE8A13D02549EA8F00852939 /* Overlays */ = {
+			isa = PBXGroup;
+			children = (
+				EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */,
+			);
+			path = Overlays;
+			sourceTree = "<group>";
+		};
+		EE8A13D12549EB2D00852939 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				EEDCE83D2520E93C00F21FAF /* ARContentView.swift */,
+				EEDCE8422520E97A00F21FAF /* ARViewContainer.swift */,
+				EE29E40D25057CF1007F4036 /* DuctSideView.swift */,
+				EEFB990625276787008AB605 /* LoadDuctworkListItemView.swift */,
+				EEFB990B25277BBC008AB605 /* ScenePreview.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		EE8FB6AC252545AE008FA41B /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
+				EE29E4182505F6CA007F4036 /* ControlView.swift */,
+				EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */,
 				EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */,
 				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
 				EED1CE79251FF091003E6F08 /* FText.swift */,
@@ -271,21 +304,17 @@
 		EEC7CF3425034396003389AB /* FieldFab */ = {
 			isa = PBXGroup;
 			children = (
+				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
+				EEC7CF4325034397003389AB /* Info.plist */,
+				EE29E431250D2D16007F4036 /* main.scnassets */,
 				EEC7CF3525034396003389AB /* AppDelegate.swift */,
+				EEC7CF3725034396003389AB /* ContentView.swift */,
 				EEC7CF3B25034397003389AB /* Assets.xcassets */,
 				EE29E40625053CFD007F4036 /* Components */,
-				EEC7CF3725034396003389AB /* ContentView.swift */,
 				EEFB98DC2526CEDA008AB605 /* Data Persistence */,
-				EEC7CF3925034396003389AB /* Experience.rcproject */,
-				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
 				EEDCE8342520D9AD00F21FAF /* Globals */,
-				EEC7CF4325034397003389AB /* Info.plist */,
 				EEC7CF4025034397003389AB /* LaunchScreen.storyboard */,
-				EEC7CF6C2503E70A003389AB /* Logic.swift */,
-				EE29E431250D2D16007F4036 /* main.scnassets */,
 				EE29E41E2506BF7D007F4036 /* Math */,
-				EEC7CF3D25034397003389AB /* Preview Content */,
-				EEC7CF6825034858003389AB /* Routes */,
 			);
 			path = FieldFab;
 			sourceTree = "<group>";
@@ -293,6 +322,7 @@
 		EEC7CF3D25034397003389AB /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				EE99FABF2539D08500F27C2C /* ExamplePreview.swift */,
 				EEC7CF3E25034397003389AB /* Preview Assets.xcassets */,
 				EEFB98FE25275CFA008AB605 /* StatefulPreviewWrapper.swift */,
 			);
@@ -317,19 +347,21 @@
 			path = FieldFabUITests;
 			sourceTree = "<group>";
 		};
-		EEC7CF6825034858003389AB /* Routes */ = {
+		EEC7CF6825034858003389AB /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
 				EEC7CF6525034800003389AB /* Controls.swift */,
 				EE29E40B2505794D007F4036 /* 2D.swift */,
 				EE29E428250BAC9D007F4036 /* 3D.swift */,
 			);
-			path = Routes;
+			path = Tabs;
 			sourceTree = "<group>";
 		};
 		EEDCE8342520D9AD00F21FAF /* Globals */ = {
 			isa = PBXGroup;
 			children = (
+				EE9787992517AC9F003DE8E0 /* Duct.swift */,
+				EEC7CF6C2503E70A003389AB /* Logic.swift */,
 				EEDCE8352520D9C200F21FAF /* Colors.swift */,
 				EEDFF2262546145B00FD9D51 /* ExperimentalFeatures.swift */,
 				EEDFF23625464DFC00FD9D51 /* TapWithLocation.swift */,
@@ -512,7 +544,6 @@
 				EEC7CF3625034396003389AB /* AppDelegate.swift in Sources */,
 				EE29E429250BAC9D007F4036 /* 3D.swift in Sources */,
 				EE99FAC02539D08500F27C2C /* ExamplePreview.swift in Sources */,
-				EEC7CF3A25034396003389AB /* Experience.rcproject in Sources */,
 				EEFB99162527BBDB008AB605 /* AboutView.swift in Sources */,
 				EEFB990C25277BBC008AB605 /* ScenePreview.swift in Sources */,
 				EEDCE84D25211A7100F21FAF /* ResetViewButton.swift in Sources */,
@@ -529,6 +560,7 @@
 				EE29E4222506C401007F4036 /* Math.swift in Sources */,
 				EE29E41B2506A02F007F4036 /* VectorExtensions.swift in Sources */,
 				EED1CE60251F8C26003E6F08 /* Quad.swift in Sources */,
+				EE8A13C92549E1BA00852939 /* Popup.swift in Sources */,
 				EED1CE65251F8D99003E6F08 /* SCNUtils.swift in Sources */,
 				EEFB993F252C1A15008AB605 /* ThreeDMenuSheet.swift in Sources */,
 				EEAF2B332516581F0074A516 /* Line.swift in Sources */,
