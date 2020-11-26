@@ -20,11 +20,14 @@ struct ARViewContainer: UIViewRepresentable {
 
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
-        guard let scene = SCNScene(named: "ductwork.scn", inDirectory: "main.scnassets")
-        else { fatalError("Derp") }
+        let scene = SCNScene()
         arView.session = ARSession()
+        arView.automaticallyUpdatesLighting = true
+        arView.session.configuration?.isLightEstimationEnabled = true
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = []
+        configuration.environmentTexturing = .automatic
+        arView.
         arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         let geometryNode = al.duct.getQuadGeometry(
             al.offsetX.original,
@@ -36,7 +39,6 @@ struct ARViewContainer: UIViewRepresentable {
             scene.rootNode.addChildNode(v)
             v.eulerAngles = al.arViewFlowDirection.getVector()
         }
-
         arView.scene = scene
 
         return arView
@@ -95,6 +97,13 @@ struct ARViewContainer: UIViewRepresentable {
             geoNodes[5].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "B") : UIColor.white
             geoNodes[6].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "L") : UIColor.white
             geoNodes[7].geometry?.firstMaterial?.transparent.contents = al.arViewHelpersShown ? UIImage(named: "R") : UIColor.white
+        }
+        for i in geos[...3] {
+            uiView.scene.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.diffuse.contents = al.texture + "-diffuse"
+            uiView.scene.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.metalness.contents = al.texture + "-metallic"
+            uiView.scene.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.normal.contents = al.texture + "-normal"
+            uiView.scene.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.roughness.contents = al.texture + "-roughness"
+            uiView.scene.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.lightingModel = .physicallyBased
         }
     }
 

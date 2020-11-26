@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "TexturesCom_Metal_Galvanized2_1K_albedo.jpg",
-      "idiom" : "universal"
+      "filename" : "metal_Tcom_Metal_StainlessClean_Base_Color-1.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "metal_Tcom_Metal_StainlessClean_Base_Color-2.jpg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "metal_Tcom_Metal_StainlessClean_Base_Color.jpg",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

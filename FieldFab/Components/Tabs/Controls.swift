@@ -157,6 +157,13 @@ struct Controls: View {
                                             }))
                                             .padding(.trailing, 2)
                                     }
+                                    VStack {
+                                        Text("Texture")
+                                        Picker(selection: $al.texture, label: Text("Texture"), content: {
+                                            Text("Stainless").tag("metal")
+                                            Text("Galvanized").tag("galvanized")
+                                        }).pickerStyle(SegmentedPickerStyle())
+                                    }
                                     if !al.experimentalFeaturesEnabled.contains(.newLayout) {
                                         Divider()
                                         VStack {

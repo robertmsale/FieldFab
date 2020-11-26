@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "TexturesCom_Metal_Galvanized2_1K_normal.jpg",
-      "idiom" : "universal"
+      "filename" : "metal_Tcom_Metal_StainlessClean_Normal-1.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "metal_Tcom_Metal_StainlessClean_Normal-2.jpg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "metal_Tcom_Metal_StainlessClean_Normal.jpg",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

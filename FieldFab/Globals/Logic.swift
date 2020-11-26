@@ -173,6 +173,11 @@ class AppLogic: ObservableObject {
     }
     @Published var threeDObjectHitPopupShown: Bool = false
     @Published var threeDObjectHit: SceneObject = .front
+    @Published var texture: String = UserDefaults.standard.object(forKey: "texture") as? String ?? "metal" {
+        didSet {
+            UserDefaults.standard.set(texture, forKey: "texture")
+        }
+    }
     
     // /////////////////////////////////////// //
     //                Functions                //

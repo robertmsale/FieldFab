@@ -138,14 +138,6 @@ struct Ductwork {
             .left: GeometryBuilder(quads: [2, 6, 10, 14].map({v in quads[v]})).getGeometry(),
             .right: GeometryBuilder(quads: [3, 7, 11, 15].map({v in quads[v]})).getGeometry()
         ]
-        let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "metal-diffuse")
-        material.normal.contents = UIImage(named: "metal-normal")
-//        material.ambientOcclusion.contents = UIImage(named: "metal-ao")
-        material.metalness.contents = UIImage(named: "metal-metallic")
-        material.roughness.contents = UIImage(named: "metal-roughness")
-        material.lightingModel = .physicallyBased
-        faces.forEach({ (k, _) in faces[k]?.firstMaterial = material })
 
         let geometryNode = SCNNode()
         geometryNode.name = "duct"
@@ -227,11 +219,11 @@ struct Ductwork {
         var result: [SCNNode] = []
         result.append(contentsOf: [f, b, l, r])
         result.append(contentsOf: gNodes.map({(_, v) in v}))
-        result.append(contentsOf: generateTabs(outer: outer, inner: inner, tabs: tabs, material: material, isAR: options.contains(.isAR)))
+        result.append(contentsOf: generateTabs(outer: outer, inner: inner, tabs: tabs, isAR: options.contains(.isAR)))
         return result
     }
 
-    func genShape(len: Float, width: Float, type: TabType, thickness: Float, material: SCNMaterial, taper: Float = 1) -> SCNGeometry {
+    func genShape(len: Float, width: Float, type: TabType, thickness: Float, taper: Float = 1) -> SCNGeometry {
         
         switch type {
         case .straight:
@@ -243,7 +235,6 @@ struct Ductwork {
             path.addLine(to: V2.zero)
 
             let shape = SCNShape(path: UIBezierPath(cgPath: path), extrusionDepth: width.cg)
-            shape.firstMaterial = material
             return shape
         case .tapered:
             let path = CGMutablePath()
@@ -253,7 +244,6 @@ struct Ductwork {
             path.addLine(to: V2(x: taper, y: len))
             path.addLine(to: V2.zero)
             let shape = SCNShape(path: UIBezierPath(cgPath: path), extrusionDepth: thickness.cg)
-            shape.firstMaterial = material
             return shape
         case .drive:
             let path = CGMutablePath()
@@ -271,18 +261,16 @@ struct Ductwork {
             path.addLine(to: CGPoint(x: 0, y: 0))
 
             let shape = SCNShape(path: UIBezierPath(cgPath: path), extrusionDepth: (width).cg)
-            shape.firstMaterial = material
             return shape
         case .slock:
             let path = CGPath(rect: CGRect(x: 0, y: 0, width: (thickness).cg * 3, height: len.cg), transform: nil)
             let shape = SCNShape(path: UIBezierPath(cgPath: path), extrusionDepth: width.cg)
-            shape.firstMaterial = material
             return shape
         default: return SCNGeometry()
         }
     }
 
-    func generateTabs(outer: [String: V3], inner: [String: V3], tabs: TabsData, material: SCNMaterial, isAR: Bool) -> [SCNNode] {
+    func generateTabs(outer: [String: V3], inner: [String: V3], tabs: TabsData,  isAR: Bool) -> [SCNNode] {
         var nodes: [SCNNode] = []
         let thickness = inner["ftl"]!.z.distance(to: outer["ftl"]!.z) * (isAR ? 0.0254 : 1)
         let taper: Float = isAR ? 0.0254 : 1
@@ -291,41 +279,41 @@ struct Ductwork {
         switch tabs.front.top.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["ftl"]!.translate(x: inner["ftl"]!.x.distance(to: inner["ftr"]!.x) / 2))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-ft"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: outer["ftl"]!)
             node.name = "tab-ft"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-ft"
             node.localTranslate(by: V3(inner["ftl"]!.x + (inner["ftl"]!.x.distance(to: inner["ftr"]!.x) / 2), inner["ftl"]!.y, inner["ftl"]!.z))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-ft"
             node.localTranslate(by: V3(inner["ftl"]!.x + (inner["ftl"]!.x.distance(to: inner["ftr"]!.x) / 2), inner["ftl"]!.y, inner["ftl"]!.z))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["ftl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: 0, z: 0)
             node.name = "tab-ft"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["ftl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: 0, z: 0)
@@ -336,42 +324,42 @@ struct Ductwork {
         switch tabs.front.bottom.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["fbl"]!.translate(x: inner["fbl"]!.x.distance(to: inner["fbr"]!.x) / 2).translate(y: -len))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-fb"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: outer["fbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 180), y: 0, z: 0)
             node.name = "tab-fb"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-fb"
             node.localTranslate(by: V3(inner["fbl"]!.x + (inner["fbl"]!.x.distance(to: inner["fbr"]!.x) / 2), inner["fbl"]!.y, inner["fbl"]!.z))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: Math.degToRad(degrees: 180))
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-fb"
             node.localTranslate(by: V3(inner["fbl"]!.x + (inner["fbl"]!.x.distance(to: inner["fbr"]!.x) / 2), inner["fbl"]!.y - len, inner["fbl"]!.z))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["fbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: 0, z: 0)
             node.name = "tab-fb"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["fbl"]!.x.distance(to: inner["fbr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["fbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: 0, z: 0)
@@ -401,7 +389,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-fl"
                 nodes.append(node)
@@ -430,7 +417,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-fr"
                 nodes.append(node)
@@ -442,41 +428,41 @@ struct Ductwork {
         switch tabs.back.top.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["ftl"]!.x.distance(to: inner["ftr"]!.x), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: outer["btl"]!.translate(x: outer["btl"]!.x.distance(to: outer["btr"]!.x) / 2))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-bt"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: outer["btl"]!)
             node.name = "tab-bt"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-bt"
             node.localTranslate(by: V3(inner["btl"]!.x + (inner["btl"]!.x.distance(to: inner["btr"]!.x) / 2), outer["btl"]!.y, outer["btl"]!.z).translate(z: -thickness * 3))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["btl"]!.x.distance(to: inner["btr"]!.x) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["btl"]!.x.distance(to: inner["btr"]!.x) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-bt"
             node.localTranslate(by: V3(inner["btl"]!.x + (inner["btl"]!.x.distance(to: inner["btr"]!.x) / 2), inner["btl"]!.y, inner["btl"]!.z))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: 0, z: 0)
             node.name = "tab-bt"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: 0, z: 0)
@@ -487,42 +473,42 @@ struct Ductwork {
         switch tabs.back.bottom.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!.translate(x: inner["bbl"]!.x.distance(to: inner["bbr"]!.x) / 2).translate(y: -len).translate(x: thickness / 2).translate(z: -thickness))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-bb"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: outer["bbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 180), y: 0, z: 0)
             node.name = "tab-bb"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-bb"
             node.localTranslate(by: V3(inner["bbl"]!.x + (inner["bbl"]!.x.distance(to: inner["bbr"]!.x) / 2), outer["bbl"]!.y, outer["bbl"]!.z).translate(z: -thickness * 3))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: Math.degToRad(degrees: 180))
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-bb"
             node.localTranslate(by: V3(inner["bbl"]!.x + (inner["bbl"]!.x.distance(to: inner["bbr"]!.x) / 2), inner["bbl"]!.y - len, inner["bbl"]!.z).translate(z: -thickness * 2))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: -90), z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: 0, z: 0)
             node.name = "tab-bb"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.x.distance(to: inner["bbr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: 0, z: 0)
@@ -552,7 +538,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-bl"
                 nodes.append(node)
@@ -581,7 +566,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-br"
                 nodes.append(node)
@@ -593,42 +577,42 @@ struct Ductwork {
         switch tabs.left.top.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btl"]!.translate(z: inner["btl"]!.distance(inner["ftl"]!) / 2).translate(x: -thickness * 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             node.name = "tab-lt"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["ftl"]!.translate(x: -thickness))
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: 90), z: 0)
             node.name = "tab-lt"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-lt"
             node.localTranslate(by: inner["btl"]!.translate(x: -thickness * 3).translate(z: inner["btl"]!.z.distance(to: inner["ftl"]!.z) / 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-lt"
             node.localTranslate(by: inner["btl"]!.translate(z: inner["btl"]!.z.distance(to: inner["ftl"]!.z) / 2).translate(x: -thickness * 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-lt"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.x.distance(to: inner["btr"]!.x), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: Math.degToRad(degrees: -90), z: 0)
@@ -639,42 +623,42 @@ struct Ductwork {
         switch tabs.left.bottom.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!.translate(z: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) / 2).translate(y: -len).translate(x: -thickness * 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             node.name = "tab-lb"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["fbl"]!.translate(x: -thickness))
             node.eulerAngles = V3(x: Math.degToRad(degrees: 180), y: Math.degToRad(degrees: 90), z: 0)
             node.name = "tab-lb"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-lb"
             node.localTranslate(by: inner["bbl"]!.translate(z: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) / 2))
             node.eulerAngles = V3(x: 0, y: 0, z: Math.degToRad(degrees: 180))
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-lb"
             node.localTranslate(by: inner["bbl"]!.translate(z: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) / 2).translate(y: -taper).translate(x: -thickness * 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-lb"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbl"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: Math.degToRad(degrees: -90), z: 0)
@@ -704,7 +688,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-ll"
                 nodes.append(node)
@@ -733,7 +716,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-lr"
                 nodes.append(node)
@@ -745,42 +727,42 @@ struct Ductwork {
         switch tabs.right.top.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btr"]!.translate(z: inner["btl"]!.distance(inner["ftl"]!) / 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             node.name = "tab-rt"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["ftr"]!)
             node.eulerAngles = V3(x: 0, y: Math.degToRad(degrees: 90), z: 0)
             node.name = "tab-rt"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-rt"
             node.localTranslate(by: inner["btr"]!.translate(z: inner["btl"]!.z.distance(to: inner["ftl"]!.z) / 2))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-rt"
             node.localTranslate(by: inner["btr"]!.translate(z: inner["btl"]!.z.distance(to: inner["ftl"]!.z) / 2).translate(x: -thickness))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btl"]!.z.distance(to: inner["ftl"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btr"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-rt"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["btr"]!.z.distance(to: inner["ftr"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["btr"]!.z.distance(to: inner["ftr"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["btr"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: Math.degToRad(degrees: -90), z: 0)
@@ -791,42 +773,42 @@ struct Ductwork {
         switch tabs.right.bottom.getType() {
         case .none: break
         case .straight:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .straight, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .straight, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbr"]!.translate(z: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) / 2).translate(y: -len))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             node.name = "tab-rb"
             nodes.append(node)
         case .tapered:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, material: material, taper: taper)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, taper: taper)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["fbr"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 180), y: Math.degToRad(degrees: 90), z: 0)
             node.name = "tab-rb"
             nodes.append(node)
         case .drive:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .drive, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .drive, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-rb"
             node.localTranslate(by: inner["bbr"]!.translate(z: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) / 2).translate(x: thickness * 3))
             node.eulerAngles = V3(x: 0, y: 0, z: Math.degToRad(degrees: 180))
             nodes.append(node)
         case .slock:
-            let shape = genShape(len: taper, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) - thickness, type: .slock, thickness: thickness, material: material)
+            let shape = genShape(len: taper, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) - thickness, type: .slock, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.name = "tab-rb"
             node.localTranslate(by: inner["bbr"]!.translate(z: inner["bbl"]!.z.distance(to: inner["fbl"]!.z) / 2).translate(y: -taper).translate(x: -thickness))
             node.eulerAngles = V3(x: 0, y: 0, z: 0)
             nodes.append(node)
         case .foldIn:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbl"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbr"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: 90), y: Math.degToRad(degrees: -90), z: 0)
             node.name = "tab-rb"
             nodes.append(node)
         case .foldOut:
-            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbr"]!.z), type: .tapered, thickness: thickness, material: material)
+            let shape = genShape(len: len, width: inner["bbl"]!.z.distance(to: inner["fbr"]!.z), type: .tapered, thickness: thickness)
             let node = SCNNode(geometry: shape)
             node.localTranslate(by: inner["bbr"]!)
             node.eulerAngles = V3(x: Math.degToRad(degrees: -90), y: Math.degToRad(degrees: -90), z: 0)
@@ -856,7 +838,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-rl"
                 nodes.append(node)
@@ -885,7 +866,6 @@ struct Ductwork {
                     Quad(v[3], v[7], v[6], v[2])
                 ]
                 let geo = GeometryBuilder(quads: quads).getGeometry()
-                geo.firstMaterial = material
                 let node = SCNNode(geometry: geo)
                 node.name = "tab-rr"
                 nodes.append(node)

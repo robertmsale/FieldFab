@@ -185,7 +185,7 @@ struct SceneView: UIViewRepresentable {
         guard let scene = SCNScene(named: "ductwork.scn", inDirectory: "main.scnassets")
         else { fatalError("Derp") }
         scene.rootNode.childNode(withName: "plane", recursively: false)?.geometry?.firstMaterial?.fillMode = .lines
-
+        sceneView.autoenablesDefaultLighting = true
         let camera = SCNCamera()
         camera.fieldOfView = 90
         camera.zFar = 1000
@@ -220,6 +220,8 @@ struct SceneView: UIViewRepresentable {
 
     func updateUIView(_ uiView: SCNView, context: Context) {
         uiView.showsStatistics = aL.experimentalFeaturesEnabled.contains(.showDebugInfo)
+        let tabnames: [String] = ["ft", "fb", "fl", "fr", "bt", "bb", "bl", "br", "lt", "lb", "ll", "lr", "rt", "rb", "rl", "rr"]
+        let nodeNames: [String] = ["h-front", "h-back", "h-left", "h-right", "duct", "camera", "front", "back", "left", "right"]
         var maxXZ: Float = 0.0
         for (_, v) in self.aL.duct.v3D {
             maxXZ = maxXZ < max(v.x, v.z) ? max(v.x, v.z) : maxXZ
@@ -231,13 +233,10 @@ struct SceneView: UIViewRepresentable {
             uiView.scene?.rootNode.childNode(withName: "h-back", recursively: false)?.removeFromParentNode()
             uiView.scene?.rootNode.childNode(withName: "h-left", recursively: false)?.removeFromParentNode()
             uiView.scene?.rootNode.childNode(withName: "h-right", recursively: false)?.removeFromParentNode()
-            var nodeNames = ["duct", "camera", "h-front", "h-back", "h-left"]
-            nodeNames.append(contentsOf: ["h-right", "front", "back", "left", "right"])
             for i in nodeNames {
                 uiView.scene?.rootNode.childNode(withName: i, recursively: false)?.removeFromParentNode()
             }
-            var tabnames = ["ft", "fb", "fl", "fr", "bt", "bb", "bl"]
-            tabnames.append(contentsOf: ["br", "lt", "lb", "ll", "lr", "rt", "rb", "rl", "rr"])
+            
             for i in tabnames {
                 uiView.scene?.rootNode.childNode(withName: "tab-\(i)", recursively: false)?.removeFromParentNode()
             }
@@ -269,10 +268,30 @@ struct SceneView: UIViewRepresentable {
 //                }
 //                tapRecognized = false
 //            }
-            uiView.scene?.rootNode.childNode(withName: "h-front", recursively: false)?.geometry?.firstMaterial?.transparent.contents = aL.threeDViewHelpersShown ? UIImage(named: "F") : UIColor.white
-            uiView.scene?.rootNode.childNode(withName: "h-back", recursively: false)?.geometry?.firstMaterial?.transparent.contents = aL.threeDViewHelpersShown ? UIImage(named: "B") : UIColor.white
-            uiView.scene?.rootNode.childNode(withName: "h-left", recursively: false)?.geometry?.firstMaterial?.transparent.contents = aL.threeDViewHelpersShown ? UIImage(named: "L") : UIColor.white
-            uiView.scene?.rootNode.childNode(withName: "h-right", recursively: false)?.geometry?.firstMaterial?.transparent.contents = aL.threeDViewHelpersShown ? UIImage(named: "R") : UIColor.white
+            uiView.scene?.rootNode.childNode(withName: "h-front", recursively: false)?.geometry?.firstMaterial?.transparent.contents = UIImage(named: "F")
+            uiView.scene?.rootNode.childNode(withName: "h-back", recursively: false)?.geometry?.firstMaterial?.transparent.contents = UIImage(named: "B")
+            uiView.scene?.rootNode.childNode(withName: "h-left", recursively: false)?.geometry?.firstMaterial?.transparent.contents = UIImage(named: "L")
+            uiView.scene?.rootNode.childNode(withName: "h-right", recursively: false)?.geometry?.firstMaterial?.transparent.contents = UIImage(named: "R")
+        }
+        
+        for i in nodeNames[6...] {
+            uiView.scene?.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.diffuse.contents = aL.texture + "-diffuse"
+            uiView.scene?.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.metalness.contents = aL.texture + "-metallic"
+            uiView.scene?.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.normal.contents = aL.texture + "-normal"
+            uiView.scene?.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.roughness.contents = aL.texture + "-roughness"
+            uiView.scene?.rootNode.childNode(withName: i, recursively: false)?.geometry?.firstMaterial?.lightingModel = .physicallyBased
+        }
+        for i in tabnames {
+            let v = "tab-\(i)"
+            uiView.scene?.rootNode.childNode(withName: v, recursively: false)?.geometry?.firstMaterial?.diffuse.contents = aL.texture + "-diffuse"
+            uiView.scene?.rootNode.childNode(withName: v, recursively: false)?.geometry?.firstMaterial?.metalness.contents = aL.texture + "-metallic"
+            uiView.scene?.rootNode.childNode(withName: v, recursively: false)?.geometry?.firstMaterial?.normal.contents = aL.texture + "-normal"
+            uiView.scene?.rootNode.childNode(withName: v, recursively: false)?.geometry?.firstMaterial?.roughness.contents = aL.texture + "-roughness"
+            uiView.scene?.rootNode.childNode(withName: v, recursively: false)?.geometry?.firstMaterial?.lightingModel = .physicallyBased
+        }
+        
+        if !aL.threeDViewHelpersShown {
+            for i in 0...3 { uiView.scene?.rootNode.childNode(withName: nodeNames[i], recursively: false)?.removeFromParentNode() }
         }
         
         if selectorShown {
