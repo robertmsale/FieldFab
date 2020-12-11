@@ -34,7 +34,7 @@ struct FText: View {
             if self.isMeasurement {
                 Text("\"")
             }
-        })
+        }).layoutPriority(1)
     }
 }
 

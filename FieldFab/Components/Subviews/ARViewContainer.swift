@@ -27,7 +27,6 @@ struct ARViewContainer: UIViewRepresentable {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = []
         configuration.environmentTexturing = .automatic
-        arView.
         arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         let geometryNode = al.duct.getQuadGeometry(
             al.offsetX.original,

@@ -58,6 +58,7 @@ struct FStepper: View {
                         }).onEnded({_ in
                             prevStep = CGPoint.zero
                         }))
+                        .fixedSize(horizontal: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                     Spacer()
                     Button(action: {
                         self.val.mutate(self.stepSize, .increment)
@@ -91,7 +92,7 @@ struct FStepper_Previews: PreviewProvider {
             StatefulPreviewWrapper(Fraction(22.5)) {
                 FStepper(val: $0, fullStep: true, big: false)
             }
-        }.frame(width: 300, height: 64, alignment: .center/*@END_MENU_TOKEN@*/)
+        }.frame(width: 200, height: 64, alignment: .center/*@END_MENU_TOKEN@*/)
     }
 }
 #endif
