@@ -9,6 +9,24 @@
           "revision": "b0cb4fdf23e51849cc2460bdc6de795c3bcca99d",
           "version": "0.6.4"
         }
+      },
+      {
+        "package": "VectorExtensions",
+        "repositoryURL": "https://github.com/robertmsale/VectorExtensions",
+        "state": {
+          "branch": null,
+          "revision": "bc74cee5496b87b2b0aba03af2d9bcb50c53be08",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "VectorProtocol",
+        "repositoryURL": "https://github.com/robertmsale/VectorProtocol.git",
+        "state": {
+          "branch": null,
+          "revision": "d23d15eb20b48418280ec6b02ce1da6cfa409d09",
+          "version": "1.0.0"
+        }
       }
     ]
   },
