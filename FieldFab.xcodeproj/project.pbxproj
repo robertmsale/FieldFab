@@ -7,13 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = EE12F1812592F6F8007F5CE4 /* PopupView */; };
+		EE12F19625958930007F5CE4 /* DuctMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12F19525958930007F5CE4 /* DuctMeasurement.swift */; };
+		EE12F19E2595898C007F5CE4 /* DuctTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12F19D2595898C007F5CE4 /* DuctTab.swift */; };
+		EE12F1A3259589D0007F5CE4 /* DuctUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12F1A2259589D0007F5CE4 /* DuctUtils.swift */; };
+		EE12F1B125963FFB007F5CE4 /* DuctSceneProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12F1B025963FFB007F5CE4 /* DuctSceneProtocol.swift */; };
 		EE29E432250D2D16007F4036 /* main.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = EE29E431250D2D16007F4036 /* main.scnassets */; };
+		EE47C41325966AE100288BD7 /* LoadSceneProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE47C41225966AE100288BD7 /* LoadSceneProgressView.swift */; };
+		EE47C41B2596BDC700288BD7 /* DuctSCN.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE47C41A2596BDC700288BD7 /* DuctSCN.swift */; };
+		EE6C3B722597E9DF00AA70AE /* WorkViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B712597E9DF00AA70AE /* WorkViewSettings.swift */; };
+		EE6C3B772597EA3300AA70AE /* Work3DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B762597EA3300AA70AE /* Work3DView.swift */; };
+		EE6C3B7C2597EAAD00AA70AE /* WorkViewAR.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B7B2597EAAD00AA70AE /* WorkViewAR.swift */; };
+		EE6C3B812597EAD400AA70AE /* WorkShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B802597EAD400AA70AE /* WorkShopView.swift */; };
+		EE6C3B862597EAF100AA70AE /* DuctSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B852597EAF000AA70AE /* DuctSideView.swift */; };
+		EE6C3B8B2597EB0900AA70AE /* TabPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B8A2597EB0900AA70AE /* TabPicker.swift */; };
+		EE6C3B902597EC0A00AA70AE /* RotationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6C3B8F2597EC0A00AA70AE /* RotationTest.swift */; };
+		EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
+		EE6C3B95259969B600AA70AE /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99102527B9EC008AB605 /* HelpView.swift */; };
+		EE6C3B9B2599778300AA70AE /* StringFix in Frameworks */ = {isa = PBXBuildFile; productRef = EE6C3B9A2599778300AA70AE /* StringFix */; };
 		EE8D395C25831C7600A1AC39 /* AppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8D395B25831C7600A1AC39 /* AppMain.swift */; };
 		EE8D396525831DEE00A1AC39 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8D396425831DEE00A1AC39 /* AppState.swift */; };
 		EE8D3990258326B700A1AC39 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EE8D398F258326B700A1AC39 /* VectorExtensions */; };
+		EE9022BD258EC87C00EE0C9A /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022BC258EC87C00EE0C9A /* AppView.swift */; };
+		EE9022C5258EE02100EE0C9A /* MeasurementField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022C4258EE02100EE0C9A /* MeasurementField.swift */; };
+		EE9022CA258EE60000EE0C9A /* DigitWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022C9258EE60000EE0C9A /* DigitWheel.swift */; };
+		EE9022CE258EEBB900EE0C9A /* StatefulPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB98FE25275CFA008AB605 /* StatefulPreviewWrapper.swift */; };
+		EE9022D3258EFF1000EE0C9A /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022D2258EFF1000EE0C9A /* SettingsPage.swift */; };
+		EE9022DB258FB7CB00EE0C9A /* WorkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022DA258FB7CB00EE0C9A /* WorkView.swift */; };
+		EE9022E3258FB85000EE0C9A /* NumberSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022E2258FB85000EE0C9A /* NumberSlider.swift */; };
 		EEB3AE73258BAEF800285C20 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB3AE72258BAEF800285C20 /* Duct.swift */; };
 		EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EEB3AE7B258CE95100285C20 /* VectorExtensions */; };
 		EEB3AE81258D570100285C20 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB3AE80258D570100285C20 /* Vector3.swift */; };
+		EEB3AE8B258E62CB00285C20 /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */; };
+		EEB3AE8F258E62CE00285C20 /* Quad.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5F251F8C26003E6F08 /* Quad.swift */; };
+		EEB3AE93258E62DD00285C20 /* SCNUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE64251F8D99003E6F08 /* SCNUtils.swift */; };
 		EEC7CF3C25034397003389AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF3B25034397003389AB /* Assets.xcassets */; };
 		EEC7CF3F25034397003389AB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF3E25034397003389AB /* Preview Assets.xcassets */; };
 		EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF4025034397003389AB /* LaunchScreen.storyboard */; };
@@ -42,6 +69,10 @@
 
 /* Begin PBXFileReference section */
 		EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMenuSheet.swift; sourceTree = "<group>"; };
+		EE12F19525958930007F5CE4 /* DuctMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctMeasurement.swift; sourceTree = "<group>"; };
+		EE12F19D2595898C007F5CE4 /* DuctTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctTab.swift; sourceTree = "<group>"; };
+		EE12F1A2259589D0007F5CE4 /* DuctUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctUtils.swift; sourceTree = "<group>"; };
+		EE12F1B025963FFB007F5CE4 /* DuctSceneProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctSceneProtocol.swift; sourceTree = "<group>"; };
 		EE1A1434253B574A00C4DFAD /* StringFix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringFix.swift; sourceTree = "<group>"; };
 		EE1A1439253B5CAD00C4DFAD /* LoadSharedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSharedView.swift; sourceTree = "<group>"; };
 		EE29E40B2505794D007F4036 /* 2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2D.swift; sourceTree = "<group>"; };
@@ -55,10 +86,25 @@
 		EE29E42725086B01007F4036 /* FieldFab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FieldFab.entitlements; sourceTree = "<group>"; };
 		EE29E428250BAC9D007F4036 /* 3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3D.swift; sourceTree = "<group>"; };
 		EE29E431250D2D16007F4036 /* main.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = main.scnassets; sourceTree = "<group>"; };
+		EE47C41225966AE100288BD7 /* LoadSceneProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSceneProgressView.swift; sourceTree = "<group>"; };
+		EE47C41A2596BDC700288BD7 /* DuctSCN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctSCN.swift; sourceTree = "<group>"; };
+		EE6C3B712597E9DF00AA70AE /* WorkViewSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkViewSettings.swift; sourceTree = "<group>"; };
+		EE6C3B762597EA3300AA70AE /* Work3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Work3DView.swift; sourceTree = "<group>"; };
+		EE6C3B7B2597EAAD00AA70AE /* WorkViewAR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkViewAR.swift; sourceTree = "<group>"; };
+		EE6C3B802597EAD400AA70AE /* WorkShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkShopView.swift; sourceTree = "<group>"; };
+		EE6C3B852597EAF000AA70AE /* DuctSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctSideView.swift; sourceTree = "<group>"; };
+		EE6C3B8A2597EB0900AA70AE /* TabPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPicker.swift; sourceTree = "<group>"; };
+		EE6C3B8F2597EC0A00AA70AE /* RotationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationTest.swift; sourceTree = "<group>"; };
 		EE8A13C82549E1BA00852939 /* Popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		EE8D395B25831C7600A1AC39 /* AppMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		EE8D396425831DEE00A1AC39 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDuctworkView.swift; sourceTree = "<group>"; };
+		EE9022BC258EC87C00EE0C9A /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		EE9022C4258EE02100EE0C9A /* MeasurementField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementField.swift; sourceTree = "<group>"; };
+		EE9022C9258EE60000EE0C9A /* DigitWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitWheel.swift; sourceTree = "<group>"; };
+		EE9022D2258EFF1000EE0C9A /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		EE9022DA258FB7CB00EE0C9A /* WorkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkView.swift; sourceTree = "<group>"; };
+		EE9022E2258FB85000EE0C9A /* NumberSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSlider.swift; sourceTree = "<group>"; };
 		EE9787992517AC9F003DE8E0 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
 		EE99FABF2539D08500F27C2C /* ExamplePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePreview.swift; sourceTree = "<group>"; };
 		EEAF2B322516581F0074A516 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -120,6 +166,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */,
+				EE6C3B9B2599778300AA70AE /* StringFix in Frameworks */,
 				EEFB98D82526CCA8008AB605 /* Disk in Frameworks */,
 				EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */,
 				EE8D3990258326B700A1AC39 /* VectorExtensions in Frameworks */,
@@ -143,9 +191,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EE12F1862593AD89007F5CE4 /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */,
+				EEFB98F92526EA00008AB605 /* UnitText.swift */,
+				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
+				EE29E4182505F6CA007F4036 /* ControlView.swift */,
+				EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */,
+				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
+				EED1CE79251FF091003E6F08 /* FText.swift */,
+				EED1CE0F251E775D003E6F08 /* GridView.swift */,
+				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
+			);
+			path = Old;
+			sourceTree = "<group>";
+		};
+		EE12F19425958912007F5CE4 /* Duct */ = {
+			isa = PBXGroup;
+			children = (
+				EEB3AE72258BAEF800285C20 /* Duct.swift */,
+				EE12F19525958930007F5CE4 /* DuctMeasurement.swift */,
+				EE12F19D2595898C007F5CE4 /* DuctTab.swift */,
+				EE12F1A2259589D0007F5CE4 /* DuctUtils.swift */,
+				EE12F1B025963FFB007F5CE4 /* DuctSceneProtocol.swift */,
+				EE47C41A2596BDC700288BD7 /* DuctSCN.swift */,
+				EE6C3B8F2597EC0A00AA70AE /* RotationTest.swift */,
+			);
+			path = Duct;
+			sourceTree = "<group>";
+		};
 		EE29E40625053CFD007F4036 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				EEFB99152527BBDB008AB605 /* AboutView.swift */,
+				EEFB99102527B9EC008AB605 /* HelpView.swift */,
 				EE8A13D02549EA8F00852939 /* Overlays */,
 				EE8A13C72549E1A000852939 /* Modifiers */,
 				EE8A13D12549EB2D00852939 /* Subviews */,
@@ -156,6 +236,7 @@
 				EEC7CF3D25034397003389AB /* Preview Content */,
 				EE8A13BD2549DB8900852939 /* Sheets */,
 				EEC7CF6825034858003389AB /* Tabs */,
+				EE47C41225966AE100288BD7 /* LoadSceneProgressView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -169,9 +250,6 @@
 				EE29E4212506C401007F4036 /* Math.swift */,
 				EE29E4232506CBAD007F4036 /* Quaternion.swift */,
 				EEAF2B322516581F0074A516 /* Line.swift */,
-				EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */,
-				EED1CE5F251F8C26003E6F08 /* Quad.swift */,
-				EED1CE64251F8D99003E6F08 /* SCNUtils.swift */,
 				EEFB98F12526E2C6008AB605 /* Fractional.swift */,
 				EE1A1434253B574A00C4DFAD /* StringFix.swift */,
 				EEDFF2142545CDB100FD9D51 /* DistanceUnit.swift */,
@@ -179,16 +257,28 @@
 			path = Math;
 			sourceTree = "<group>";
 		};
+		EE6C3B702597E9CA00AA70AE /* WorkViewComponents */ = {
+			isa = PBXGroup;
+			children = (
+				EE6C3B712597E9DF00AA70AE /* WorkViewSettings.swift */,
+				EE6C3B762597EA3300AA70AE /* Work3DView.swift */,
+				EE6C3B7B2597EAAD00AA70AE /* WorkViewAR.swift */,
+				EE6C3B802597EAD400AA70AE /* WorkShopView.swift */,
+				EE6C3B852597EAF000AA70AE /* DuctSideView.swift */,
+				EE6C3B8A2597EB0900AA70AE /* TabPicker.swift */,
+			);
+			path = WorkViewComponents;
+			sourceTree = "<group>";
+		};
 		EE8A13BD2549DB8900852939 /* Sheets */ = {
 			isa = PBXGroup;
 			children = (
-				EEFB99152527BBDB008AB605 /* AboutView.swift */,
 				EEDFF22B25462B7C00FD9D51 /* AdvancedSettingsSheet.swift */,
 				EE0D5420252DE20500D89C32 /* ARMenuSheet.swift */,
-				EEFB99102527B9EC008AB605 /* HelpView.swift */,
 				EE8FB6B025254E10008FA41B /* LoadDuctworkView.swift */,
 				EE1A1439253B5CAD00C4DFAD /* LoadSharedView.swift */,
 				EEFB993E252C1A15008AB605 /* ThreeDMenuSheet.swift */,
+				EE9022D2258EFF1000EE0C9A /* SettingsPage.swift */,
 			);
 			path = Sheets;
 			sourceTree = "<group>";
@@ -235,7 +325,10 @@
 		EE8D39692583214B00A1AC39 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				EEB3AE72258BAEF800285C20 /* Duct.swift */,
+				EE12F19425958912007F5CE4 /* Duct */,
+				EED1CE64251F8D99003E6F08 /* SCNUtils.swift */,
+				EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */,
+				EED1CE5F251F8C26003E6F08 /* Quad.swift */,
 				EEB3AE80258D570100285C20 /* Vector3.swift */,
 			);
 			path = Utility;
@@ -251,17 +344,11 @@
 		EE8FB6AC252545AE008FA41B /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				EEFB992E2527DCF0008AB605 /* CarouselView.swift */,
-				EE29E4182505F6CA007F4036 /* ControlView.swift */,
-				EEDFF2192545E63C00FD9D51 /* SelectorWheel.swift */,
-				EEFB9939252A6F6A008AB605 /* ButtonGroup.swift */,
-				EED1CE74251FE98E003E6F08 /* FStepper.swift */,
-				EED1CE79251FF091003E6F08 /* FText.swift */,
-				EED1CE0F251E775D003E6F08 /* GridView.swift */,
+				EE12F1862593AD89007F5CE4 /* Old */,
 				EEDCE8472520F99900F21FAF /* PlaneAdjustmentView.swift */,
 				EEDCE84C25211A7100F21FAF /* ResetViewButton.swift */,
-				EEDCE85125213C7600F21FAF /* RotateButtonView.swift */,
-				EEFB98F92526EA00008AB605 /* UnitText.swift */,
+				EE9022C9258EE60000EE0C9A /* DigitWheel.swift */,
+				EE9022E2258FB85000EE0C9A /* NumberSlider.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -292,6 +379,9 @@
 			children = (
 				EE8D395B25831C7600A1AC39 /* AppMain.swift */,
 				EE8D396425831DEE00A1AC39 /* AppState.swift */,
+				EE9022BC258EC87C00EE0C9A /* AppView.swift */,
+				EE9022DA258FB7CB00EE0C9A /* WorkView.swift */,
+				EE6C3B702597E9CA00AA70AE /* WorkViewComponents */,
 				EEC7CF3B25034397003389AB /* Assets.xcassets */,
 				EE29E40625053CFD007F4036 /* Components */,
 				EEFB98DC2526CEDA008AB605 /* Data Persistence */,
@@ -301,6 +391,7 @@
 				EE29E431250D2D16007F4036 /* main.scnassets */,
 				EE8D396025831C8500A1AC39 /* Old */,
 				EE8D39692583214B00A1AC39 /* Utility */,
+				EE9022C4258EE02100EE0C9A /* MeasurementField.swift */,
 			);
 			path = FieldFab;
 			sourceTree = "<group>";
@@ -386,6 +477,8 @@
 				EEFB98D72526CCA8008AB605 /* Disk */,
 				EE8D398F258326B700A1AC39 /* VectorExtensions */,
 				EEB3AE7B258CE95100285C20 /* VectorExtensions */,
+				EE12F1812592F6F8007F5CE4 /* PopupView */,
+				EE6C3B9A2599778300AA70AE /* StringFix */,
 			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
@@ -463,6 +556,8 @@
 			packageReferences = (
 				EEFB98D62526CCA8008AB605 /* XCRemoteSwiftPackageReference "Disk" */,
 				EEB3AE7A258CE95100285C20 /* XCRemoteSwiftPackageReference "VectorExtensions" */,
+				EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */,
+				EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */,
 			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
@@ -508,11 +603,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE9022CE258EEBB900EE0C9A /* StatefulPreviewWrapper.swift in Sources */,
 				EEB3AE73258BAEF800285C20 /* Duct.swift in Sources */,
+				EE9022D3258EFF1000EE0C9A /* SettingsPage.swift in Sources */,
+				EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */,
+				EE6C3B812597EAD400AA70AE /* WorkShopView.swift in Sources */,
+				EE9022DB258FB7CB00EE0C9A /* WorkView.swift in Sources */,
+				EE6C3B8B2597EB0900AA70AE /* TabPicker.swift in Sources */,
+				EE6C3B7C2597EAAD00AA70AE /* WorkViewAR.swift in Sources */,
+				EEB3AE8F258E62CE00285C20 /* Quad.swift in Sources */,
+				EE12F1B125963FFB007F5CE4 /* DuctSceneProtocol.swift in Sources */,
+				EE6C3B902597EC0A00AA70AE /* RotationTest.swift in Sources */,
+				EE9022E3258FB85000EE0C9A /* NumberSlider.swift in Sources */,
+				EE12F19625958930007F5CE4 /* DuctMeasurement.swift in Sources */,
+				EE6C3B95259969B600AA70AE /* HelpView.swift in Sources */,
+				EE9022BD258EC87C00EE0C9A /* AppView.swift in Sources */,
+				EE6C3B862597EAF100AA70AE /* DuctSideView.swift in Sources */,
 				EE8D396525831DEE00A1AC39 /* AppState.swift in Sources */,
 				EE8D395C25831C7600A1AC39 /* AppMain.swift in Sources */,
+				EE12F19E2595898C007F5CE4 /* DuctTab.swift in Sources */,
+				EE12F1A3259589D0007F5CE4 /* DuctUtils.swift in Sources */,
+				EE9022C5258EE02100EE0C9A /* MeasurementField.swift in Sources */,
 				EEB3AE81258D570100285C20 /* Vector3.swift in Sources */,
 				EEDFF21F2546021B00FD9D51 /* VisualEffectView.swift in Sources */,
+				EE47C41B2596BDC700288BD7 /* DuctSCN.swift in Sources */,
+				EE9022CA258EE60000EE0C9A /* DigitWheel.swift in Sources */,
+				EE47C41325966AE100288BD7 /* LoadSceneProgressView.swift in Sources */,
+				EE6C3B772597EA3300AA70AE /* Work3DView.swift in Sources */,
+				EEB3AE93258E62DD00285C20 /* SCNUtils.swift in Sources */,
+				EE6C3B722597E9DF00AA70AE /* WorkViewSettings.swift in Sources */,
+				EEB3AE8B258E62CB00285C20 /* GeometryBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,9 +739,11 @@
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -675,9 +797,11 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -690,14 +814,18 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.0.0;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FieldFab/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -715,14 +843,18 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.0.0;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FieldFab/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -858,6 +990,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.10;
+			};
+		};
+		EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/robertmsale/StringFix";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		EEB3AE7A258CE95100285C20 /* XCRemoteSwiftPackageReference "VectorExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/robertmsale/VectorExtensions";
@@ -877,6 +1025,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		EE12F1812592F6F8007F5CE4 /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
+		};
+		EE6C3B9A2599778300AA70AE /* StringFix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */;
+			productName = StringFix;
+		};
 		EE8D398F258326B700A1AC39 /* VectorExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VectorExtensions;

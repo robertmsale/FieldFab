@@ -5,51 +5,230 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.RuntimeIssueBreakpoint">
          <BreakpointContent
-            uuid = "894DD85B-1DEF-4A99-9F3E-6736036BF6CB"
-            shouldBeEnabled = "No"
+            uuid = "867A488E-E506-42E4-8E17-5C741CFEF4F8"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FieldFab/Components/ARViewContainer.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
-            landmarkName = "ARViewContainer"
-            landmarkType = "14">
+            breakpointStackSelectionBehavior = "1"
+            type = "8"
+            categories = "Metal Diagnostics">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SwiftErrorBreakpoint">
+         <BreakpointContent
+            uuid = "9913C813-A143-44AD-BBEC-61FE5A8A8F14"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3D96234D-E85F-45D0-8C30-77CAD4E97409"
+            uuid = "51458963-B1BB-47BA-AAD3-A0141B0A420D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FieldFab/Data Persistence/Tabs.swift"
+            filePath = "FieldFab/Components/Controls/DigitWheel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
-            landmarkName = "TabsData"
-            landmarkType = "14">
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "51458963-B1BB-47BA-AAD3-A0141B0A420D - 50f8eaed5243c415"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.clipShape&lt;A where A1: SwiftUI.Shape&gt;(_: A1, style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0 in FieldFab.FractionWheel.body.getter : some"
+                  moduleName = "FieldFab"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Components/Controls/DigitWheel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "548">
+               </Location>
+               <Location
+                  uuid = "51458963-B1BB-47BA-AAD3-A0141B0A420D - c8b2b109078e4e14"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.clipShape&lt;A where A1: SwiftUI.Shape&gt;(_: A1, style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0 in FieldFab.FractionWheel.body.getter : some"
+                  moduleName = "FieldFab"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Components/Controls/DigitWheel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "81">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1ACE96FA-F360-41BB-BCD8-F68997171948"
+            uuid = "A9FDBC42-D6A2-4BC3-8AD8-33A292A05494"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FieldFab/Data Persistence/Tabs.swift"
+            filePath = "FieldFab/Utility/Duct/DuctSCN.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
-            landmarkName = "TabsData"
-            landmarkType = "14">
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "helpersUpdate(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8CF8914B-0C9E-4828-8C12-FC46F9BA6646"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FieldFab/Utility/Duct/DuctMeasurement.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "wholeDigits"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "78B614F7-6146-4687-9A2A-D3B19C0057E2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FieldFab/Utility/Duct/DuctMeasurement.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "fracDigits"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "62C0A532-6C7F-4F43-A6E7-785B281CE3CE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FieldFab/Utility/Duct/DuctMeasurement.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "fracDigits"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AEE72955-4B57-4248-9CB5-1A0DC6FD7C7A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FieldFab/Components/Controls/NumberSlider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "setValue()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FieldFab/Utility/Duct/Duct.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
+            landmarkName = "makeSideFlat(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
+                  moduleName = "FieldFab"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "385"
+                  endingLineNumber = "385"
+                  offsetFromSymbolStart = "780">
+               </Location>
+               <Location
+                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
+                  moduleName = "FieldFab"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "385"
+                  endingLineNumber = "385"
+                  offsetFromSymbolStart = "1196">
+               </Location>
+               <Location
+                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
+                  moduleName = "FieldFab"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "385"
+                  endingLineNumber = "385"
+                  offsetFromSymbolStart = "1448">
+               </Location>
+               <Location
+                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
+                  moduleName = "FieldFab"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "385"
+                  endingLineNumber = "385"
+                  offsetFromSymbolStart = "1700">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

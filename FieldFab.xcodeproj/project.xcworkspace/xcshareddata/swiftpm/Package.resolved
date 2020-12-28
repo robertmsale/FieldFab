@@ -11,12 +11,30 @@
         }
       },
       {
+        "package": "PopupView",
+        "repositoryURL": "https://github.com/exyte/PopupView",
+        "state": {
+          "branch": null,
+          "revision": "fd37cca19583f784288dc3f1d22e9c5c69d6fd68",
+          "version": "0.0.10"
+        }
+      },
+      {
+        "package": "StringFix",
+        "repositoryURL": "https://github.com/robertmsale/StringFix",
+        "state": {
+          "branch": null,
+          "revision": "fac126903db5586cf38f37a953f456fc8385af62",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "VectorExtensions",
         "repositoryURL": "https://github.com/robertmsale/VectorExtensions",
         "state": {
           "branch": null,
-          "revision": "bc74cee5496b87b2b0aba03af2d9bcb50c53be08",
-          "version": "1.0.0"
+          "revision": "07a42de2333fb38081fd86b2f681818baa51fc34",
+          "version": "1.0.4"
         }
       },
       {
