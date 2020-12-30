@@ -40,8 +40,10 @@ struct AppView: View {
                 aboutSheet
                 shareSheet
                 detailsSheet
-                EmptyView()
-                    .sheet(isPresented: Binding<Bool>(get: {state.pdfDuct != nil}, set: {if !$0 { state.pdfDuct = nil }}), content: {PDFView(duct: state.pdfDuct ?? Duct()).environmentObject(state)})
+                cameraHelpSheet
+                arHelpSheet
+//                EmptyView()
+//                    .sheet(isPresented: Binding<Bool>(get: {state.pdfDuct != nil}, set: {if !$0 { state.pdfDuct = nil }}), content: {PDFView(duct: state.pdfDuct ?? Duct()).environmentObject(state)})
             }
         }
     }
@@ -146,6 +148,18 @@ struct AppView: View {
             else { return AnyView(EmptyView()) }
         }
         else { return AnyView(EmptyView())}
+    }
+    var cameraHelpSheet: some View {
+        EmptyView()
+            .sheet(isPresented: $state.sheetsShown.cameraHelp, content: {
+                CameraHelpView().environmentObject(state)
+            })
+    }
+    var arHelpSheet: some View {
+        EmptyView()
+            .sheet(isPresented: $state.sheetsShown.arHelp, content: {
+                ARCameraHelpView().environmentObject(state)
+            })
     }
     
     var navItems: some View {

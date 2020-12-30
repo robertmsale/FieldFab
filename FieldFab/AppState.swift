@@ -14,32 +14,32 @@ struct ND { let n: Int; let d: Int }
 extension Measurement where UnitType: UnitLength {
     var asInchFrac: ND? {
         if self.unit != .inches { return ND(n: 0, d: 0) }
-        let num = self.value.rounded(toNearest: 0.0625)
-        let floor = num.floor
+        let floor = self.value.rounded(.towardZero)
         var nd: ND!
-        switch num - floor {
-            case let x where x > 0.0624 && x < 0.0626: nd = ND(n: 1, d: 16)
-            case let x where x > 0.1249 && x < 0.1251: nd = ND(n: 1, d: 8)
-            case let x where x > 0.1874 && x < 0.1876: nd = ND(n: 3, d: 16)
-            case let x where x > 0.2499 && x < 0.2501: nd = ND(n: 1, d: 4)
-            case let x where x > 0.3124 && x < 0.3126: nd = ND(n: 5, d: 16)
-            case let x where x > 0.3749 && x < 0.3751: nd = ND(n: 3, d: 8)
-            case let x where x > 0.4374 && x < 0.4376: nd = ND(n: 7, d: 16)
-            case let x where x > 0.4999 && x < 0.5001: nd = ND(n: 1, d: 2)
-            case let x where x > 0.5624 && x < 0.5626: nd = ND(n: 9, d: 16)
-            case let x where x > 0.6249 && x < 0.6251: nd = ND(n: 5, d: 8)
-            case let x where x > 0.6874 && x < 0.6876: nd = ND(n: 11, d: 16)
-            case let x where x > 0.7499 && x < 0.7501: nd = ND(n: 3, d: 4)
-            case let x where x > 0.8124 && x < 0.8126: nd = ND(n: 13, d: 16)
-            case let x where x > 0.8749 && x < 0.8751: nd = ND(n: 7, d: 8)
-            case let x where x > 0.9374 && x < 0.9376: nd = ND(n: 15, d: 16)
+        switch abs(value.distance(to: floor)) {
+            case let x where x > 0.03125 && x < 0.09375: nd = ND(n: 1, d: 16)
+            case let x where x >= 0.09375 && x < 0.15625: nd = ND(n: 1, d: 8)
+            case let x where x >= 0.15625 && x < 0.21875: nd = ND(n: 3, d: 16)
+            case let x where x >= 0.21875 && x < 0.28125: nd = ND(n: 1, d: 4)
+            case let x where x >= 0.28125 && x < 0.34375: nd = ND(n: 5, d: 16)
+            case let x where x >= 0.34375 && x < 0.40625: nd = ND(n: 3, d: 8)
+            case let x where x >= 0.40625 && x < 0.46875: nd = ND(n: 7, d: 16)
+            case let x where x >= 0.46875 && x < 0.53125: nd = ND(n: 1, d: 2)
+            case let x where x >= 0.53125 && x < 0.59375: nd = ND(n: 9, d: 16)
+            case let x where x >= 0.59375 && x < 0.65625: nd = ND(n: 5, d: 8)
+            case let x where x >= 0.65625 && x < 0.71875: nd = ND(n: 11, d: 16)
+            case let x where x >= 0.71875 && x < 0.78125: nd = ND(n: 3, d: 4)
+            case let x where x >= 0.78125 && x < 0.84375: nd = ND(n: 13, d: 16)
+            case let x where x >= 0.84375 && x < 0.90625: nd = ND(n: 7, d: 8)
+            case let x where x >= 0.90625 && x < 0.96875: nd = ND(n: 15, d: 16)
+            case let x where x >= 0.96875: nd = ND(n: 1, d: 1)
             default: break
         }
         return nd
     }
     var asElement: AnyView {
         let numf = NumberFormatter()
-        numf.roundingMode = .down
+//        numf.roundingMode = .down
         switch self.unit {
             case .feet:
                 numf.maximumFractionDigits = 1
@@ -47,10 +47,11 @@ extension Measurement where UnitType: UnitLength {
             case .inches:
                 let inf = self.asInchFrac
                 numf.maximumFractionDigits = 0
+                let w = inf?.d == 1 ? self.value.rounded(.awayFromZero) : self.value.rounded(.towardZero)
                 return AnyView(HStack(alignment: .top, spacing: 0) {
                     if self.value != 0.0 {
-                        Text("\(numf.string(from: NSNumber(value: value)) ?? "")")
-                        if inf != nil {
+                        Text("\(numf.string(from: NSNumber(value: w)) ?? "")")
+                        if inf != nil && inf?.d != 1 {
                             Text("\(inf!.n)/\(inf!.d)").font(.footnote)
                         }
                         Text("\"")
@@ -97,6 +98,8 @@ struct SheetShownState: Codable {
     var shared = false
     var load = false
     var advancedSettings = false
+    var cameraHelp = false
+    var arHelp = false
 }
 
 @propertyWrapper
@@ -273,8 +276,13 @@ final class AppState: ObservableObject {
     @Published var workViewTab: Int = {
         UserDefaults.standard.object(forKey: "workViewTab") as? Int ?? 0
     }() { didSet { UserDefaults.standard.setValue(workViewTab, forKey: "workViewTab")}}
+    @Published var isSanatized: Bool = false
     @Published var currentWork: Duct? { willSet(v) {
         if currentWork == nil { return }
+//        if v == nil { return }
+//        if currentWork!.data.width.value.unit != v!.data.width.value.unit {
+//            isSanatized = false
+//        }
         if let nd = v {
             for i in DuctData.MeasureKeys.allCases { if nd.data[i].value != currentWork!.data[i].value {
                 sceneEvents.measurementsChanged = true
@@ -285,6 +293,21 @@ final class AppState: ObservableObject {
                 arEvents.tabsChanged = true
             }
         }
+    } didSet {
+//        if currentWork == nil { return }
+//        if !isSanatized {
+//            isSanatized = true
+//            for key in DuctData.MeasureKeys.allCases {
+//                switch currentWork!.data[key].value.unit {
+//                    case .inches: currentWork!.data[key].value.value = currentWork!.data[key].value.value.rounded(toNearest: 0.0625)
+//                    case .feet: currentWork!.data[key].value.value = currentWork!.data[key].value.value.rounded(toNearest: 0.01)
+//                    case .meters: currentWork!.data[key].value.value = currentWork!.data[key].value.value.rounded(toNearest: 0.0001)
+//                    case .centimeters: currentWork!.data[key].value.value = currentWork!.data[key].value.value.rounded(toNearest: 0.1)
+//                    case .millimeters: currentWork!.data[key].value.value = currentWork!.data[key].value.value.rounded(.down)
+//                    default: break
+//                }
+//            }
+//        }
     }}
     @Published var currentWorkTab: Int = 0
     @Published var sceneBGColor: CGColor = {

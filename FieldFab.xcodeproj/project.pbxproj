@@ -25,6 +25,7 @@
 		EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
 		EE6C3B95259969B600AA70AE /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99102527B9EC008AB605 /* HelpView.swift */; };
 		EE6C3B9B2599778300AA70AE /* StringFix in Frameworks */ = {isa = PBXBuildFile; productRef = EE6C3B9A2599778300AA70AE /* StringFix */; };
+		EE6C3BB2259C3F3700AA70AE /* CameraHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE6C251FC876003E6F08 /* CameraHelpView.swift */; };
 		EE8D395C25831C7600A1AC39 /* AppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8D395B25831C7600A1AC39 /* AppMain.swift */; };
 		EE8D396525831DEE00A1AC39 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8D396425831DEE00A1AC39 /* AppState.swift */; };
 		EE8D3990258326B700A1AC39 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EE8D398F258326B700A1AC39 /* VectorExtensions */; };
@@ -611,6 +612,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE6C3BB2259C3F3700AA70AE /* CameraHelpView.swift in Sources */,
 				EE9022CE258EEBB900EE0C9A /* StatefulPreviewWrapper.swift in Sources */,
 				EEB3AE73258BAEF800285C20 /* Duct.swift in Sources */,
 				EE9022D3258EFF1000EE0C9A /* SettingsPage.swift in Sources */,
@@ -822,7 +824,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.0.2;
+				CURRENT_PROJECT_VERSION = 2.0.3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -833,7 +835,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -851,7 +853,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.0.2;
+				CURRENT_PROJECT_VERSION = 2.0.3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -862,7 +864,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

@@ -46,7 +46,7 @@ struct WorkView: View {
             WorkViewAR().tag(2).tabItem {
                 Image(systemName: "camera.viewfinder")
                 Text("AR")
-            }.edgesIgnoringSafeArea(.horizontal)
+            }
             #endif
         }
         .navigationBarTitle("\(cw.data.name)")

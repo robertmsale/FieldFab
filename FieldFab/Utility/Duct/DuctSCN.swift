@@ -381,12 +381,16 @@ struct DuctAR: UIViewRepresentable {
             geometryUpdateAll(uiView.scene)
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)
+            let node = ductNode(uiView.scene)
+            node.worldPosition = context.coordinator.ductPosition
+            node.eulerAngles = context.coordinator.ductEuler
         }
         if state.arEvents.textureChanged {
             materialUpdate(uiView.scene)
         }
         if state.arEvents.tabsChanged {
             tabsUpdate(uiView.scene)
+            materialUpdate(uiView.scene)
         }
         if state.arEvents.helpersChanged {
             helpersUpdate(uiView.scene)
@@ -394,15 +398,15 @@ struct DuctAR: UIViewRepresentable {
         if state.arEvents.arViewReset {
             uiView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors, .resetSceneReconstruction])
             context.coordinator.ductPosition = SCNVector3(0,0,0)
-            ductNode(uiView.scene).worldPosition = SCNVector3(0,0,0)
+            context.coordinator.ductEuler = SCNVector3(0, 0, 0)
+            let node = ductNode(uiView.scene)
+            node.worldPosition = SCNVector3(0,0,0)
+            node.eulerAngles = SCNVector3(0,0,0)
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)
             state.arEvents.arViewReset = false
         }
         changeFlow(uiView.scene, context: context)
-        if state.arEvents.needsReset {
-            state.arEvents = EventState.ARScene()
-        }
         if state.currentWorkTab == 2 && !uiView.isPlaying {
             uiView.play(nil)
             uiView.session.run(configuration, options: [])
@@ -410,6 +414,9 @@ struct DuctAR: UIViewRepresentable {
         if state.currentWorkTab != 2 && uiView.isPlaying {
             uiView.pause(nil)
             uiView.session.pause()
+        }
+        if state.arEvents.needsReset {
+            state.arEvents = EventState.ARScene()
         }
         uiView.showsStatistics = state.showDebugInfo
         context.coordinator.translationMode = state.translationMode
@@ -424,6 +431,7 @@ struct DuctAR: UIViewRepresentable {
     class Coordinator {
         var ductPosition = SCNVector3(0, 0, 0)
         var ductRotation = CGFloat(0)
+        var ductEuler = SCNVector3(0, 0, 0)
         var initialRotation = CGFloat(0)
         var initialPan = CGPoint.zero
         var translationMode: AppState.TranslationMode
@@ -452,7 +460,8 @@ struct DuctAR: UIViewRepresentable {
             }
             if g.state != .cancelled {
                 let ductNode = v.scene.rootNode.childNode(withName: "Duct Node", recursively: false) ?? SCNNode()
-                ductNode.eulerAngles.translate([.y: (g.rotation - initialRotation).f * 0.01])
+                ductNode.eulerAngles.translate([.y: -(g.rotation - initialRotation).f * 0.01])
+                ductEuler = ductNode.eulerAngles
             }
         }
         

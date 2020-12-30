@@ -58,14 +58,16 @@ struct DuctMeasurement: Codable {
         return nf
     }
     func sanatize(newval: inout Double) {
+        var clamped: Double!
         switch value.unit {
-            case .inches:       newval = newval.clamp(min: -60,     max: 60     )
-            case .feet:         newval = newval.clamp(min: -5,      max: 5      )
-            case .meters:       newval = newval.clamp(min: -1.828,  max: 1.828  )
-            case .centimeters:  newval = newval.clamp(min: -182.8,  max: 182.8  )
-            case .millimeters:  newval = newval.clamp(min: -1828,   max: 1828   )
-            default: newval = 0
+            case .inches:       clamped = newval.clamp(min: -60,     max: 60     )
+            case .feet:         clamped = newval.clamp(min: -5,      max: 5      )
+            case .meters:       clamped = newval.clamp(min: -1.828,  max: 1.828  )
+            case .centimeters:  clamped = newval.clamp(min: -182.8,  max: 182.8  )
+            case .millimeters:  clamped = newval.clamp(min: -1828,   max: 1828   )
+            default: clamped = 0
         }
+        newval = clamped
     }
     
     var wholeDigits: [Int] {

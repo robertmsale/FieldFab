@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct CameraHelpView: View {
-    var g: GeometryProxy
-    @Binding var visible: Bool
+//    var g: GeometryProxy
+//    @Binding var visible: Bool
     @Environment(\.colorScheme) var colorScheme
 
     func rImage(_ i: String) -> Image {
@@ -22,9 +22,8 @@ struct CameraHelpView: View {
     }
 
     var body: some View {
-        ZStack {
+        ScrollView {
             VStack(alignment: .center, spacing: 24.0) {
-                Spacer()
                 HStack(alignment: .center) {
                     rImage("Drag")
                     Spacer()
@@ -56,29 +55,52 @@ struct CameraHelpView: View {
                     Text("Scroll with two fingers to adjust camera position").multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 24.0)
-                Spacer()
+                Text("Press and hold on one of the duct faces to make one of the sides flat.").multilineTextAlignment(.center)
             }
             .foregroundColor(colorScheme == .dark ? .white : .black)
             .zIndex(2.0)
-            Button(action: { self.visible = false }, label: {
-                Image(systemName: "xmark")
-                    .font(.title)
-                    .frame(width: 25, height: 25)
-                    .padding()
-                    .background(VisualEffectView(effect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light)))
-                    .cornerRadius(45.0)
-            })
-            .zIndex(3.0)
-            .position(CGPoint(x: self.g.size.width - 40, y: self.g.size.height - 40))
+        }
+    }
+}
+
+struct ARCameraHelpView: View {
+    @Environment(\.colorScheme) var colorScheme
+
+    func rImage(_ i: String) -> Image {
+        if colorScheme == .dark {
+            return Image("\(i) Inverted")
+        } else {
+            return Image(i)
+        }
+    }
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .center, spacing: 24.0) {
+                HStack(alignment: .center) {
+                    rImage("Drag")
+                    Spacer()
+                    Text("Drag finger move ductwork around the area. Translation mode XZ moves the duct horizontally, while Y mode moves the duct vertically.").multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
+                .padding(.horizontal, 24.0)
+                .padding(.top, 24.0)
+                Divider().background(Color.white)
+                HStack(alignment: .center) {
+                    rImage("Rotate")
+                    Spacer()
+                    Text("Rotate with two fingers to rotate the ductwork").multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 24.0)
+                Text("Press and hold on one of the duct faces to make one of the sides flat.").multilineTextAlignment(.center)
+            }
+            .foregroundColor(colorScheme == .dark ? .white : .black)
+            .zIndex(2.0)
         }
     }
 }
 
 struct CameraHelpViewPreviews: PreviewProvider {
     static var previews: some View {
-        var lol = true
-        return GeometryReader { g in
-            CameraHelpView(g: g, visible: Binding(get: { lol }, set: {v in lol = v}))
-        }
+        return ARCameraHelpView()
     }
 }

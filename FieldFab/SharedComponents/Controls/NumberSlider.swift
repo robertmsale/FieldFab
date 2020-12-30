@@ -54,6 +54,7 @@ class NumberSliderState: ObservableObject {
         let val = abs(v.wrappedValue.value.value)
         isNegative = v.wrappedValue.value.value < 0
         let vstr = String(val).split(separator: ".")
+        var correction: Int = 0
         if v.wrappedValue.value.unit == .inches {
             let fracVal = val - val.rounded(.towardZero)
             switch fracVal {
@@ -72,6 +73,7 @@ class NumberSliderState: ObservableObject {
                 case let x where x > 0.8124 && x < 0.8126: frac = [8, 1, 2, 5]
                 case let x where x > 0.8749 && x < 0.8751: frac = [8, 7, 5, 0]
                 case let x where x > 0.9374 && x < 0.9376: frac = [9, 3, 7, 5]
+                case let x where x > 0.9376: frac = [0,0,0,0]; correction = 1
                 default: frac = [0, 0, 0, 0]
             }
         } else {
@@ -89,6 +91,7 @@ class NumberSliderState: ObservableObject {
                 whstr.insert(0, at: 0)
             }
         }
+        whstr[3] += correction
         whole = whstr
 //        let th: Double = (val/1000).rounded()
 //        let rth: Double = th * 1000

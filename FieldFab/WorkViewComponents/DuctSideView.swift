@@ -47,13 +47,13 @@ struct DuctSideView: View {
         var aspectw: CGFloat!
         var aspecth: CGFloat!
         var tabt: CGFloat!
-        var tabtc: Measurement<UnitLength>?
+//        var tabtc: Measurement<UnitLength>?
         var tabb: CGFloat!
-        var tabbc: Measurement<UnitLength>?
+//        var tabbc: Measurement<UnitLength>?
         var tabl: CGFloat!
-        var tablc: Measurement<UnitLength>?
+//        var tablc: Measurement<UnitLength>?
         var tabr: CGFloat!
-        var tabrc: Measurement<UnitLength>?
+//        var tabrc: Measurement<UnitLength>?
         let linelen: CGFloat = maxwh * 0.035
         let len2F: (DuctTab.Length) -> CGFloat = {
             switch $0 {
@@ -70,40 +70,40 @@ struct DuctSideView: View {
                     let sw = max(duct.data.width.rendered2D, duct.data.twidth.rendered2D + abs(duct.data.offsetx.rendered2D))
                     let sh = duct.data.length.rendered2D
                     if sw < sh { aspectw = sw / sh } else { aspecth = sh / sw }
-                    if duct.data.tabs.ft != nil { tabt = len2F(duct.data.tabs.ft!.length); tabtc = Measurement<UnitLength>(value: duct.data.tabs.ft!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.fb != nil { tabb = len2F(duct.data.tabs.fb!.length); tabbc = Measurement<UnitLength>(value: duct.data.tabs.fb!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.fl != nil { tabl = len2F(duct.data.tabs.fl!.length); tablc = Measurement<UnitLength>(value: duct.data.tabs.fl!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.fr != nil { tabr = len2F(duct.data.tabs.fr!.length); tabrc = Measurement<UnitLength>(value: duct.data.tabs.fr!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
+                    if duct.data.tabs.ft != nil { tabt = len2F(duct.data.tabs.ft!.length) }
+                    if duct.data.tabs.fb != nil { tabb = len2F(duct.data.tabs.fb!.length) }
+                    if duct.data.tabs.fl != nil { tabl = len2F(duct.data.tabs.fl!.length) }
+                    if duct.data.tabs.fr != nil { tabr = len2F(duct.data.tabs.fr!.length) }
                 case .back:
                     v3a = .x
                     v3c = [.btr, .btl, .bbl, .bbr]
                     let sw = max(duct.data.width.rendered2D, duct.data.twidth.rendered2D + abs(duct.data.offsetx.rendered2D))
                     let sh = duct.data.length.rendered2D
                     if sw < sh { aspectw = sw / sh } else { aspecth = sh / sw }
-                    if duct.data.tabs.bt != nil { tabt = len2F(duct.data.tabs.bt!.length); tabtc = Measurement<UnitLength>(value: duct.data.tabs.bt!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.bb != nil { tabb = len2F(duct.data.tabs.bb!.length); tabbc = Measurement<UnitLength>(value: duct.data.tabs.bb!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.bl != nil { tabl = len2F(duct.data.tabs.bl!.length); tablc = Measurement<UnitLength>(value: duct.data.tabs.bl!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.br != nil { tabr = len2F(duct.data.tabs.br!.length); tabrc = Measurement<UnitLength>(value: duct.data.tabs.br!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
+                    if duct.data.tabs.bt != nil { tabt = len2F(duct.data.tabs.bt!.length) }
+                    if duct.data.tabs.bb != nil { tabb = len2F(duct.data.tabs.bb!.length) }
+                    if duct.data.tabs.bl != nil { tabl = len2F(duct.data.tabs.bl!.length) }
+                    if duct.data.tabs.br != nil { tabr = len2F(duct.data.tabs.br!.length) }
                 case .left:
                     v3a = .z
                     v3c = [.ltr, .ltl, .lbl, .lbr]
                     let sw = max(duct.data.depth.rendered2D, duct.data.tdepth.rendered2D + abs(duct.data.offsety.rendered2D))
                     let sh = duct.data.length.rendered2D
                     if sw < sh { aspectw = sw / sh } else { aspecth = sh / sw }
-                    if duct.data.tabs.lt != nil { tabt = len2F(duct.data.tabs.lt!.length); tabtc = Measurement<UnitLength>(value: duct.data.tabs.lt!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.lb != nil { tabb = len2F(duct.data.tabs.lb!.length); tabbc = Measurement<UnitLength>(value: duct.data.tabs.lb!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.ll != nil { tabl = len2F(duct.data.tabs.ll!.length); tablc = Measurement<UnitLength>(value: duct.data.tabs.ll!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.lr != nil { tabr = len2F(duct.data.tabs.lr!.length); tabrc = Measurement<UnitLength>(value: duct.data.tabs.lr!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
+                    if duct.data.tabs.lt != nil { tabt = len2F(duct.data.tabs.lt!.length) }
+                    if duct.data.tabs.lb != nil { tabb = len2F(duct.data.tabs.lb!.length) }
+                    if duct.data.tabs.ll != nil { tabl = len2F(duct.data.tabs.ll!.length) }
+                    if duct.data.tabs.lr != nil { tabr = len2F(duct.data.tabs.lr!.length) }
                 case .right:
                     v3a = .z
                     v3c = [.rtr, .rtl, .rbl, .rbr]
                     let sw = max(duct.data.depth.rendered2D, duct.data.tdepth.rendered2D + abs(duct.data.offsety.rendered2D))
                     let sh = duct.data.length.rendered2D
                     if sw < sh { aspectw = sw / sh } else { aspecth = sh / sw }
-                    if duct.data.tabs.rt != nil { tabt = len2F(duct.data.tabs.rt!.length); tabtc = Measurement<UnitLength>(value: duct.data.tabs.rt!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.rb != nil { tabb = len2F(duct.data.tabs.rb!.length); tabbc = Measurement<UnitLength>(value: duct.data.tabs.rb!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.rl != nil { tabl = len2F(duct.data.tabs.rl!.length); tablc = Measurement<UnitLength>(value: duct.data.tabs.rl!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
-                    if duct.data.tabs.rr != nil { tabr = len2F(duct.data.tabs.rr!.length); tabrc = Measurement<UnitLength>(value: duct.data.tabs.rr!.length.to3D().d, unit: .meters).converted(to: duct.data.width.value.unit) }
+                    if duct.data.tabs.rt != nil { tabt = len2F(duct.data.tabs.rt!.length) }
+                    if duct.data.tabs.rb != nil { tabb = len2F(duct.data.tabs.rb!.length) }
+                    if duct.data.tabs.rl != nil { tabl = len2F(duct.data.tabs.rl!.length) }
+                    if duct.data.tabs.rr != nil { tabr = len2F(duct.data.tabs.rr!.length) }
             }
         }
         processFace()
@@ -201,14 +201,9 @@ struct DuctSideView: View {
             duct.measurements[face].right.asElement,
             duct.measurements[face].boundingLeft.asElement,
             duct.measurements[face].boundingRight.asElement,
+            duct.measurements[face].totalLeft.asElement,
+            duct.measurements[face].totalTop.asElement
         ]
-        let mt = Measurement(value: 0, unit: duct.data.depth.value.unit)
-        let totl: Measurement<UnitLength> = duct.measurements[face].totalLeft
-        let tott: Measurement<UnitLength> = duct.measurements[face].totalTop
-        let totlres: Measurement<UnitLength> = totl + (tabtc ?? mt) + (tabbc ?? mt)
-        let tottres: Measurement<UnitLength> = tott + (tablc ?? mt) + (tabrc ?? mt)
-        measurements.append(totlres.asElement)
-        measurements.append(tottres.asElement)
         let bounding = basePath.boundingRect
         let btl = V2(x: bounding.minX, y: bounding.minY)
         let bbl = V2(x: bounding.minX, y: bounding.maxY)

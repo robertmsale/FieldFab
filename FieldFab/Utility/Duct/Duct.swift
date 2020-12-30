@@ -130,7 +130,7 @@ struct Duct {
         let (o,i) = self.data.generateCoordinates()
         outer = o
         inner = i
-        measurements = Self.genMeasurements(o: o, units: data.depth.value.unit)
+        measurements = Self.genMeasurements(o: o, units: data.depth.value.unit, data: data)
         var tc = DuctTabCoordinates()
         for tab in DuctTab.FaceTab.allCases {
             if let t = data.tabs[tab] {
@@ -140,44 +140,50 @@ struct Duct {
         tabs = tc
         geometry = Self.initGeometry(o: o, i: i, tc: tc)
     }
-    static func genMeasurements(o: DuctCoordinates, units: UnitLength) -> DuctFaceMeasure.Faces {
+    static func genMeasurements(o: DuctCoordinates, units: UnitLength, data: DuctData) -> DuctFaceMeasure.Faces {
         // front
-        let fbl  = Measurement(value: o[.fbl].zeroed(.x).distance(o[.ftl].zeroed(.x)).d, unit: UnitLength.meters)
-        let ftt  = Measurement(value: min(o[.fbl].x, o[.ftl].x).distance(max(o[.fbr].x, o[.ftr].x)).d, unit: UnitLength.meters)
+        let fbl  = Measurement(value: o[.fbl].zeroed(.x).distance(o[.ftl].zeroed(.x)).d + (data.tabs.ft?.length.to3D().d ?? 0) + (data.tabs.fb?.length.to3D().d ?? 0), unit: UnitLength.meters)
+        let pftt = Measurement(value: max(data.width.value.value, data.twidth.value.value), unit: data.width.value.unit)
+        let (flt, frt) = (data.tabs.fl?.length.to3D().d ?? 0, data.tabs.fr?.length.to3D().d ?? 0)
+        let ftt  = Measurement(value: pftt.converted(to: .meters).value + flt + frt, unit: UnitLength.meters)
         let fbel = Measurement(value: o[.ftl].zeroed(.y, .z).distance(o[.fbl].zeroed(.y, .z)).d, unit: UnitLength.meters)
         let fber = Measurement(value: o[.ftr].zeroed(.y, .z).distance(o[.fbr].zeroed(.y, .z)).d, unit: UnitLength.meters)
-        let fdt  = Measurement(value: o[.ftl].distance(o[.ftr]).d, unit: UnitLength.meters)
-        let fdb  = Measurement(value: o[.fbl].distance(o[.fbr]).d, unit: UnitLength.meters)
+        let fdt  = data.twidth.value.converted(to: .meters)
+        let fdb  = data.width.value.converted(to: .meters)
         let fdl  = Measurement(value: o[.fbl].distance(o[.ftl]).d, unit: UnitLength.meters)
         let fdr  = Measurement(value: o[.fbr].distance(o[.ftr]).d, unit: UnitLength.meters)
         // back
-        let bbl  = Measurement(value: o[.bbl].zeroed(.x).distance(o[.btl].zeroed(.x)).d, unit: UnitLength.meters)
-        let btt  = ftt
+        let bbl  = Measurement(value: o[.bbl].zeroed(.x).distance(o[.btl].zeroed(.x)).d + (data.tabs.bt?.length.to3D().d ?? 0) + (data.tabs.bb?.length.to3D().d ?? 0), unit: UnitLength.meters)
+        let (blt, brt) = (data.tabs.bl?.length.to3D().d ?? 0, data.tabs.br?.length.to3D().d ?? 0)
+        let btt  = Measurement(value: pftt.converted(to: .meters).value + blt + brt, unit: UnitLength.meters)
         let bbel = Measurement(value: o[.bbl].zeroed(.y, .z).distance(o[.btl].zeroed(.y, .z)).d, unit: UnitLength.meters)
         let bber = Measurement(value: o[.bbr].zeroed(.y, .z).distance(o[.btr].zeroed(.y, .z)).d, unit: UnitLength.meters)
-        let bdt  = Measurement(value: o[.btl].distance(o[.btr]).d, unit: UnitLength.meters)
-        let bdb  = Measurement(value: o[.bbl].distance(o[.bbr]).d, unit: UnitLength.meters)
+        let bdt  = fdt
+        let bdb  = fdb
         let bdl  = Measurement(value: o[.bbl].distance(o[.btl]).d, unit: UnitLength.meters)
         let bdr  = Measurement(value: o[.bbr].distance(o[.btr]).d, unit: UnitLength.meters)
         // left
-        let lbl  = Measurement(value: o[.lbl].zeroed(.z).distance(o[.ltl].zeroed(.z)).d, unit: UnitLength.meters)
-        let ltt  = Measurement(value: min(o[.lbl].z, o[.ltl].z).distance(max(o[.lbr].z, o[.ltr].z)).d, unit: UnitLength.meters)
+        let lbl  = Measurement(value: o[.lbl].zeroed(.z).distance(o[.ltl].zeroed(.z)).d + (data.tabs.lt?.length.to3D().d ?? 0) + (data.tabs.lb?.length.to3D().d ?? 0), unit: UnitLength.meters)
+        let pltt = Measurement(value: max(data.depth.value.value, data.tdepth.value.value), unit: data.depth.value.unit)
+        let (llt, lrt) = (data.tabs.ll?.length.to3D().d ?? 0, data.tabs.lr?.length.to3D().d ?? 0)
+        let ltt  = Measurement(value: pltt.converted(to: .meters).value + llt + lrt, unit: UnitLength.meters)
         let lbel = Measurement(value: o[.ltl].zeroed(.y, .x).distance(o[.lbl].zeroed(.y, .x)).d, unit: UnitLength.meters)
         let lber = Measurement(value: o[.ltr].zeroed(.y, .x).distance(o[.lbr].zeroed(.y, .x)).d, unit: UnitLength.meters)
-        let ldt  = Measurement(value: o[.ltl].distance(o[.ltr]).d, unit: UnitLength.meters)
-        let ldb  = Measurement(value: o[.lbl].distance(o[.lbr]).d, unit: UnitLength.meters)
+        let ldt  = data.tdepth.value.converted(to: .meters)
+        let ldb  = data.depth.value.converted(to: .meters)
         let ldl  = Measurement(value: o[.lbl].distance(o[.ltl]).d, unit: UnitLength.meters)
         let ldr  = Measurement(value: o[.lbr].distance(o[.ltr]).d, unit: UnitLength.meters)
         // right
-        let rbl  = Measurement(value: o[.rbl].zeroed(.z).distance(o[.rtl].zeroed(.z)).d, unit: UnitLength.meters)
-        let rtt  = ltt
+        let rbl  = Measurement(value: o[.rbl].zeroed(.z).distance(o[.rtl].zeroed(.z)).d + (data.tabs.rt?.length.to3D().d ?? 0) + (data.tabs.rb?.length.to3D().d ?? 0), unit: UnitLength.meters)
+        let (rlt, rrt) = (data.tabs.rl?.length.to3D().d ?? 0, data.tabs.rr?.length.to3D().d ?? 0)
+        let rtt  = Measurement(value: pltt.converted(to: .meters).value + rlt + rrt, unit: UnitLength.meters)
         let rbel = Measurement(value: o[.rtl].zeroed(.y, .x).distance(o[.rbl].zeroed(.y, .x)).d, unit: UnitLength.meters)
         let rber = Measurement(value: o[.rtr].zeroed(.y, .x).distance(o[.rbr].zeroed(.y, .x)).d, unit: UnitLength.meters)
-        let rdt  = Measurement(value: o[.rtl].distance(o[.rtr]).d, unit: UnitLength.meters)
-        let rdb  = Measurement(value: o[.rbl].distance(o[.rbr]).d, unit: UnitLength.meters)
+        let rdt  = ldt
+        let rdb  = ldb
         let rdl  = Measurement(value: o[.rbl].distance(o[.rtl]).d, unit: UnitLength.meters)
         let rdr  = Measurement(value: o[.rbr].distance(o[.rtr]).d, unit: UnitLength.meters)
-        return .init(
+        let result = DuctFaceMeasure.Faces(
             front: .init(
                 top:            fdt.converted(to: units),
                 bottom:         fdb.converted(to: units),
@@ -214,6 +220,7 @@ struct Duct {
                 boundingRight:  rber.converted(to: units),
                 totalLeft:      rbl.converted(to: units),
                 totalTop:       rtt.converted(to: units)))
+        return result
     }
     
     init(data: DuctData) {
@@ -224,14 +231,34 @@ struct Duct {
                 tc[tab] = DuctCoordinates(array: t.generate(tab, duct: o))
             }
         }
-        self.data = data
+        var predata = data
+        switch predata.width.value.unit {
+            case .inches:
+                for i in DuctData.MeasureKeys.allCases {
+                    let nd = predata[i].value.asInchFrac
+                    if nd == nil && abs(predata[i].value.value.rounded()) > abs(predata[i].value.value) {
+                        predata[i].value.value = predata[i].value.value.rounded(.awayFromZero)
+                    } else if nd != nil {
+                        let derp = (nd!.n.d / nd!.d.d)
+                        predata[i].value.value = predata[i].value.value.rounded(.towardZero) + (predata[i].value.value < 0 ? -derp : derp)
+                    } else {
+                        predata[i].value.value = predata[i].value.value.rounded(.towardZero)
+                    }
+                }
+            default: break
+        }
+        self.data = predata
         outer = o
         inner = i
         tabs = tc
         let units = data.width.value.unit
-        measurements = Self.genMeasurements(o: o, units: units)
+        measurements = Self.genMeasurements(o: o, units: units, data: data)
         geometry = Self.initGeometry(o: o, i: i, tc: tc)
     }
+    
+    static func sanatize(_ data: DuctData) {
+    }
+    
     init() {
         let d = DuctData(name: "", units: .inch)
         data = d
@@ -239,7 +266,7 @@ struct Duct {
         let (o,i) = d.generateCoordinates()
         outer = o
         inner = i
-        measurements = Self.genMeasurements(o: o, units: .inches)
+        measurements = Self.genMeasurements(o: o, units: .inches, data: d)
         geometry = Self.initGeometry(o: o, i: i, tc: DuctTabCoordinates())
     }
     
