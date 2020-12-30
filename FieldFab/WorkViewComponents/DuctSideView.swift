@@ -15,6 +15,7 @@ struct DuctSideView: View {
     typealias V3 = SCNVector3
     typealias V2 = CGPoint
     var face: DuctData.Face
+    var forceHelpersOff: Bool = false
     var showMeasurements: Bool = true
     @Binding var duct: Duct
     @EnvironmentObject var state: AppState
@@ -202,8 +203,12 @@ struct DuctSideView: View {
             duct.measurements[face].boundingRight.asElement,
         ]
         let mt = Measurement(value: 0, unit: duct.data.depth.value.unit)
-        measurements.append((duct.measurements[face].totalLeft + (tabtc ?? mt) + (tabbc ?? mt)).asElement)
-        measurements.append((duct.measurements[face].totalTop + (tablc ?? mt) + (tabrc ?? mt)).asElement)
+        let totl: Measurement<UnitLength> = duct.measurements[face].totalLeft
+        let tott: Measurement<UnitLength> = duct.measurements[face].totalTop
+        let totlres: Measurement<UnitLength> = totl + (tabtc ?? mt) + (tabbc ?? mt)
+        let tottres: Measurement<UnitLength> = tott + (tablc ?? mt) + (tabrc ?? mt)
+        measurements.append(totlres.asElement)
+        measurements.append(tottres.asElement)
         let bounding = basePath.boundingRect
         let btl = V2(x: bounding.minX, y: bounding.minY)
         let bbl = V2(x: bounding.minX, y: bounding.maxY)
@@ -269,7 +274,7 @@ struct DuctSideView: View {
                 p.addLine(to: btl)
             }.strokedPath(StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .bevel, miterLimit: .zero, dash: [10, 10, 10, 10], dashPhase: 5))
             Image("\(state.material)-diffuse").clipShape(basePath).opacity(0.8)
-            if state.showHelpers {
+            if state.showHelpers && !forceHelpersOff {
                 basePath.fill(helperColor()).opacity(0.2)
             }
             makePaths()
@@ -328,8 +333,27 @@ struct DuctSideView: View {
 }
 
 struct DuctSideView_Previews: PreviewProvider {
-    static var previews: some View {
-//        DuctSideView()
-        Text("Ayyy lmao swag")
+    static var previews: some View {let width = Measurement<UnitLength>(value: 18, unit: .inches)
+        let depth = Measurement<UnitLength>(value: 20, unit: .inches)
+        let length = Measurement<UnitLength>(value: 6, unit: .inches)
+        let offsetx = Measurement<UnitLength>(value: 0, unit: .inches)
+        let offsety = Measurement<UnitLength>(value: 0, unit: .inches)
+        let twidth = Measurement<UnitLength>(value: 20, unit: .inches)
+        let tdepth = Measurement<UnitLength>(value: 18, unit: .inches)
+        var tabs = DuctTabContainer()
+        let len = DuctTab.Length.half
+        tabs.ft = .init(length: len, type: .straight)
+        tabs.fb = .init(length: len, type: .straight)
+        tabs.bt = .init(length: len, type: .straight)
+        tabs.bb = .init(length: len, type: .straight)
+        tabs.lt = .init(length: len, type: .straight)
+        tabs.lb = .init(length: len, type: .straight)
+        tabs.ll = .init(length: len, type: .straight)
+//        tabs.lr = .init(length: .inch, type: .straight)
+        tabs.rt = .init(length: len, type: .straight)
+        tabs.rb = .init(length: len, type: .straight)
+        tabs.rl = .init(length: len, type: .straight)
+        tabs.rr = .init(length: .inch, type: .straight)
+        return DuctSideView(face: .right, duct: .constant(Duct(data: .init(name: "Some duct", id: UUID(), created: Date(), width: .init(value: width), depth: .init(value: depth), length: .init(value: length), offsetx: .init(value: offsetx), offsety: .init(value: offsety), twidth: .init(value: twidth), tdepth: .init(value: tdepth), type: DuctData.DType.fourpiece, tabs: tabs)))).scaledToFit().environmentObject(AppState())
     }
 }

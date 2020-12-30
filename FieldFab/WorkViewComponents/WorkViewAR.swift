@@ -29,7 +29,7 @@ struct WorkViewAR: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        state.events.arViewReset = true
+                        state.arEvents.arViewReset = true
                     }, label: { Text("Reset").font(.title2) })
                     Spacer()
                     Picker(state.flowDirection.text, selection: $state.flowDirection, content: {

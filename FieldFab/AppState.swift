@@ -39,6 +39,7 @@ extension Measurement where UnitType: UnitLength {
     }
     var asElement: AnyView {
         let numf = NumberFormatter()
+        numf.roundingMode = .down
         switch self.unit {
             case .feet:
                 numf.maximumFractionDigits = 1
@@ -47,20 +48,40 @@ extension Measurement where UnitType: UnitLength {
                 let inf = self.asInchFrac
                 numf.maximumFractionDigits = 0
                 return AnyView(HStack(alignment: .top, spacing: 0) {
-                    Text("\(numf.string(from: NSNumber(value: value)) ?? "")")
-                    if inf != nil {
-                        Text("\(inf!.n)/\(inf!.d)").font(.footnote)
+                    if self.value != 0.0 {
+                        Text("\(numf.string(from: NSNumber(value: value)) ?? "")")
+                        if inf != nil {
+                            Text("\(inf!.n)/\(inf!.d)").font(.footnote)
+                        }
+                        Text("\"")
                     }
-                    Text("\"")
                 })
             case .meters:
                 numf.maximumFractionDigits = 3
-                return AnyView(Text("\(numf.string(from: NSNumber(value: self.value)) ?? "")m"))
+                return AnyView(
+                    HStack {
+                        if self.value != 0.0 {
+                            Text("\(numf.string(from: NSNumber(value: self.value)) ?? "")m")
+                        }
+                    }
+                )
             case .centimeters:
                 numf.maximumFractionDigits = 1
-                return AnyView(Text("\(numf.string(from: NSNumber(value: self.value)) ?? "")cm"))
+                return AnyView(
+                    HStack {
+                        if self.value != 0 {
+                            Text("\(numf.string(from: NSNumber(value: self.value)) ?? "")cm")
+                        }
+                    }
+                )
             case .millimeters:
-                return AnyView(Text("\(Int(self.value))mm"))
+                return AnyView(
+                    HStack {
+                        if self.value != 0.0 {
+                            Text("\(Int(self.value))mm")
+                        }
+                    }
+                )
             default: return AnyView(Text("\(self.value) \(self.unit.symbol)"))
         }
     }
@@ -78,6 +99,17 @@ struct SheetShownState: Codable {
     var advancedSettings = false
 }
 
+@propertyWrapper
+struct PrevNext<T> {
+    private var value: T
+    var prev: T
+    init(_ val: T) { value = val; prev = val }
+    var wrappedValue: T {
+        get { return value }
+        set(v) { value = v }
+    }
+}
+
 struct EventState {
     struct Scene {
         var renderChanged = false
@@ -88,6 +120,23 @@ struct EventState {
         var energySaverChanged = false
         var helpersChanged = false
         var drawerChanged = false
+        var needsReset: Bool {
+            renderChanged || bgChanged || textureChanged || measurementsChanged || tabsChanged || energySaverChanged || helpersChanged || drawerChanged
+        }
+    }
+    struct ARScene {
+        var renderChanged = false
+//        var bgChanged = false
+        var textureChanged = false
+        var measurementsChanged = false
+        var tabsChanged = false
+        var energySaverChanged = false
+        var helpersChanged = false
+//        var drawerChanged = false
+        var arViewReset = false
+        var needsReset: Bool {
+            renderChanged || textureChanged || measurementsChanged || tabsChanged || energySaverChanged || helpersChanged || arViewReset
+        }
     }
     enum Keys { case renderer, bg, texture, measurements, tabs, energy, helpers, drawer }
     var scene = Scene()
@@ -104,13 +153,9 @@ struct EventState {
             case .drawer: scene.drawerChanged = true; ar.drawerChanged = true
         }
     }
-    var arViewReset = false
+    mutating func changeDone(_ isAR: Bool) { if isAR { self = Self() } else { scene = Scene() } }
     enum FlowDirection: Int { case up, down, left, right }
-    var flowDirection: FlowDirection = {
-        return FlowDirection(rawValue: UserDefaults.standard.object(forKey: "flowDirection") as? Int ?? 0) ?? .up
-    }() { didSet {
-        UserDefaults.standard.setValue(flowDirection.rawValue, forKey: "flowDirection")
-    }}
+    var arViewReset = false
 }
 
 enum MeasurementUnits: Int, Codable, Identifiable, CaseIterable {
@@ -138,7 +183,8 @@ enum MeasurementUnits: Int, Codable, Identifiable, CaseIterable {
 
 final class AppState: ObservableObject {
     @Published var sheetsShown = SheetShownState()
-    @Published var events = EventState()
+    @Published var sceneEvents = EventState.Scene()
+    @Published var arEvents = EventState.ARScene()
     @Published var ductData: [DuctData] = {
         let defaultData = [
             DuctData(
@@ -200,13 +246,15 @@ final class AppState: ObservableObject {
         return UserDefaults.standard.object(forKey: "material") as? String ?? "galvanized"
     }() { didSet {
         UserDefaults.standard.setValue(material, forKey: "material")
-        events.change(.texture)
+        sceneEvents.textureChanged = true
+        arEvents.textureChanged = true
     }}
     @Published var lightingModel: LightingModel = {
         return LightingModel(rawValue: UserDefaults.standard.object(forKey: "lightingModel") as? String ?? "Physically Based") ?? .physicallyBased
     }() { didSet {
         UserDefaults.standard.setValue(lightingModel.rawValue, forKey: "lightingModel")
-        events.change(.texture)
+        sceneEvents.textureChanged = true
+        arEvents.textureChanged = true
     }}
     @Published var showDebugInfo: Bool = {
         UserDefaults.standard.object(forKey: "showDebugInfo") as? Bool ?? false
@@ -215,7 +263,8 @@ final class AppState: ObservableObject {
         UserDefaults.standard.object(forKey: "showHelpers") as? Bool ?? false
     }() { didSet {
         UserDefaults.standard.setValue(showHelpers, forKey: "showHelpers")
-        events.change(.helpers)
+        sceneEvents.helpersChanged = true
+        arEvents.helpersChanged = true
     }}
     @Published var navSelection: UUID? { willSet(v) {
         currentWork = Duct(data: ductData.first(where: {$0.id == v}) ?? DuctData())
@@ -227,8 +276,14 @@ final class AppState: ObservableObject {
     @Published var currentWork: Duct? { willSet(v) {
         if currentWork == nil { return }
         if let nd = v {
-            for i in DuctData.MeasureKeys.allCases { if nd.data[i].value != currentWork!.data[i].value { events.change(.measurements) }}
-            if nd.data.tabs != currentWork!.data.tabs { events.change(.tabs) }
+            for i in DuctData.MeasureKeys.allCases { if nd.data[i].value != currentWork!.data[i].value {
+                sceneEvents.measurementsChanged = true
+                arEvents.measurementsChanged = true
+            }}
+            if nd.data.tabs != currentWork!.data.tabs && !sceneEvents.measurementsChanged {
+                sceneEvents.tabsChanged = true
+                arEvents.tabsChanged = true
+            }
         }
     }}
     @Published var currentWorkTab: Int = 0
@@ -237,24 +292,25 @@ final class AppState: ObservableObject {
         return CGColor(red: colors[0], green: colors[1], blue: colors[2], alpha: colors[3])
     }() { didSet {
         UserDefaults.standard.setValue(sceneBGColor.components, forKey: "sceneBGColor")
-        events.change(.bg)
+        sceneEvents.bgChanged = true
     }}
     @Published var sceneBGTexture: String? = {
         UserDefaults.standard.object(forKey: "sceneBGTexture") as? String
     }() { didSet {
         UserDefaults.standard.setValue(sceneBGTexture, forKey: "sceneBGTexture")
-        events.change(.bg)
+        sceneEvents.bgChanged = true
     }}
     @Published var energySaver: Bool = {
         UserDefaults.standard.object(forKey: "energySaver") as? Bool ?? false
     }() {
         didSet {
             UserDefaults.standard.setValue(energySaver, forKey: "energySaver")
-            events.change(.energy)
+            sceneEvents.energySaverChanged = true
+            arEvents.energySaverChanged = true
         }
     }
-    @Published var work3DDrawerShown: Bool = false { didSet { if work3DDrawerShown { events.change(.drawer) }}}
-    @Published var work3DMeasurementSelected: DuctData.MeasureKeys = .width { didSet { events.change(.drawer) }}
+    @Published var work3DDrawerShown: Bool = false { didSet { if work3DDrawerShown { sceneEvents.drawerChanged = true }}}
+    @Published var work3DMeasurementSelected: DuctData.MeasureKeys = .width { didSet { sceneEvents.drawerChanged = true }}
     @Published var arDuctEuler: SCNVector3 = SCNVector3(0, 0, 0)
     @Published var arDuctRotation: SCNQuaternion = SCNQuaternion(0, 0, 0, 1).normalized()
     @Published var ductCameraQuat: SCNQuaternion = SCNQuaternion(0, 0, 0, 1).normalized()
@@ -281,6 +337,14 @@ final class AppState: ObservableObject {
         UserDefaults.standard.setValue(showHitTestTipsAgain, forKey: "showHitTestTipsAgain")
     }}
     @Published var showHitTestTips: Bool = true
+    @Published var showWorkShopTipsAgain: Bool = {
+        UserDefaults.standard.object(forKey: "showWorkShopTipsAgain") as? Bool ?? true
+    }() { didSet {
+        UserDefaults.standard.setValue(showHitTestTipsAgain, forKey: "showWorkShopTipsAgain")
+    }}
+    @Published var selectedFace: DuctData.FaceAndAll = .front { didSet { print(selectedFace.rawValue)}}
+    @Published var showWorkShopTips: Bool = true
+    @Published var pdfDuct: Duct?
 }
 
 enum LightingModel: String, CaseIterable, Identifiable {

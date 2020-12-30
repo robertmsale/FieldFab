@@ -81,7 +81,8 @@ struct WorkView: View {
                     Button(action: {
                         state.currentWork?.makeSideFlat(state.ductSceneHitTest ?? "")
                         state.ductSceneHitTest = nil
-                        state.events.change(.measurements)
+                        state.sceneEvents.measurementsChanged = true
+                        state.arEvents.measurementsChanged = true
                     }, label: { Text("Yes").padding() })
                 }
             }

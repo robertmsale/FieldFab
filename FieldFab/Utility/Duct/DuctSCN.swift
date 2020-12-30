@@ -40,7 +40,7 @@ struct DuctSCN: UIViewRepresentable {
             view.antialiasingMode = .multisampling2X
         }
         view.rendersContinuously = !state.energySaver
-        state.events.scene.energySaverChanged = false
+//        state.events.scene.energySaverChanged = false
     }
     func bgTextureUpdate(_ view: UIViewType, _ scene: SCNScene?) {
         if let t = state.sceneBGTexture {
@@ -51,7 +51,7 @@ struct DuctSCN: UIViewRepresentable {
             scene?.background.contents = state.sceneBGColor
             scene?.lightingEnvironment.contents = state.sceneBGColor
         }
-        state.events.scene.bgChanged = false
+//        state.events.scene.bgChanged = false
     }
     func materialUpdate(_ scene: SCNScene?) {
         for node in allDuctNodes(scene) {
@@ -61,7 +61,7 @@ struct DuctSCN: UIViewRepresentable {
             node.geometry?.firstMaterial?.roughness.contents = UIImage(named: "\(state.material)-roughness")
             node.geometry?.firstMaterial?.lightingModel = state.lightingModel.scn
         }
-        state.events.scene.textureChanged = false
+//        state.events.scene.textureChanged = false
     }
     func geometryUpdateAll(_ scene: SCNScene?) {
         ductNode(scene).removeFromParentNode()
@@ -77,7 +77,7 @@ struct DuctSCN: UIViewRepresentable {
             }
         }
         scene?.rootNode.addChildNode(dNode)
-        state.events.scene.measurementsChanged = false
+//        state.events.scene.measurementsChanged = false
     }
     func tabsUpdate(_ scene: SCNScene?) {
         for i in allTabNodes(scene) { i.removeFromParentNode() }
@@ -87,7 +87,7 @@ struct DuctSCN: UIViewRepresentable {
                 dNode.addChildNode(node)
             }
         }
-        state.events.scene.tabsChanged = false
+//        state.events.scene.tabsChanged = false
     }
     func helpersUpdate(_ scene: SCNScene?) {
         let i = CGFloat(0.25)
@@ -105,7 +105,7 @@ struct DuctSCN: UIViewRepresentable {
                 default: break
             }
         }
-        state.events.scene.helpersChanged = false
+//        state.events.scene.helpersChanged = false
     }
     func moveCamera(_ view: UIViewType) {
         if let cam = view.scene?.rootNode.childNode(withName: "Camera", recursively: false) {
@@ -120,7 +120,7 @@ struct DuctSCN: UIViewRepresentable {
             cam.look(at: SCNVector3(0, 0, 0))
             view.pointOfView = cam
         }
-        state.events.scene.drawerChanged = false
+//        state.events.scene.drawerChanged = false
     }
     
     func makeUIView(context: Context) -> SCNView {
@@ -135,7 +135,7 @@ struct DuctSCN: UIViewRepresentable {
         let camNode = SCNNode()
         camNode.name = "Camera"
         camNode.camera = camera
-        let maxXZ = max(state.currentWork?.data.width.rendered3D ?? 0, state.currentWork?.data.depth.rendered3D ?? 0)
+//        let maxXZ = max(state.currentWork?.data.width.rendered3D ?? 0, state.currentWork?.data.depth.rendered3D ?? 0)
         view.pointOfView = camNode
         energyUpdate(view)
         bgTextureUpdate(view, scene)
@@ -156,21 +156,29 @@ struct DuctSCN: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: SCNView, context: Context) {
-        if state.events.scene.bgChanged { bgTextureUpdate(uiView, uiView.scene) }
-        if state.events.scene.energySaverChanged { energyUpdate(uiView) }
-        if state.events.scene.measurementsChanged {
+        if state.sceneEvents.bgChanged { bgTextureUpdate(uiView, uiView.scene) }
+        if state.sceneEvents.energySaverChanged { energyUpdate(uiView) }
+        if state.sceneEvents.measurementsChanged {
             geometryUpdateAll(uiView.scene)
             materialUpdate(uiView.scene)
             moveCamera(uiView)
             helpersUpdate(uiView.scene)
         }
-        else if state.events.scene.tabsChanged {
+        else if state.sceneEvents.tabsChanged {
             tabsUpdate(uiView.scene)
             materialUpdate(uiView.scene)
         }
-        if state.events.scene.textureChanged { materialUpdate(uiView.scene) }
-        if state.events.scene.helpersChanged { helpersUpdate(uiView.scene) }
-        if state.events.scene.drawerChanged { moveCamera(uiView) }
+        if state.sceneEvents.textureChanged { materialUpdate(uiView.scene) }
+        if state.sceneEvents.helpersChanged { helpersUpdate(uiView.scene) }
+        if state.sceneEvents.drawerChanged { moveCamera(uiView) }
+        if state.workViewTab == 1 {
+            materialUpdate(uiView.scene)
+        }
+        if state.sceneEvents.needsReset {
+            state.sceneEvents = EventState.Scene()
+        }
+        if state.currentWorkTab == 1 && !uiView.isPlaying { uiView.play(nil) }
+        if state.currentWorkTab != 1 && uiView.isPlaying { uiView.pause(nil) }
         uiView.showsStatistics = state.showDebugInfo
     }
     
@@ -266,7 +274,7 @@ struct DuctAR: UIViewRepresentable {
             view.antialiasingMode = .multisampling2X
         }
         view.rendersContinuously = !state.energySaver
-        state.events.ar.energySaverChanged = false
+//        state.events.ar.energySaverChanged = false
     }
     func materialUpdate(_ scene: SCNScene?) {
         for node in allDuctNodes(scene) {
@@ -276,7 +284,7 @@ struct DuctAR: UIViewRepresentable {
             node.geometry?.firstMaterial?.roughness.contents = UIImage(named: "\(state.material)-roughness")
             node.geometry?.firstMaterial?.lightingModel = state.lightingModel.scn
         }
-        state.events.ar.textureChanged = false
+//        state.events.ar.textureChanged = false
     }
     func geometryUpdateAll(_ scene: SCNScene?) {
         ductNode(scene).removeFromParentNode()
@@ -292,7 +300,7 @@ struct DuctAR: UIViewRepresentable {
             }
         }
         scene?.rootNode.addChildNode(dNode)
-        state.events.ar.measurementsChanged = false
+//        state.events.ar.measurementsChanged = false
     }
     func tabsUpdate(_ scene: SCNScene?) {
         for i in allTabNodes(scene) { i.removeFromParentNode() }
@@ -302,7 +310,7 @@ struct DuctAR: UIViewRepresentable {
                 dNode.addChildNode(node)
             }
         }
-        state.events.ar.tabsChanged = false
+//        state.events.ar.tabsChanged = false
     }
     func helpersUpdate(_ scene: SCNScene?) {
         let i = CGFloat(0.25)
@@ -321,17 +329,20 @@ struct DuctAR: UIViewRepresentable {
                 default: break
             }
         }
-        state.events.ar.helpersChanged = false
+//        state.events.ar.helpersChanged = false
     }
     
-    func changeFlow(_ scene: SCNScene?) {
-        for n in allDuctNodes(scene) {
-            switch state.flowDirection {
-                case .up: n.eulerAngles = SCNVector3(0, 0, 0)
-                case .down: n.eulerAngles = SCNVector3(0, 0,   180.0.rad)
-                case .left: n.eulerAngles = SCNVector3(0, 0,    90.0.rad)
-                case .right: n.eulerAngles = SCNVector3(0, 0,  -90.0.rad)
+    func changeFlow(_ scene: SCNScene?, context: Context) {
+        if state.flowDirection != context.coordinator.currentFlow {
+            for n in allDuctNodes(scene) {
+                switch state.flowDirection {
+                    case .up: n.eulerAngles = SCNVector3(0, 0, 0)
+                    case .down: n.eulerAngles = SCNVector3(0, 0,   180.0.rad)
+                    case .left: n.eulerAngles = SCNVector3(0, 0,    90.0.rad)
+                    case .right: n.eulerAngles = SCNVector3(0, 0,  -90.0.rad)
+                }
             }
+            context.coordinator.currentFlow = state.flowDirection
         }
     }
     
@@ -355,40 +366,51 @@ struct DuctAR: UIViewRepresentable {
         geometryUpdateAll(scene)
         materialUpdate(scene)
         helpersUpdate(scene)
-        changeFlow(scene)
+        changeFlow(scene, context: context)
         view.scene = scene
         return view
     }
     func updateUIView(_ uiView: ARSCNView, context: Context) {
-        if state.events.ar.energySaverChanged {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = []
+        configuration.environmentTexturing = .automatic
+        if state.arEvents.energySaverChanged {
             energyUpdate(uiView)
         }
-        if state.events.ar.measurementsChanged {
+        if state.arEvents.measurementsChanged {
             geometryUpdateAll(uiView.scene)
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)
         }
-        if state.events.ar.textureChanged {
+        if state.arEvents.textureChanged {
             materialUpdate(uiView.scene)
         }
-        if state.events.ar.tabsChanged {
+        if state.arEvents.tabsChanged {
             tabsUpdate(uiView.scene)
         }
-        if state.events.ar.helpersChanged {
+        if state.arEvents.helpersChanged {
             helpersUpdate(uiView.scene)
         }
-        if state.events.arViewReset {
-            let configuration = ARWorldTrackingConfiguration()
-            configuration.planeDetection = []
-            configuration.environmentTexturing = .automatic
+        if state.arEvents.arViewReset {
             uiView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors, .resetSceneReconstruction])
             context.coordinator.ductPosition = SCNVector3(0,0,0)
             ductNode(uiView.scene).worldPosition = SCNVector3(0,0,0)
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)
-            state.events.arViewReset = false
+            state.arEvents.arViewReset = false
         }
-        changeFlow(uiView.scene)
+        changeFlow(uiView.scene, context: context)
+        if state.arEvents.needsReset {
+            state.arEvents = EventState.ARScene()
+        }
+        if state.currentWorkTab == 2 && !uiView.isPlaying {
+            uiView.play(nil)
+            uiView.session.run(configuration, options: [])
+        }
+        if state.currentWorkTab != 2 && uiView.isPlaying {
+            uiView.pause(nil)
+            uiView.session.pause()
+        }
         uiView.showsStatistics = state.showDebugInfo
         context.coordinator.translationMode = state.translationMode
     }
@@ -396,7 +418,7 @@ struct DuctAR: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return Coordinator({
             state.ductSceneHitTest = $0
-        }, state.translationMode)
+        }, state.translationMode, currentFlow: state.flowDirection)
     }
     
     class Coordinator {
@@ -406,10 +428,12 @@ struct DuctAR: UIViewRepresentable {
         var initialPan = CGPoint.zero
         var translationMode: AppState.TranslationMode
         var hitTest: (String?) -> Void
+        var currentFlow: AppState.FlowDirection
         
-        init(_ hitTest: @escaping (String?) -> Void, _ translationM: AppState.TranslationMode) {
+        init(_ hitTest: @escaping (String?) -> Void, _ translationM: AppState.TranslationMode, currentFlow: AppState.FlowDirection) {
             self.hitTest = hitTest
             self.translationMode = translationM
+            self.currentFlow = currentFlow
         }
         
         @objc func hit(g: UILongPressGestureRecognizer) {
@@ -448,7 +472,7 @@ struct DuctAR: UIViewRepresentable {
                     case .xz: ductPosition.x += dx; ductPosition.z += dy
                     case .y: ductPosition.y -= dy
                 }
-                v.scene?.rootNode.childNode(withName: "Duct Node", recursively: false)?.worldPosition = ductPosition
+                v.scene?.rootNode.childNode(withName: "Duct Node", recursively: false)?.worldPosition = self.ductPosition
             }
             
         }

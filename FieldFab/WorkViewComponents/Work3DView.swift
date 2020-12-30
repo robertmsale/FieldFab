@@ -85,7 +85,7 @@ struct Work3DView: View {
             state.showHitTestTips && state.showHitTestTipsAgain
         }, set: {
             state.showHitTestTips = $0
-        }), type: .toast, position: .top, animation: .easeInOut, autohideIn: 8, closeOnTap: false, closeOnTapOutside: false, view: {
+        }), type: .toast, position: .top, animation: .easeInOut, autohideIn: 8, closeOnTap: true, closeOnTapOutside: true, view: {
             VStack {
                 Spacer().frame(width: 40, height: 140, alignment: .center)
                 VStack {

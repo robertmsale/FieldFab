@@ -221,7 +221,7 @@
 			path = Duct;
 			sourceTree = "<group>";
 		};
-		EE29E40625053CFD007F4036 /* Components */ = {
+		EE29E40625053CFD007F4036 /* SharedComponents */ = {
 			isa = PBXGroup;
 			children = (
 				EEFB99152527BBDB008AB605 /* AboutView.swift */,
@@ -238,7 +238,7 @@
 				EEC7CF6825034858003389AB /* Tabs */,
 				EE47C41225966AE100288BD7 /* LoadSceneProgressView.swift */,
 			);
-			path = Components;
+			path = SharedComponents;
 			sourceTree = "<group>";
 		};
 		EE29E41E2506BF7D007F4036 /* Math */ = {
@@ -268,6 +268,13 @@
 				EE6C3B8A2597EB0900AA70AE /* TabPicker.swift */,
 			);
 			path = WorkViewComponents;
+			sourceTree = "<group>";
+		};
+		EE6C3B9F259B62FB00AA70AE /* AppViewComponents */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AppViewComponents;
 			sourceTree = "<group>";
 		};
 		EE8A13BD2549DB8900852939 /* Sheets */ = {
@@ -380,10 +387,11 @@
 				EE8D395B25831C7600A1AC39 /* AppMain.swift */,
 				EE8D396425831DEE00A1AC39 /* AppState.swift */,
 				EE9022BC258EC87C00EE0C9A /* AppView.swift */,
+				EE6C3B9F259B62FB00AA70AE /* AppViewComponents */,
 				EE9022DA258FB7CB00EE0C9A /* WorkView.swift */,
 				EE6C3B702597E9CA00AA70AE /* WorkViewComponents */,
 				EEC7CF3B25034397003389AB /* Assets.xcassets */,
-				EE29E40625053CFD007F4036 /* Components */,
+				EE29E40625053CFD007F4036 /* SharedComponents */,
 				EEFB98DC2526CEDA008AB605 /* Data Persistence */,
 				EE29E42725086B01007F4036 /* FieldFab.entitlements */,
 				EEC7CF4325034397003389AB /* Info.plist */,
@@ -814,7 +822,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.0.0;
+				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -825,7 +833,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -843,7 +851,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.0.0;
+				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -854,7 +862,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

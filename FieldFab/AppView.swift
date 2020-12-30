@@ -18,74 +18,83 @@ struct AppView: View {
     var dList: some View {
         ZStack {
             ScrollView {
-                Group {
-                    VStack {
-                        ForEach(state.ductData) { d in
-                            NavView(data: d, isShown: state.navSelection == nil, details: $details, nav: $state.navSelection, loading: $loadingDetails)
-                        }
-                        Button(action: {
-                            newSession = true
-                        }, label: {
-                            Text("New Session").font(.title)
-                        })
+                VStack {
+                    ForEach(state.ductData) { d in
+                        NavView(data: d, isShown: state.navSelection == nil, details: $details, nav: $state.navSelection, loading: $loadingDetails)
                     }
-                    .padding()
+                    Button(action: {
+                        newSession = true
+                    }, label: {
+                        Text("New Session").font(.title)
+                    })
                 }
+                .padding()
             }
             .navigationBarTitle("Home", displayMode: .inline)
-            .navigationBarItems(trailing: HStack {
-                NavigationLink(
-                    destination: SettingsPage(),
-                    tag: "Settings",
-                    selection: $state.currentPage,
-                    label: {Image(systemName: "gear")})
-                NavigationLink(
-                    destination: WorkSettingsView(data: Binding<Duct>(get: {state.currentWork ?? Duct()}, set: {state.currentWork = $0})),
-                    tag: "Work Settings",
-                    selection: $state.currentPage,
-                    label: {EmptyView()})
-            })
+            .navigationBarItems(trailing: navItems)
             .sheet(isPresented: $newSession) {
                 NewSessionSheet(isPresented: $newSession).environmentObject(state)
             }
             Group {
+                helpWebSheet
+                aboutSheet
+                shareSheet
+                detailsSheet
                 EmptyView()
-                .sheet(isPresented: $state.sheetsShown.helpWeb, content: {
-                    ZStack {
-                        VStack {
-                            HStack {
-                                Button(action: {
-                                    state.sheetsShown.helpWeb = false
-                                }, label: {
-                                    Image(systemName: "xmark")
-                                        .font(.title2)
-                                        .padding()
-                                        .background(BlurEffectView())
-                                        .clipShape(Circle())
-                                })
-                                Spacer()
-                            }
-                            Spacer()
-                        }.zIndex(2)
-                        HelpWebKitView().environmentObject(state).zIndex(1)
-                    }
-                    
-                })
-                EmptyView()
-                .sheet(isPresented: $state.sheetsShown.about, content: {AboutView().environmentObject(state)})
-                EmptyView()
-                    .sheet(isPresented: Binding<Bool>(get: {
-                        state.shareURL != nil
-                    }, set: {
-                        if !$0 { state.shareURL = nil }
-                    }), content: {
-                        ActivityView(activityItems: [state.shareURL ?? ""], applicationActivities: nil)
-                })
+                    .sheet(isPresented: Binding<Bool>(get: {state.pdfDuct != nil}, set: {if !$0 { state.pdfDuct = nil }}), content: {PDFView(duct: state.pdfDuct ?? Duct()).environmentObject(state)})
             }
         }
     }
     
-    var viewMod: AnyView {
+    var helpWebSheet: some View {
+        EmptyView()
+        .sheet(isPresented: $state.sheetsShown.helpWeb, content: {
+            ZStack {
+                VStack {
+                    HStack {
+                        Button(action: {
+                            state.sheetsShown.helpWeb = false
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.title2)
+                                .padding()
+                                .background(BlurEffectView())
+                                .clipShape(Circle())
+                        })
+                        Spacer()
+                    }
+                    Spacer()
+                }.zIndex(2)
+                HelpWebKitView().environmentObject(state).zIndex(1)
+            }
+            
+        })
+    }
+    var aboutSheet: some View {
+        EmptyView()
+        .sheet(isPresented: $state.sheetsShown.about, content: {AboutView().environmentObject(state)})
+    }
+    var shareSheet: some View {
+        EmptyView()
+            .sheet(isPresented: Binding<Bool>(get: {
+                state.shareURL != nil
+            }, set: {
+                if !$0 { state.shareURL = nil }
+            }), content: {
+                ActivityView(activityItems: [state.shareURL ?? ""], applicationActivities: nil)
+        })
+    }
+    var detailsSheet: some View {
+        EmptyView()
+            .sheet(isPresented: Binding<Bool>(get: {details != nil}, set: {
+                if $0 {
+                    loadingDetails = true
+                } else {
+                    details = nil
+                }
+            })) {detailsView.environmentObject(state)}
+    }
+    var detailsView: AnyView {
         if details != nil {
             if let duct = state.ductData.first(where: {$0.id == details}) {
                 let df = DateFormatter()
@@ -139,15 +148,23 @@ struct AppView: View {
         else { return AnyView(EmptyView())}
     }
     
+    var navItems: some View {
+        HStack {
+            NavigationLink(
+                destination: SettingsPage(),
+                tag: "Settings",
+                selection: $state.currentPage,
+                label: {Image(systemName: "gear")})
+            NavigationLink(
+                destination: WorkSettingsView(data: Binding<Duct>(get: {state.currentWork ?? Duct()}, set: {state.currentWork = $0})),
+                tag: "Work Settings",
+                selection: $state.currentPage,
+                label: {EmptyView()})
+        }
+    }
+    
     var body: some View {
-        NavigationView { dList}
-            .sheet(isPresented: Binding<Bool>(get: {details != nil}, set: {
-                if $0 {
-                    loadingDetails = true
-                } else {
-                    details = nil
-                }
-            })) {viewMod.environmentObject(state)}
+        NavigationView { dList }
             .navigationViewStyle(StackNavigationViewStyle())
     }
 }
@@ -174,6 +191,62 @@ struct NewSessionSheet: View {
     }
 }
 
+struct PDFView: View {
+    var duct: Duct
+    let ductFont: Font? = .title3
+    let ductBorderColor: Color = .black
+    let ductBorderWidth: CGFloat = 1
+    
+    var body: some View {
+        VStack {
+            HStack(alignment: .bottom) {
+                HStack {
+                    Image("FieldFab Logo")
+                        .resizable()
+                        .frame(width: 64, height: 64)
+                    Spacer()
+                }.frame(maxWidth: .infinity)
+                HStack(alignment: .top, spacing: 0) {
+                    Text("FieldFab")
+                    Text("©").font(.body)
+                    Text(" Duct Fabrication")
+                }
+                .font(.largeTitle)
+                .fixedSize(horizontal: true, vertical: false)
+                HStack {
+                    
+                }.frame(maxWidth: .infinity)
+            }
+            Text(duct.data.name).font(.title2)
+            Text("Units: \(duct.data.width.value.unit.symbol)").font(.title3)
+            HStack {
+                ZStack {
+                    DuctSideView(face: .front, forceHelpersOff: true, duct: .constant(duct)).scaledToFit()
+                    Text("Front").font(ductFont)
+                }
+                .border(ductBorderColor, width: ductBorderWidth)
+                ZStack {
+                    DuctSideView(face: .back, forceHelpersOff: true, duct: .constant(duct)).scaledToFit()
+                    Text("Back").font(ductFont)
+                }
+                .border(ductBorderColor, width: ductBorderWidth)
+            }
+            HStack {
+                ZStack {
+                    DuctSideView(face: .left, forceHelpersOff: true, duct: .constant(duct)).scaledToFit()
+                    Text("Left").font(ductFont)
+                }
+                .border(ductBorderColor, width: ductBorderWidth)
+                ZStack {
+                    DuctSideView(face: .right, forceHelpersOff: true, duct: .constant(duct)).scaledToFit()
+                    Text("Right").font(ductFont)
+                }
+                .border(ductBorderColor, width: ductBorderWidth)
+            }
+        }.padding().environment(\.colorScheme, .light)
+    }
+}
+
 struct NavView: View {
     var data: DuctData
     var isShown: Bool
@@ -186,30 +259,61 @@ struct NavView: View {
         df.dateStyle = .long
         return df.string(from: date)
     }
+    
+    var navLink: some View {
+        NavigationLink(
+            destination: WorkView().popup(isPresented: $state.popupSaveSuccessful, type: .toast, animation: .easeInOut, autohideIn: 2, view: {
+                VStack {
+                    HStack {
+                        Image(systemName: "checkmark.circle")
+                        Spacer()
+                        Text("Session saved successfully")
+                    }
+                    .foregroundColor(.white)
+                    .frame(width: 250, height: 30, alignment: .center)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(Color.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    Spacer().frame(height: 20)
+                }.opacity(state.popupSaveSuccessful ? 1 : 0)
+            }),
+            tag: data.id,
+            selection: $nav,
+            label: {
+                Text("\(data.name)").font(.title2)
+            }).lineLimit(1)
+    }
+    var shareButton: some View {
+        Button(action: {
+            state.shareURL = data.toURL()
+        }, label: {
+            Image(systemName: "square.and.arrow.up").padding(.horizontal, 4)
+        })
+    }
+    var exportButton: some View {
+        Button(action: {
+            state.pdfDuct = Duct(data: data)
+        }, label: {Text("Export")})
+    }
+    
+    struct Mod: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .padding()
+                .background(Color.gray.opacity(0.025))
+                .background(BlurEffectView())
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+        }
+    }
+    
     var body: some View {
         VStack {
-            NavigationLink(
-                destination: WorkView().popup(isPresented: $state.popupSaveSuccessful, type: .toast, animation: .easeInOut, autohideIn: 2, view: {
-                    VStack {
-                        HStack {
-                            Image(systemName: "checkmark.circle")
-                            Spacer()
-                            Text("Session saved successfully")
-                        }
-                        .foregroundColor(.white)
-                        .frame(width: 250, height: 30, alignment: .center)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(Color.green)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        Spacer().frame(height: 20)
-                    }.opacity(state.popupSaveSuccessful ? 1 : 0)
-                }),
-                tag: data.id,
-                selection: $nav,
-                label: {
-                    Text("\(data.name)").font(.title2)
-                })
+            ZStack {
+//                shareButton.
+                navLink
+//                exportButton.opacity(0)
+            }
             Divider()
             Text("Created on \(formatDate(data.created))")
             Divider()
@@ -218,7 +322,7 @@ struct NavView: View {
                     details = data.id
                     loading = true
                 }, label: {
-                    Text("Details")
+                    Text("Details").padding(.trailing, 4)
                 })
                 Spacer()
                 Button(action: {
@@ -228,10 +332,7 @@ struct NavView: View {
                 }).foregroundColor(.red)
             }
         }
-        .padding()
-        .background(Color.gray.opacity(0.025))
-        .background(BlurEffectView())
-        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .modifier(Mod())
     }
 }
 
@@ -348,7 +449,7 @@ extension SCNScene {
                 async.group.leave()
                 async.sem.signal()
             }
-            let names = [
+            let names: [String] = [
                 "tab-front-left", "tab-front-right", "tab-front-top", "tab-front-bottom", "tab-left-left", "tab-left-right", "tab-left-top", "tab-left-bottom", "tab-right-left", "tab-right-right", "tab-right-top", "tab-right-bottom", "tab-back-left", "tab-back-right", "tab-back-top", "tab-back-bottom", "Front", "Back", "Left", "Right"
             ]
             for i in names {
@@ -415,27 +516,6 @@ extension SCNScene {
     }
 }
 
-//class DuctScene: SCNScene {
-//    let queue: DispatchQueue// = DispatchQueue.global(qos: .userInteractive)
-//    let group: DispatchGroup// = DispatchGroup()
-//    let sem: DispatchSemaphore// = DispatchSemaphore(value: 1)
-//    init(queue: DispatchQueue, group: DispatchGroup, sem: DispatchSemaphore) {
-//        self.queue = queue
-//        self.group = group
-//        self.sem = sem
-//        super.init()
-//    }
-//    required init?(coder: NSCoder) {
-//        super.init()
-//    }
-//    static let tabNodeNames: [String] = [
-//        "tab-front-left", "tab-front-right", "tab-front-top", "tab-front-bottom", "tab-left-left", "tab-left-right", "tab-left-top", "tab-left-bottom", "tab-right-left", "tab-right-right", "tab-right-top", "tab-right-bottom", "tab-back-left", "tab-back-right", "tab-back-top", "tab-back-bottom"
-//    ]
-//    static let ductNodeNames: [String] = [
-//        "Front", "Back", "Left", "Right"
-//    ]
-//}
-
 struct ActivityView: UIViewControllerRepresentable {
     let activityItems: [Any]
     let applicationActivities: [UIActivity]?
@@ -451,8 +531,27 @@ struct ActivityView: UIViewControllerRepresentable {
 #if DEBUG
 struct AppView_Previews: PreviewProvider {
     static var previews: some View {
-        var appstate = AppState()
-        return AppView().environmentObject(appstate)
+        let width = Measurement<UnitLength>(value: 18, unit: .inches)
+        let depth = Measurement<UnitLength>(value: 20, unit: .inches)
+        let length = Measurement<UnitLength>(value: 6, unit: .inches)
+        let offsetx = Measurement<UnitLength>(value: 0, unit: .inches)
+        let offsety = Measurement<UnitLength>(value: 0, unit: .inches)
+        let twidth = Measurement<UnitLength>(value: 20, unit: .inches)
+        let tdepth = Measurement<UnitLength>(value: 18, unit: .inches)
+        var tabs = DuctTabContainer()
+        tabs.ft = .init(length: .inch, type: .straight)
+        tabs.fb = .init(length: .inch, type: .straight)
+        tabs.bt = .init(length: .inch, type: .straight)
+        tabs.bb = .init(length: .inch, type: .straight)
+        tabs.lt = .init(length: .inch, type: .straight)
+        tabs.lb = .init(length: .inch, type: .straight)
+        tabs.ll = .init(length: .inch, type: .straight)
+        tabs.lr = .init(length: .inch, type: .straight)
+        tabs.rt = .init(length: .inch, type: .straight)
+        tabs.rb = .init(length: .inch, type: .straight)
+        tabs.rl = .init(length: .inch, type: .straight)
+        tabs.rr = .init(length: .inch, type: .straight)
+        return PDFView(duct: Duct(data: .init(name: "Some duct", id: UUID(), created: Date(), width: .init(value: width), depth: .init(value: depth), length: .init(value: length), offsetx: .init(value: offsetx), offsety: .init(value: offsety), twidth: .init(value: twidth), tdepth: .init(value: tdepth), type: DuctData.DType.fourpiece, tabs: tabs))).environmentObject(AppState())
     }
 }
 #endif

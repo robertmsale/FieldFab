@@ -11,15 +11,15 @@ import SwiftUI
 struct WorkShopView: View {
     typealias Face = DuctData.FaceAndAll
     @Binding var data: Duct
-    @State var selectedFace: Face = .front
     @State var tabEdge: DuctTab.Edge = .top
     @Environment(\.verticalSizeClass) var sizeClass
+    @EnvironmentObject var state: AppState
     let sw = UIScreen.main.bounds.size
     init(data: Binding<Duct>) {
         _data = data
     }
     var facePicker: some View {
-        Picker("", selection: $selectedFace) {
+        Picker("", selection: Binding<Face>(get: {state.selectedFace}, set: {state.selectedFace = $0})) {
             Text(Face.front.rawValue).tag(Face.front)
             Text(Face.back.rawValue).tag(Face.back)
             Text(Face.left.rawValue).tag(Face.left)
@@ -33,8 +33,8 @@ struct WorkShopView: View {
                     if sizeClass == .regular {
                         facePicker
                     }
-                    if selectedFace != .all {
-                        DuctSideView(face: selectedFace.noAll, duct: $data)
+                    if state.selectedFace != .all {
+                        DuctSideView(face: state.selectedFace.noAll, duct: $data)
                             .animation(.easeInOut)
                             .aspectRatio(1, contentMode: .fit)
                     } else {
@@ -126,23 +126,43 @@ struct WorkShopView: View {
                                         })
                                     }).pickerStyle(SegmentedPickerStyle())
                                     
-                                    TabLengthPicker(face: selectedFace, edge: tabEdge, data: $data.data.tabs[selectedFace.noAll, tabEdge])
-                                    TabTypePicker(face: selectedFace, edge: tabEdge, data: $data.data.tabs[selectedFace.noAll, tabEdge])
+                                    TabLengthPicker(face: state.selectedFace, edge: tabEdge, data: $data.data.tabs[state.selectedFace.noAll, tabEdge])
+                                    TabTypePicker(face: state.selectedFace, edge: tabEdge, data: $data.data.tabs[state.selectedFace.noAll, tabEdge])
                                 }
                             }
-                        }.disabled(selectedFace == .all).tabItem { Text("Ayyy") }
+                        }.disabled(state.selectedFace == .all).tabItem { Text("Ayyy") }
                     }.tabViewStyle(PageTabViewStyle())
+//                    .popup(isPresented: Binding<Bool>(get: {
+//                        state.showWorkShopTips && state.showWorkShopTipsAgain
+//                    }, set: {
+//                        state.showWorkShopTips = $0
+//                    }), type: .toast, position: .bottom, animation: .easeInOut, autohideIn: 8, closeOnTap: true, closeOnTapOutside: true, view: {
+//                        VStack {
+//                            VStack {
+//                                Text("Swipe left and right to switch between menues")
+//                                Button(action: {
+//                                    state.showWorkShopTipsAgain = false
+//                                }, label: {Text("Don't show this again").foregroundColor(.blue)})
+//                            }
+//                            .padding(.all, 4)
+//                            .background(Color.green)
+//                            .foregroundColor(.white)
+//                            .clipShape(RoundedRectangle(cornerRadius: 5))
+//                            Spacer().frame(width: 40, height: 140, alignment: .center)
+//                        }.opacity(state.showWorkShopTips ? 1 : 0)
+//                    })
                 }
             }
-        
     }
     var body: some View {
-        HStack {
-            if sizeClass == .regular {
-                VStack { content }
-            }
-            else {
-                content
+        ZStack {
+            HStack {
+                if sizeClass == .regular {
+                    VStack { content }
+                }
+                else {
+                    content
+                }
             }
         }
     }
