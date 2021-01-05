@@ -413,9 +413,9 @@ struct Duct {
             case "Back":
                 data.offsety.value.value = -abs(depth - tdepth)
             case "Right":
-                data.offsetx.value.value = -abs(width - twidth)
-            case "Left":
                 data.offsetx.value.value = abs(width - twidth)
+            case "Left":
+                data.offsetx.value.value = -abs(width - twidth)
             default: break
         }
     }
@@ -465,8 +465,8 @@ struct DuctData: Codable, Identifiable {
         url += "offsetY=\(offsety.value.value)&"
         url += "tWidth=\(twidth.value.value)&"
         url += "tDepth=\(tdepth.value.value)&"
-        url += "name=\(name)&"
-        url += "tabs=\(tabs.toURL())"
+        url += "tabs=\(tabs.toURL())&"
+        url += "name=\(name)"
         return url
     }
     

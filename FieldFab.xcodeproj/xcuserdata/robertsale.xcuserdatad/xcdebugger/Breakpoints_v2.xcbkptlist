@@ -331,7 +331,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D4D4F070-B310-4279-8D1F-9D77F21F6F6B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FieldFab/SharedComponents/Controls/NumberSlider.swift"
