@@ -109,7 +109,7 @@ struct DuctSCN: UIViewRepresentable {
     }
     func moveCamera(_ view: UIViewType) {
         if let cam = view.scene?.rootNode.childNode(withName: "Camera", recursively: false) {
-            let maxXZ = max(
+            let maxXZ: Float = max(
                 max(state.currentWork?.data.width.rendered3D ?? 0, state.currentWork?.data.twidth.rendered3D ?? 0),
                 max(state.currentWork?.data.depth.rendered3D ?? 0, state.currentWork?.data.tdepth.rendered3D ?? 0)
             )

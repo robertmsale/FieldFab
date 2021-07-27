@@ -189,34 +189,7 @@ final class AppState: ObservableObject {
     @Published var sceneEvents = EventState.Scene()
     @Published var arEvents = EventState.ARScene()
     @Published var ductData: [DuctData] = {
-        let defaultData = [
-            DuctData(
-                name: "16x20-to-20x20",
-                id: UUID(),
-                created: Date(),
-                width: DuctMeasurement(value: .init(value: 16, unit: .inches)),
-                depth: DuctMeasurement(value: .init(value: 20, unit: .inches)),
-                length: DuctMeasurement(value: .init(value: 6, unit: .inches)),
-                offsetx: DuctMeasurement(value: .init(value: 0, unit: .inches)),
-                offsety: DuctMeasurement(value: .init(value: 0, unit: .inches)),
-                twidth: DuctMeasurement(value: .init(value: 20, unit: .inches)),
-                tdepth: DuctMeasurement(value: .init(value: 20, unit: .inches)),
-                type: .fourpiece,
-                tabs: DuctTabContainer()),
-            DuctData(
-                name: "16x20-to-20x20-w-offset",
-                id: UUID(),
-                created: Date(),
-                width: DuctMeasurement(value: .init(value: 16, unit: .inches)),
-                depth: DuctMeasurement(value: .init(value: 20, unit: .inches)),
-                length: DuctMeasurement(value: .init(value: 8, unit: .inches)),
-                offsetx: DuctMeasurement(value: .init(value: 2, unit: .inches)),
-                offsety: DuctMeasurement(value: .init(value: 1, unit: .inches)),
-                twidth: DuctMeasurement(value: .init(value: 20, unit: .inches)),
-                tdepth: DuctMeasurement(value: .init(value: 20, unit: .inches)),
-                type: .fourpiece,
-                tabs: DuctTabContainer())
-        ]
+        let defaultData: [DuctData] = []
         do {
             let data = try Disk.retrieve("duct-data.json", from: .caches, as: [DuctData].self)
             if data.count == 0 {
