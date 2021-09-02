@@ -67,7 +67,7 @@ struct AboutView: View {
                 HStack {
                     Text("Developer Email")
                     Spacer()
-                    Link("robert@fieldfab.net", destination: URL(string: "mailto:robert@fieldfab.net")!)
+                    Link("robert.sale@outlook.com", destination: URL(string: "mailto:robert.sale@outlook.com")!)
                 }
                 Divider()
             }
