@@ -143,8 +143,11 @@ struct Duct {
     static func genMeasurements(o: DuctCoordinates, units: UnitLength, data: DuctData) -> DuctFaceMeasure.Faces {
         // front
         let fbl  = Measurement(value: o[.fbl].zeroed(.x).distance(o[.ftl].zeroed(.x)).d + (data.tabs.ft?.length.to3D().d ?? 0) + (data.tabs.fb?.length.to3D().d ?? 0), unit: UnitLength.meters)
-        let pftt = Measurement(value: max(data.width.value.value, data.twidth.value.value), unit: data.width.value.unit)
+        var pftt = Measurement(value: max(data.width.value.value, data.twidth.value.value), unit: data.width.value.unit)
         let (flt, frt) = (data.tabs.fl?.length.to3D().d ?? 0, data.tabs.fr?.length.to3D().d ?? 0)
+        if (abs(data.offsetx.value.value) > abs(data.width.value.value - data.twidth.value.value)) {
+            pftt.value += abs(data.offsetx.value.value) - abs(data.width.value.value - data.twidth.value.value)
+        }
         let ftt  = Measurement(value: pftt.converted(to: .meters).value + flt + frt, unit: UnitLength.meters)
         let fbel = Measurement(value: o[.ftl].zeroed(.y, .z).distance(o[.fbl].zeroed(.y, .z)).d, unit: UnitLength.meters)
         let fber = Measurement(value: o[.ftr].zeroed(.y, .z).distance(o[.fbr].zeroed(.y, .z)).d, unit: UnitLength.meters)
@@ -164,8 +167,11 @@ struct Duct {
         let bdr  = Measurement(value: o[.bbr].distance(o[.btr]).d, unit: UnitLength.meters)
         // left
         let lbl  = Measurement(value: o[.lbl].zeroed(.z).distance(o[.ltl].zeroed(.z)).d + (data.tabs.lt?.length.to3D().d ?? 0) + (data.tabs.lb?.length.to3D().d ?? 0), unit: UnitLength.meters)
-        let pltt = Measurement(value: max(data.depth.value.value, data.tdepth.value.value), unit: data.depth.value.unit)
+        var pltt = Measurement(value: max(data.depth.value.value, data.tdepth.value.value), unit: data.depth.value.unit)
         let (llt, lrt) = (data.tabs.ll?.length.to3D().d ?? 0, data.tabs.lr?.length.to3D().d ?? 0)
+        if (abs(data.offsety.value.value) > abs(data.depth.value.value - data.tdepth.value.value)) {
+            pltt.value += abs(data.offsety.value.value) - abs(data.depth.value.value - data.tdepth.value.value)
+        }
         let ltt  = Measurement(value: pltt.converted(to: .meters).value + llt + lrt, unit: UnitLength.meters)
         let lbel = Measurement(value: o[.ltl].zeroed(.y, .x).distance(o[.lbl].zeroed(.y, .x)).d, unit: UnitLength.meters)
         let lber = Measurement(value: o[.ltr].zeroed(.y, .x).distance(o[.lbr].zeroed(.y, .x)).d, unit: UnitLength.meters)
