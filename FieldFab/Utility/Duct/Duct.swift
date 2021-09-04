@@ -146,7 +146,7 @@ struct Duct {
         var pftt = Measurement(value: max(data.width.value.value, data.twidth.value.value), unit: data.width.value.unit)
         let (flt, frt) = (data.tabs.fl?.length.to3D().d ?? 0, data.tabs.fr?.length.to3D().d ?? 0)
         if (abs(data.offsetx.value.value) > abs(data.width.value.value - data.twidth.value.value)) {
-            pftt.value += abs(data.offsetx.value.value) - abs(data.width.value.value - data.twidth.value.value)
+            pftt.value += (abs(data.offsetx.value.value) - abs(data.width.value.value - data.twidth.value.value)) / 2
         }
         let ftt  = Measurement(value: pftt.converted(to: .meters).value + flt + frt, unit: UnitLength.meters)
         let fbel = Measurement(value: o[.ftl].zeroed(.y, .z).distance(o[.fbl].zeroed(.y, .z)).d, unit: UnitLength.meters)
@@ -170,7 +170,7 @@ struct Duct {
         var pltt = Measurement(value: max(data.depth.value.value, data.tdepth.value.value), unit: data.depth.value.unit)
         let (llt, lrt) = (data.tabs.ll?.length.to3D().d ?? 0, data.tabs.lr?.length.to3D().d ?? 0)
         if (abs(data.offsety.value.value) > abs(data.depth.value.value - data.tdepth.value.value)) {
-            pltt.value += abs(data.offsety.value.value) - abs(data.depth.value.value - data.tdepth.value.value)
+            pltt.value += (abs(data.offsety.value.value) - abs(data.depth.value.value - data.tdepth.value.value)) / 2
         }
         let ltt  = Measurement(value: pltt.converted(to: .meters).value + llt + lrt, unit: UnitLength.meters)
         let lbel = Measurement(value: o[.ltl].zeroed(.y, .x).distance(o[.lbl].zeroed(.y, .x)).d, unit: UnitLength.meters)

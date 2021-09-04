@@ -38,7 +38,6 @@
 		EE9022E3258FB85000EE0C9A /* NumberSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022E2258FB85000EE0C9A /* NumberSlider.swift */; };
 		EEB3AE73258BAEF800285C20 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB3AE72258BAEF800285C20 /* Duct.swift */; };
 		EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EEB3AE7B258CE95100285C20 /* VectorExtensions */; };
-		EEB3AE81258D570100285C20 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB3AE80258D570100285C20 /* Vector3.swift */; };
 		EEB3AE8B258E62CB00285C20 /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */; };
 		EEB3AE8F258E62CE00285C20 /* Quad.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5F251F8C26003E6F08 /* Quad.swift */; };
 		EEB3AE93258E62DD00285C20 /* SCNUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE64251F8D99003E6F08 /* SCNUtils.swift */; };
@@ -110,7 +109,6 @@
 		EE99FABF2539D08500F27C2C /* ExamplePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePreview.swift; sourceTree = "<group>"; };
 		EEAF2B322516581F0074A516 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		EEB3AE72258BAEF800285C20 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
-		EEB3AE80258D570100285C20 /* Vector3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3525034396003389AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EEC7CF3725034396003389AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -337,7 +335,6 @@
 				EED1CE64251F8D99003E6F08 /* SCNUtils.swift */,
 				EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */,
 				EED1CE5F251F8C26003E6F08 /* Quad.swift */,
-				EEB3AE80258D570100285C20 /* Vector3.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -634,7 +631,6 @@
 				EE12F19E2595898C007F5CE4 /* DuctTab.swift in Sources */,
 				EE12F1A3259589D0007F5CE4 /* DuctUtils.swift in Sources */,
 				EE9022C5258EE02100EE0C9A /* MeasurementField.swift in Sources */,
-				EEB3AE81258D570100285C20 /* Vector3.swift in Sources */,
 				EEDFF21F2546021B00FD9D51 /* VisualEffectView.swift in Sources */,
 				EE47C41B2596BDC700288BD7 /* DuctSCN.swift in Sources */,
 				EE9022CA258EE60000EE0C9A /* DigitWheel.swift in Sources */,
