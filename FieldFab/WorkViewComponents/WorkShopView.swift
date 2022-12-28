@@ -57,61 +57,113 @@ struct WorkShopView: View {
                     VStack {
                         Form {
                             Section(header: Text("Measurements")) {
-                                HStack {
-                                    Text("Units")
-                                    Spacer()
-                                    Picker("\(data.data.depth.value.unit.symbol)", selection: Binding(get: {
-                                        data.data.depth.value.unit
-                                    }, set: { (k, v) in
-                                        data.data.width.value.convert(to: k)
-                                        data.data.depth.value.convert(to: k)
-                                        data.data.length.value.convert(to: k)
-                                        data.data.offsetx.value.convert(to: k)
-                                        data.data.offsety.value.convert(to: k)
-                                        data.data.twidth.value.convert(to: k)
-                                        data.data.tdepth.value.convert(to: k)
-                                    }), content: {
-                                        Text("Inches").tag(UnitLength.inches)
-                                        Text("Feet").tag(UnitLength.feet)
-                                        Text("Meters").tag(UnitLength.meters)
-                                        Text("Centimeters").tag(UnitLength.centimeters)
-                                        Text("Millimeters").tag(UnitLength.millimeters)
-                                    }).pickerStyle(WheelPickerStyle()).frame(width: 120, height: 30, alignment: .center).clipShape(RoundedRectangle(cornerRadius: 5))
-                                }
+                                Picker("Units", selection: Binding(get: {
+                                    data.data.depth.value.unit
+                                }, set: { (k, v) in
+                                    data.data.width.value.convert(to: k)
+                                    data.data.depth.value.convert(to: k)
+                                    data.data.length.value.convert(to: k)
+                                    data.data.offsetx.value.convert(to: k)
+                                    data.data.offsety.value.convert(to: k)
+                                    data.data.twidth.value.convert(to: k)
+                                    data.data.tdepth.value.convert(to: k)
+                                }), content: {
+                                    Text("Inches").tag(UnitLength.inches)
+                                    Text("Feet").tag(UnitLength.feet)
+                                    Text("Meters").tag(UnitLength.meters)
+                                    Text("Centimeters").tag(UnitLength.centimeters)
+                                    Text("Millimeters").tag(UnitLength.millimeters)
+                                })
                                 HStack {
                                     Text("Width:")
                                     Spacer()
-                                    NumberSlider($data.data.width).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.width.value.asEditableString
+                                            state.measureToEdit = .width
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.width.value.asViewOnlyString)
+                                    }
                                 }
                                 HStack {
                                     Text("Depth:")
                                     Spacer()
-                                    NumberSlider($data.data.depth).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.depth.value.asEditableString
+                                            state.measureToEdit = .depth
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.depth.value.asViewOnlyString)
+                                    }
                                 }
                                 HStack {
                                     Text("Length:")
                                     Spacer()
-                                    NumberSlider($data.data.length).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.length.value.asEditableString
+                                            state.measureToEdit = .length
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.length.value.asViewOnlyString)
+                                    }
                                 }
                                 HStack {
                                     Text("Offset X:")
                                     Spacer()
-                                    NumberSlider($data.data.offsetx, isNegatable: true).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.offsetx.value.asEditableString
+                                            state.measureToEdit = .offsetx
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.offsetx.value.asViewOnlyString)
+                                    }
                                 }
                                 HStack {
                                     Text("Offset Y:")
                                     Spacer()
-                                    NumberSlider($data.data.offsety, isNegatable: true).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.offsety.value.asEditableString
+                                            state.measureToEdit = .offsety
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.offsety.value.asViewOnlyString)
+                                    }
                                 }
                                 HStack {
                                     Text("T Width:")
                                     Spacer()
-                                    NumberSlider($data.data.twidth).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.twidth.value.asEditableString
+                                            state.measureToEdit = .twidth
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.twidth.value.asViewOnlyString)
+                                    }
                                 }
                                 HStack {
                                     Text("T Depth:")
                                     Spacer()
-                                    NumberSlider($data.data.tdepth).fixedSize(horizontal: true, vertical: false)
+                                    Button(action: {
+                                        Task {
+                                            state.numberToEdit = data.data.tdepth.value.asEditableString
+                                            state.measureToEdit = .tdepth
+                                            state.editorShown = true
+                                        }
+                                    }) {
+                                        Text(data.data.tdepth.value.asViewOnlyString)
+                                    }
                                 }
                             }
                             Section(header: Text("Tabs")) {

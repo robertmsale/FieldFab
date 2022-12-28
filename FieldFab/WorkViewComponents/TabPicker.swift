@@ -19,9 +19,7 @@ struct TabTypePicker: View {
     }
     var body: some View {
         HStack {
-            Text("Type")
-            Spacer()
-            Picker(pickerText, selection: Binding<TTNL>(get: {
+            Picker("Type", selection: Binding<TTNL>(get: {
                 if data == nil { return .none }
                 switch data!.type {
                     case .slock: return .slock
@@ -60,9 +58,9 @@ struct TabTypePicker: View {
                     Text(TTNL.foldout.rawValue).tag(TTNL.foldout)
                 }
             }
-            .pickerStyle(WheelPickerStyle())
-            .frame(width: 160, height: 30)
-            .clipShape(RoundedRectangle(cornerRadius: 5))
+//            .pickerStyle(WheelPickerStyle())
+//            .frame(width: 160, height: 30)
+//            .clipShape(RoundedRectangle(cornerRadius: 5))
         }
     }
 }
@@ -78,9 +76,7 @@ struct TabLengthPicker: View {
     }
     var body: some View {
         HStack {
-            Text("Length")
-            Spacer()
-            Picker(pickerText, selection: Binding<TLNL>(get: {
+            Picker("Length", selection: Binding<TLNL>(get: {
                 if data == nil { return .none }
                 switch data!.length {
                     case .inch: return .inch
@@ -105,9 +101,9 @@ struct TabLengthPicker: View {
                 Text("Half Inch").tag(TLNL.half)
                 Text("Three Eighths").tag(TLNL.threeeighth)
             })
-            .pickerStyle(WheelPickerStyle())
-            .frame(width: 160, height: 30)
-            .clipShape(RoundedRectangle(cornerRadius: 5))
+//            .pickerStyle(WheelPickerStyle())
+//            .frame(width: 160, height: 30)
+//            .clipShape(RoundedRectangle(cornerRadius: 5))
         }
     }
 }

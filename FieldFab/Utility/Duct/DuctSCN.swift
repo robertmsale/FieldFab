@@ -175,7 +175,9 @@ struct DuctSCN: UIViewRepresentable {
             materialUpdate(uiView.scene)
         }
         if state.sceneEvents.needsReset {
-            state.sceneEvents = EventState.Scene()
+            Task {
+                state.sceneEvents = EventState.Scene()
+            }
         }
         if state.currentWorkTab == 1 && !uiView.isPlaying { uiView.play(nil) }
         if state.currentWorkTab != 1 && uiView.isPlaying { uiView.pause(nil) }

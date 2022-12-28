@@ -59,9 +59,7 @@ struct WorkView: View {
             }, label: {
                 Text("Save")
             })
-            Button(action: {
-                state.currentPage = "Work Settings"
-            }, label: {Image(systemName: "gear")})
+            NavigationLink(destination: SettingsPage(), label: {Image(systemName: "gear")})
         })
         .popup(isPresented: Binding<Bool>(get: {
             switch state.ductSceneHitTest {
@@ -75,14 +73,18 @@ struct WorkView: View {
                 Text("Would you like to make the \(state.ductSceneHitTest ?? "") side flat?")
                 HStack {
                     Button(action: {
-                        state.ductSceneHitTest = nil
+                        Task {
+                            state.ductSceneHitTest = nil
+                        }
                     }, label: { Text("No").padding() } )
                     Spacer()
                     Button(action: {
-                        state.currentWork?.makeSideFlat(state.ductSceneHitTest ?? "")
-                        state.ductSceneHitTest = nil
-                        state.sceneEvents.measurementsChanged = true
-                        state.arEvents.measurementsChanged = true
+                        Task {
+                            state.currentWork?.makeSideFlat(state.ductSceneHitTest ?? "")
+                            state.ductSceneHitTest = nil
+                            state.sceneEvents.measurementsChanged = true
+                            state.arEvents.measurementsChanged = true
+                        }
                     }, label: { Text("Yes").padding() })
                 }
             }

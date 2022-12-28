@@ -36,6 +36,8 @@
 		EE9022D3258EFF1000EE0C9A /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022D2258EFF1000EE0C9A /* SettingsPage.swift */; };
 		EE9022DB258FB7CB00EE0C9A /* WorkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022DA258FB7CB00EE0C9A /* WorkView.swift */; };
 		EE9022E3258FB85000EE0C9A /* NumberSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9022E2258FB85000EE0C9A /* NumberSlider.swift */; };
+		EE97EC73295A3D5E00A9FDBC /* InchKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97EC72295A3D5E00A9FDBC /* InchKeyboard.swift */; };
+		EE97EC75295A3E5800A9FDBC /* KBButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97EC74295A3E5800A9FDBC /* KBButton.swift */; };
 		EEB3AE73258BAEF800285C20 /* Duct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB3AE72258BAEF800285C20 /* Duct.swift */; };
 		EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EEB3AE7B258CE95100285C20 /* VectorExtensions */; };
 		EEB3AE8B258E62CB00285C20 /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED1CE5A251F8BF0003E6F08 /* GeometryBuilder.swift */; };
@@ -106,6 +108,8 @@
 		EE9022DA258FB7CB00EE0C9A /* WorkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkView.swift; sourceTree = "<group>"; };
 		EE9022E2258FB85000EE0C9A /* NumberSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSlider.swift; sourceTree = "<group>"; };
 		EE9787992517AC9F003DE8E0 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
+		EE97EC72295A3D5E00A9FDBC /* InchKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InchKeyboard.swift; sourceTree = "<group>"; };
+		EE97EC74295A3E5800A9FDBC /* KBButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBButton.swift; sourceTree = "<group>"; };
 		EE99FABF2539D08500F27C2C /* ExamplePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePreview.swift; sourceTree = "<group>"; };
 		EEAF2B322516581F0074A516 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		EEB3AE72258BAEF800285C20 /* Duct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duct.swift; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 				EE8A13BD2549DB8900852939 /* Sheets */,
 				EEC7CF6825034858003389AB /* Tabs */,
 				EE47C41225966AE100288BD7 /* LoadSceneProgressView.swift */,
+				EE97EC72295A3D5E00A9FDBC /* InchKeyboard.swift */,
+				EE97EC74295A3E5800A9FDBC /* KBButton.swift */,
 			);
 			path = SharedComponents;
 			sourceTree = "<group>";
@@ -616,6 +622,7 @@
 				EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */,
 				EE6C3B812597EAD400AA70AE /* WorkShopView.swift in Sources */,
 				EE9022DB258FB7CB00EE0C9A /* WorkView.swift in Sources */,
+				EE97EC73295A3D5E00A9FDBC /* InchKeyboard.swift in Sources */,
 				EE6C3B8B2597EB0900AA70AE /* TabPicker.swift in Sources */,
 				EE6C3B7C2597EAAD00AA70AE /* WorkViewAR.swift in Sources */,
 				EEB3AE8F258E62CE00285C20 /* Quad.swift in Sources */,
@@ -626,6 +633,7 @@
 				EE6C3B95259969B600AA70AE /* HelpView.swift in Sources */,
 				EE9022BD258EC87C00EE0C9A /* AppView.swift in Sources */,
 				EE6C3B862597EAF100AA70AE /* DuctSideView.swift in Sources */,
+				EE97EC75295A3E5800A9FDBC /* KBButton.swift in Sources */,
 				EE8D396525831DEE00A1AC39 /* AppState.swift in Sources */,
 				EE8D395C25831C7600A1AC39 /* AppMain.swift in Sources */,
 				EE12F19E2595898C007F5CE4 /* DuctTab.swift in Sources */,
@@ -820,18 +828,19 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.0.4;
+				CURRENT_PROJECT_VERSION = 2.1.0;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FieldFab/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -849,18 +858,19 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.0.4;
+				CURRENT_PROJECT_VERSION = 2.1.0;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FieldFab/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

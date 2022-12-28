@@ -166,20 +166,30 @@ struct AppView: View {
         HStack {
             NavigationLink(
                 destination: SettingsPage(),
-                tag: "Settings",
-                selection: $state.currentPage,
                 label: {Image(systemName: "gear")})
             NavigationLink(
                 destination: WorkSettingsView(data: Binding<Duct>(get: {state.currentWork ?? Duct()}, set: {state.currentWork = $0})),
-                tag: "Work Settings",
-                selection: $state.currentPage,
                 label: {EmptyView()})
         }
     }
     
     var body: some View {
-        NavigationView { dList }
-            .navigationViewStyle(StackNavigationViewStyle())
+        ZStack {
+            NavigationView { dList }
+                .navigationViewStyle(StackNavigationViewStyle())
+                .zIndex(1.0)
+            if state.editorShown {
+                CustomKeyboard(text: $state.numberToEdit, shown: $state.editorShown)
+                    .zIndex(2.0)
+            }
+        }
+        .popover(isPresented: $state.sheetsShown.about, content: {AboutView()})
+        .popover(isPresented: $state.sheetsShown.helpWeb, content: {VStack {
+            Rectangle().frame(height: 50)
+            HelpWebKitView()
+        }})
+        .popover(isPresented: $state.sheetsShown.cameraHelp, content: {CameraHelpView()})
+        .popover(isPresented: $state.sheetsShown.arHelp, content: {ARCameraHelpView()})
     }
 }
 
@@ -292,11 +302,12 @@ struct NavView: View {
                     Spacer().frame(height: 20)
                 }.opacity(state.popupSaveSuccessful ? 1 : 0)
             }),
-            tag: data.id,
-            selection: $nav,
             label: {
                 Text("\(data.name)").font(.title2)
-            }).lineLimit(1)
+            })
+        .simultaneousGesture(TapGesture().onEnded({
+            state.currentWork = Duct(data: data)
+        }), including: .all).lineLimit(1)
     }
     var shareButton: some View {
         Button(action: {

@@ -76,22 +76,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A9FDBC42-D6A2-4BC3-8AD8-33A292A05494"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FieldFab/Utility/Duct/DuctSCN.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "helpersUpdate(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "8CF8914B-0C9E-4828-8C12-FC46F9BA6646"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -257,8 +241,8 @@
             filePath = "FieldFab/AppState.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "asElement"
             landmarkType = "24">
          </BreakpointContent>
@@ -273,8 +257,8 @@
             filePath = "FieldFab/AppState.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "asElement"
             landmarkType = "24">
          </BreakpointContent>

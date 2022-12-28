@@ -9,6 +9,7 @@
 import SwiftUI
 import Disk
 import SceneKit
+import StringFix
 
 struct ND { let n: Int; let d: Int }
 extension Measurement where UnitType: UnitLength {
@@ -36,6 +37,39 @@ extension Measurement where UnitType: UnitLength {
             default: break
         }
         return nd
+    }
+    var asEditableString: String {
+        if unit == UnitLength.inches {
+            var suffix = ""
+            var floor = self.value.rounded(.towardZero)
+            switch abs(value.distance(to: floor)) {
+                case let x where x >= 0.0625 && x < 0.1875: suffix = "⅛"
+                case let x where x >= 0.1875 && x < 0.3125: suffix = "¼"
+                case let x where x >= 0.3125 && x < 0.4375: suffix = "⅜"
+                case let x where x >= 0.4375 && x < 0.5625: suffix = "½"
+                case let x where x >= 0.5625 && x < 0.6875: suffix = "⅝"
+                case let x where x >= 0.6875 && x < 0.8125: suffix = "¾"
+                case let x where x >= 0.8125 && x < 0.9375: suffix = "⅞"
+                case let x where x >= 0.9375: floor += 1.0
+                default: break
+            }
+            return String(Int64(floor)) + suffix
+        }
+        if unit == UnitLength.millimeters { return String(Int(self.value.rounded())) }
+        if unit == UnitLength.centimeters { return String(Double(Int(self.value * 10)) / 10) }
+        if unit == UnitLength.meters { return String(Double(Int(self.value * 1000)) / 1000) }
+        if unit == UnitLength.feet { return String(Double(Int(self.value * 10)) / 10) }
+        return String(self.value)
+    }
+    var asViewOnlyString: String {
+        let estring = asEditableString
+        switch unit {
+        case UnitLength.inches: return estring + "\""
+        case UnitLength.millimeters: return estring + " mm"
+        case UnitLength.centimeters: return estring + " cm"
+        case UnitLength.feet: return estring + " ft"
+        default: return estring + "m"
+        }
     }
     var asElement: AnyView {
         let numf = NumberFormatter()
@@ -184,7 +218,21 @@ enum MeasurementUnits: Int, Codable, Identifiable, CaseIterable {
     }
 }
 
+enum MeasureToEdit {
+    case width, depth, length, offsetx, offsety, twidth, tdepth
+}
+
 final class AppState: ObservableObject {
+    static let fracsVals: Dictionary<Character, Double> = Dictionary(uniqueKeysWithValues: zip([
+        Character("⅛"), Character("¼"), Character("⅜"),
+                Character("½"), Character("⅝"), Character("¾"),
+                Character("⅞")
+    ], [
+        0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 7.8
+    ]))
+    @Published var numberToEdit: String = ""
+    @Published var measureToEdit: MeasureToEdit = .width
+    @Published var editorShown: Bool = false 
     @Published var sheetsShown = SheetShownState()
     @Published var sceneEvents = EventState.Scene()
     @Published var arEvents = EventState.ARScene()
