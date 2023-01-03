@@ -78,6 +78,7 @@ struct KBButton<Content: View, KBGesture: Gesture>: View {
     }
 }
 
+#if DEBUG
 struct KBButton_PreviewHelper: View {
     @Environment(\.colorScheme) var colorScheme
     var bg: Color {
@@ -100,3 +101,4 @@ struct KBButton_Previews: PreviewProvider {
         KBButton_PreviewHelper()
     }
 }
+#endif

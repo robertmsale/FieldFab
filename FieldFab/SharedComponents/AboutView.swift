@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AboutView: View {
-    @EnvironmentObject var state: AppState
+    @Binding var shown: Bool
     func bd() -> Date {
         if let infoPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
            let infoAttr = try? FileManager.default.attributesOfItem(atPath: infoPath),
@@ -30,7 +30,9 @@ struct AboutView: View {
         return VStack(alignment: .center) {
             HStack {
                 Button(action: {
-                    state.sheetsShown.about = false
+                    withAnimation {
+                        shown = false
+                    }
                 }, label: {
                     Image(systemName: "xmark")
                         .font(.title2)
@@ -90,7 +92,7 @@ struct AboutView: View {
 #if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        AboutView()
+        AboutView(shown: Binding(get: {true}, set: {_ in}))
     }
 }
 #endif
