@@ -9,42 +9,42 @@
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>11</integer>
 		</dict>
 		<key>Carbon (Playground) 2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>18</integer>
 		</dict>
 		<key>Carbon (Playground).xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<key>DifferenceKit (Playground) 1.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>8</integer>
+			<integer>23</integer>
 		</dict>
 		<key>DifferenceKit (Playground) 2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>9</integer>
+			<integer>24</integer>
 		</dict>
 		<key>DifferenceKit (Playground).xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>7</integer>
+			<integer>22</integer>
 		</dict>
 		<key>FieldFab.xcscheme</key>
 		<dict>
@@ -56,21 +56,21 @@
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>16</integer>
 		</dict>
 		<key>GettingStarted (Playground) 2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>20</integer>
 		</dict>
 		<key>GettingStarted (Playground).xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false />
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>6</integer>
 		</dict>
 	</dict>
 </dict>

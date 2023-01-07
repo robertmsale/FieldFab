@@ -74,10 +74,16 @@ struct KBButton<Content: View, KBGesture: Gesture>: View {
                     }
                 }
             }, gesture))
-            
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
     }
+    #if DEBUG
+    @ObservedObject var iO = injectionObserver
+    #endif
 }
 
+#if DEBUG
 struct KBButton_PreviewHelper: View {
     @Environment(\.colorScheme) var colorScheme
     var bg: Color {
@@ -100,3 +106,4 @@ struct KBButton_Previews: PreviewProvider {
         KBButton_PreviewHelper()
     }
 }
+#endif
