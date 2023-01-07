@@ -74,8 +74,13 @@ struct KBButton<Content: View, KBGesture: Gesture>: View {
                     }
                 }
             }, gesture))
-            
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
     }
+    #if DEBUG
+    @ObservedObject var iO = injectionObserver
+    #endif
 }
 
 #if DEBUG

@@ -7,16 +7,53 @@
 //
 
 import SwiftUI
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 
 extension DuctTransition {
     struct Workshop: View {
         @State var ductwork: DuctTransition.DuctData
         @EnvironmentObject var state: DuctTransition.ModuleState
+        @EnvironmentObject var appState: AppState
         @State var tabSelected = 0
         @State var menuShown = false
         @State var saveCompleteShown = false
         @State var faceHit: String = ""
         @State var showSideFlatDialog: Bool = false
+        @State var resetARSession: Bool = false
+        
+        func generateShareLink() -> String {
+            let encoder = JSONEncoder()
+            let encoded = try! encoder.encode(ductwork)
+            let b64 = encoded.base64EncodedString()
+            let urle = b64.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            return "fieldfab://data?encoded=\(urle!)"
+        }
+        
+        var renderPDF: URL {
+            let w: CGFloat = 1276
+            let h: CGFloat = 1648
+            let renderer = ImageRenderer(content: DuctToPDF(ductwork: ductwork).frame(width: w, height: h))
+            let url = URL.documentsDirectory.appending(path: "\(ductwork.name).pdf")
+            
+            renderer.render { size, context in
+                var box = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+                
+                guard let pdf = CGContext(url as CFURL, mediaBox: &box, nil) else {
+                    return
+                }
+                
+                pdf.beginPDFPage(nil)
+                
+                context(pdf)
+                pdf.endPDFPage()
+                pdf.closePDF()
+            }
+            
+            return url
+        }
+        
         var body: some View {
             TabView(selection: $tabSelected) {
                 DuctTransition.DuctEditor(ductwork: $ductwork)
@@ -35,10 +72,45 @@ extension DuctTransition {
                     }
                     .tag(1)
                 GeometryReader { g in
-                    DuctTransition.DuctAR(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
-                        faceHit = s
-                        showSideFlatDialog = true
-                    }, selectorShown: Binding.blank(false))
+                    ZStack {
+                        DuctTransition.DuctAR(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
+                            faceHit = s
+                            showSideFlatDialog = true
+                        }, resetARSession: $resetARSession, selectorShown: Binding.blank(false))
+                        VStack {
+                            HStack {
+                                Menu("Translation Mode") {
+                                    Picker("Translation Mode", selection: $state.translationMode) {
+                                        ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
+                                            Text(tm.localizedString).tag(tm)
+                                        }
+                                    }
+                                }
+                                Spacer()
+                                Menu("Flow Direction") {
+                                    Picker("Flow Direction", selection: $state.flowDirection) {
+                                        ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
+                                            Text(fd.localizedString).tag(fd)
+                                        }
+                                    }
+                                }
+                                Spacer()
+                                Button(action: {
+                                    Task {
+                                        resetARSession = true
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.counterclockwise")
+                                }
+                                .font(.title)
+                            }
+                            .padding(.all)
+                            .background {
+                                BlurEffectView()
+                            }
+                            Spacer()
+                        }
+                    }
                 }
                     .tabItem {
                         Label("AR", systemImage: "camera.viewfinder")
@@ -88,20 +160,20 @@ extension DuctTransition {
                         Text("Ok")
                     }
                 })
+                Menu(content: {
+                    ShareLink("Share Link", item: generateShareLink())
+                    ShareLink("Share PDF", item: renderPDF)
+                }, label: {
+                    Image(systemName: "square.and.arrow.up")
+                })
             }
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
         }
+        #if DEBUG
+        @ObservedObject var iO = injectionObserver
+        #endif
     }
 }
 
-#if DEBUG
-struct DuctTransitionWorkshop_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        NavigationStack {
-            DuctTransition.Workshop(ductwork: DuctTransition.DuctData())
-                .environmentObject(DuctTransition.ModuleState())
-                
-        }
-    }
-}
-#endif

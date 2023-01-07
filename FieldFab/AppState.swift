@@ -37,5 +37,7 @@ final class AppState: MockableStateObject {
     }
     
     @Published var aboutSheetShown = false
+    @Published var navPath = NavigationPath()
+    @Published var currentModule: AppView.AvailableModules? = nil
     
 }

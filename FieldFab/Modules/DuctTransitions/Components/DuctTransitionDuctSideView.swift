@@ -8,6 +8,9 @@
 
 import SwiftUI
 import simd
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 
 extension DuctTransition {
     struct DuctSideView: View {
@@ -15,9 +18,13 @@ extension DuctTransition {
         typealias V3 = SIMD3<Float>
         typealias CG = CGPoint
         typealias TE = DuctTransition.TabEdge
+        @AppStorage(DuctTransition.AppStorageKeys.showHelpers) var showHelpers: Bool = false
+        @AppStorage(AppStorageKeys.texture) var texture: String = "galvanized"
         @Environment(\.colorScheme) var colorScheme
         var ductwork: DuctTransition.DuctData
         var face: DuctTransition.Face
+        var showTabInfo: Bool = false
+        var showFaceInfo: Bool = false
         struct Quad {
             var tl: V2
             var tr: V2
@@ -146,20 +153,20 @@ extension DuctTransition {
             var retval: [V2] = points
             let tabs: [Tab?] = ductwork.tabs[face]
             if let tab: Tab = tabs[DuctTransition.TabEdge.top.rawValue] {
-                retval[0] -= V2(0, 30 * tab.length.ratio)
-                retval[1] -= V2(0, 30 * tab.length.ratio)
+                retval[0] -= V2(0, CompilerRelief.tabLen * tab.length.ratio)
+                retval[1] -= V2(0, CompilerRelief.tabLen * tab.length.ratio)
             }
             if let tab: Tab = tabs[DuctTransition.TabEdge.bottom.rawValue] {
-                retval[2] += V2(0, 30 * tab.length.ratio)
-                retval[3] += V2(0, 30 * tab.length.ratio)
+                retval[2] += V2(0, CompilerRelief.tabLen * tab.length.ratio)
+                retval[3] += V2(0, CompilerRelief.tabLen * tab.length.ratio)
             }
             if let tab: Tab = tabs[DuctTransition.TabEdge.left.rawValue] {
-                retval[1] -= V2(30 * tab.length.ratio, 0)
-                retval[2] -= V2(30 * tab.length.ratio, 0)
+                retval[1] -= V2(CompilerRelief.tabLen * tab.length.ratio, 0)
+                retval[2] -= V2(CompilerRelief.tabLen * tab.length.ratio, 0)
             }
             if let tab: Tab = tabs[DuctTransition.TabEdge.right.rawValue] {
-                retval[0] += V2(30 * tab.length.ratio, 0)
-                retval[3] += V2(30 * tab.length.ratio, 0)
+                retval[0] += V2(CompilerRelief.tabLen * tab.length.ratio, 0)
+                retval[3] += V2(CompilerRelief.tabLen * tab.length.ratio, 0)
             }
             return retval
         }
@@ -231,39 +238,39 @@ extension DuctTransition {
             if let tab: Tab = tabs[DuctTransition.TabEdge.top.rawValue] {
                 retval.append([
                     dPoints[0] - V2(0, 0),
-                    dPoints[0] - V2(0, 30 * tab.length.ratio),
-                    dPoints[1] - V2(0, 30 * tab.length.ratio),
+                    dPoints[0] - V2(0, CompilerRelief.tabLen * tab.length.ratio),
+                    dPoints[1] - V2(0, CompilerRelief.tabLen * tab.length.ratio),
                     dPoints[1] - V2(0, 0),
                 ])
             }
             if let tab: Tab = tabs[DuctTransition.TabEdge.bottom.rawValue] {
                 retval.append([
                     dPoints[2] + V2(0, 0),
-                    dPoints[2] + V2(0, 30 * tab.length.ratio),
-                    dPoints[3] + V2(0, 30 * tab.length.ratio),
+                    dPoints[2] + V2(0, CompilerRelief.tabLen * tab.length.ratio),
+                    dPoints[3] + V2(0, CompilerRelief.tabLen * tab.length.ratio),
                     dPoints[3] + V2(0, 0),
                 ])
             }
             if let tab: Tab = tabs[DuctTransition.TabEdge.left.rawValue] {
                 retval.append([
                     dPoints[1] - V2(0, 0),
-                    dPoints[1] - V2(30 * tab.length.ratio, 0),
-                    dPoints[2] - V2(30 * tab.length.ratio, 0),
+                    dPoints[1] - V2(CompilerRelief.tabLen * tab.length.ratio, 0),
+                    dPoints[2] - V2(CompilerRelief.tabLen * tab.length.ratio, 0),
                     dPoints[2] - V2(0, 0),
                 ])
             }
             if let tab: Tab = tabs[DuctTransition.TabEdge.right.rawValue] {
                 retval.append([
                     dPoints[0] + V2(0, 0),
-                    dPoints[0] + V2(30 * tab.length.ratio, 0),
-                    dPoints[3] + V2(30 * tab.length.ratio, 0),
+                    dPoints[0] + V2(CompilerRelief.tabLen * tab.length.ratio, 0),
+                    dPoints[3] + V2(CompilerRelief.tabLen * tab.length.ratio, 0),
                     dPoints[3] + V2(0, 0),
                 ])
             }
             return retval.map { Pathable(points: $0) }
         }
         
-        struct CompilerIsUnableToTypeCheckThisInReasonableTime {
+        struct CompilerRelief {
             let g: GeometryProxy
             var ductwork: DuctTransition.DuctData
             var vdata: DuctTransition.VertexData
@@ -283,6 +290,11 @@ extension DuctTransition {
             var totHPath: Path { genPath(g, points: totHPoints, closed: false) }
             let measurements: [String]
             let face: DuctTransition.Face
+            var showHelpers: Bool = false
+            var showTabInfo: Bool
+            var showFaceInfo: Bool
+            var texture: String
+            var colorScheme: ColorScheme
             
             func genPath(_ g: GeometryProxy, points: [V2], closed: Bool = true) -> Path {
                 Path { p in
@@ -300,9 +312,15 @@ extension DuctTransition {
                 ductPath
                     .fill(Color.clear)
                     .background {
-                        Image("galvanized-diffuse")
+                        Image("\(texture)-diffuse")
+                            .opacity(colorScheme == .light ? 0.5 : 1)
                     }
                     .clipShape(ductPath)
+                if showHelpers {
+                    ductPath
+                        .fill(face == .front ? Color.green : face == .back ? Color.red : face == .left ? Color.yellow : Color.blue)
+                        .opacity(0.5)
+                }
                 totWPath
                     .strokedPath(StrokeStyle(lineWidth: 1, dash: [1, 0]))
                 totHPath
@@ -314,39 +332,39 @@ extension DuctTransition {
                     path
                         .stroke(lineWidth: 1)
                         .background {
-                            Image("galvanized-diffuse")
+                            Image("\(texture)-diffuse")
                         }
                         .clipShape(path)
-                        .opacity(0.75)
+                        .opacity(colorScheme == .dark ? 0.75 : 0.25)
                 }
             }
-            
+            static let tabLen: Double = 15.0
             @ViewBuilder
             func drawMorePaths() -> some View {
                 if points[1].x > points[2].x {
                     Path { p in
                         
                         p.move(to: (tPoints[1]).cgpoint)
-                        p.addLine(to: V2(points[1].x - (30 * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[1].y).cgpoint)
+                        p.addLine(to: V2(points[1].x - (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[1].y).cgpoint)
                     }
                     .stroke(Color.red)
                 } else if points[1].x < points[2].x {
                     Path { p in
                         p.move(to: tPoints[2].cgpoint)
-                        p.addLine(to: V2(points[2].x - (30 * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[2].y).cgpoint)
+                        p.addLine(to: V2(points[2].x - (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[2].y).cgpoint)
                     }
                     .stroke(Color.red)
                 }
                 if points[0].x < points[3].x {
                     Path { p in
                         p.move(to: tPoints[0].cgpoint)
-                        p.addLine(to: V2(points[0].x + (30 * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[0].y).cgpoint)
+                        p.addLine(to: V2(points[0].x + (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[0].y).cgpoint)
                     }
                     .stroke(Color.red)
                 } else if points[0].x > points[3].x {
                     Path { p in
                         p.move(to: tPoints[3].cgpoint)
-                        p.addLine(to: V2(points[3].x + (30 * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[3].y).cgpoint)
+                        p.addLine(to: V2(points[3].x + (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[3].y).cgpoint)
                     }
                     .stroke(Color.red)
                 }
@@ -370,10 +388,10 @@ extension DuctTransition {
                         points[2].lerp(V2(points[1].x, points[2].y), alpha: 0.5).cgpoint
                     )
                     .offset(y: points[1].x > points[2].x ? -11 : 11)
-                    .offset(x: tabs[TE.left.rawValue] != nil ? -30 * tabs[TE.left.rawValue]!.length.ratio : 0)
+                    .offset(x: tabs[TE.left.rawValue] != nil ? -CompilerRelief.tabLen * tabs[TE.left.rawValue]!.length.ratio : 0)
                     .offset(y: points[1].x > points[2].x ?
-                            tabs[TE.top.rawValue] != nil ? -30 * tabs[TE.top.rawValue]!.length.ratio : 0 :
-                            tabs[TE.bottom.rawValue] != nil ? 30 * tabs[TE.bottom.rawValue]!.length.ratio : 0
+                            tabs[TE.top.rawValue] != nil ? -CompilerRelief.tabLen * tabs[TE.top.rawValue]!.length.ratio : 0 :
+                            tabs[TE.bottom.rawValue] != nil ? CompilerRelief.tabLen * tabs[TE.bottom.rawValue]!.length.ratio : 0
                     )
                     .foregroundColor(Color.red)
                     .opacity(points[1].x == points[2].x ? 0 : 1)
@@ -386,10 +404,10 @@ extension DuctTransition {
                         points[3].lerp(V2(points[0].x, points[3].y), alpha: 0.5).cgpoint
                     )
                     .offset(y: points[0].x < points[3].x ? -11 : 11)
-                    .offset(x: tabs[TE.right.rawValue] != nil ? 30 * tabs[TE.right.rawValue]!.length.ratio : 0)
+                    .offset(x: tabs[TE.right.rawValue] != nil ? CompilerRelief.tabLen * tabs[TE.right.rawValue]!.length.ratio : 0)
                     .offset(y: points[0].x < points[3].x ?
-                            tabs[TE.top.rawValue] != nil ? -30 * tabs[TE.top.rawValue]!.length.ratio : 0 :
-                            tabs[TE.bottom.rawValue] != nil ? 30 * tabs[TE.bottom.rawValue]!.length.ratio : 0
+                            tabs[TE.top.rawValue] != nil ? -CompilerRelief.tabLen * tabs[TE.top.rawValue]!.length.ratio : 0 :
+                            tabs[TE.bottom.rawValue] != nil ? CompilerRelief.tabLen * tabs[TE.bottom.rawValue]!.length.ratio : 0
                     )
                     .foregroundColor(Color.red)
                     .opacity(points[0].x == points[3].x ? 0 : 1)
@@ -398,13 +416,13 @@ extension DuctTransition {
                     .position(points[0].lerp(points[1], alpha: 0.5).cgpoint)
                     .offset(y: -11)
                     .offset(y:
-                        tabs[TE.top.rawValue] != nil ? -30 * tabs[TE.top.rawValue]!.length.ratio : 0
+                        tabs[TE.top.rawValue] != nil ? -CompilerRelief.tabLen * tabs[TE.top.rawValue]!.length.ratio : 0
                     )
                 Text(measurements[5])
                     .fixedSize()
                     .position(points[2].lerp(points[3], alpha: 0.5).cgpoint)
                     .offset(y: 11)
-                    .offset(y: tabs[TE.bottom.rawValue] != nil ? 30 * tabs[TE.bottom.rawValue]!.length.ratio : 0)
+                    .offset(y: tabs[TE.bottom.rawValue] != nil ? CompilerRelief.tabLen * tabs[TE.bottom.rawValue]!.length.ratio : 0)
                 Text(measurements[6])
                     .fixedSize()
                     .rotationEffect(Angle(degrees: -90))
@@ -429,6 +447,25 @@ extension DuctTransition {
                     }()))
                     .position(points[0].lerp(points[3], alpha: 0.5).cgpoint)
                     .offset(x: -11)
+            }
+            
+            @ViewBuilder
+            func drawTabInfo() -> some View {
+                if showTabInfo {
+                    if let tab = tabs[TabEdge.top.rawValue] {
+                        Text("\(tab.type.localizedString) ⤴")
+                            .position(points[1].lerp(points[0], alpha: 0.5).cgpoint)
+                            .offset(y: 11)
+                    }
+                    if let tab = tabs[TabEdge.bottom.rawValue] {
+                        Text("\(tab.type.localizedString) ⤵")
+                            .position(points[2].lerp(points[3], alpha: 0.5).cgpoint)
+                            .offset(y: -11)
+                    }
+                }
+                if showFaceInfo {
+                    Text(face.localizedString)
+                }
             }
         }
         
@@ -455,50 +492,42 @@ extension DuctTransition {
                     tPoints[2] - V2(8, 0),
                 ]
                 let measurements: [String] = genRawMeasurements(q3D: q3D.arr, q2D: q2D, tabs: tabs)
-                let screwYouCompiler = CompilerIsUnableToTypeCheckThisInReasonableTime(
-                    g: g,
-                    ductwork: ductwork,
-                    vdata: vdata,
-                    q3D: q3D,
-                    q2D: q2D,
-                    points: points,
-                    tabs: tabs,
-                    bPoints: bPoints,
-                    tPoints: tPoints,
-                    tabPoints: tabPoints,
-                    totWPoints: totWPoints,
-                    totHPoints: totHPoints,
-                    measurements: measurements,
-                    face: face
+                let screwYouCompiler = CompilerRelief(
+                        g: g,
+                        ductwork: ductwork,
+                        vdata: vdata,
+                        q3D: q3D,
+                        q2D: q2D,
+                        points: points,
+                        tabs: tabs,
+                        bPoints: bPoints,
+                        tPoints: tPoints,
+                        tabPoints: tabPoints,
+                        totWPoints: totWPoints,
+                        totHPoints: totHPoints,
+                        measurements: measurements,
+                        face: face,
+                        showHelpers: showHelpers,
+                        showTabInfo: showTabInfo,
+                        showFaceInfo: showFaceInfo,
+                        texture: texture,
+                        colorScheme: colorScheme
                 )
                 ZStack {
                     screwYouCompiler.drawPaths()
                     screwYouCompiler.drawMorePaths().zIndex(5)
                     screwYouCompiler.drawMeasurements()
+                    screwYouCompiler.drawTabInfo()
                 }
-                .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+                        .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
             }
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
         }
+        #if DEBUG
+        @ObservedObject var iO = injectionObserver
+        #endif
     }
 }
 
-#if DEBUG
-struct DuctTransitionSideView_Previews: PreviewProvider {
-    static var previews: some View {
-        let data = DuctTransition.DuctData(
-            measurements: [
-                12.0,
-                12.0,
-                14.0,
-                2.0,
-                2.0,
-                12.0,
-                12.0
-            ]
-            , tabs: Array(repeating: DuctTransition.Tab(length: .inch, type: .straight), count: 16)
-        )
-        DuctTransition.DuctSideView(ductwork: data, face: .right)
-            .previewDisplayName("Front")
-    }
-}
-#endif

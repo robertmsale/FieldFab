@@ -9,6 +9,9 @@
 import Foundation
 import SwiftUI
 import Disk
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 
 extension DuctTransition {
     struct ModuleToolbar: ViewModifier {
@@ -53,19 +56,20 @@ extension DuctTransition {
                 var view = Self(
                     newSessionShown: args.newSessionShown,
                     newSessionName: args.newSessionName,
-                    newSessionUnits: args.newSessionUnits,
-                    path: args.path
+                    newSessionUnits: args.newSessionUnits
+//                    path: args.path
                 )
                 if args.createEnvironmentObject {
                     view.environmentObject(DuctTransition.ModuleState())
                 }
                 view
             case .production:
-                Self(path: args.path)
+                Self()
             }
         }
         
         @EnvironmentObject var state: DuctTransition.ModuleState
+        @EnvironmentObject var appState: AppState
         @State var newSessionShown: Bool = false
         @State var newSessionName: String = ""
         @State var newSessionUnits: DuctTransition.MeasurementUnit = .inch
@@ -73,8 +77,6 @@ extension DuctTransition {
         @State var editShown: Bool = false
         @State var editID: UUID? = nil
         @State var editString: String = ""
-        
-        @Binding var path: NavigationPath
         
         var body: some View {
             VStack {
@@ -120,7 +122,7 @@ extension DuctTransition {
                 Spacer()
                 Button(action: {Task {newSessionShown = true}}) {
                     Text("Create New Session").font(.title2)
-                }.padding(.top, 5)
+                }.padding(.vertical)
             }
             .navigationDestination(for: DuctTransition.DuctData.self) { data in
                 DuctTransition.Workshop(ductwork: data)
@@ -149,29 +151,13 @@ extension DuctTransition {
                 }
             }
             .modifier(DuctTransition.ModuleToolbar(cameraHelpShown: $state.cameraHelpShown, arCameraHelpShown: $state.arCameraHelpShown, generalHelpShown: $state.generalHelpShown, settingsViewShown: $state.settingsViewShown))
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
         }
+        #if DEBUG
+        @ObservedObject var iO = injectionObserver
+        #endif
     }
 }
 
-#if DEBUG
-struct DuctTransitionsModule_Preview: PreviewProvider {
-    struct Preview: View {
-        @State var path = NavigationPath()
-        var state = DuctTransition.ModuleState()
-        var body: some View {
-            NavigationStack(path: $path) {
-                DuctTransition.ModuleView(path: $path)
-                    .navigationTitle("Duct Transition Builder")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
-            .environmentObject(state)
-            .onAppear {
-                state.ductData = Array(repeating: DuctTransition.DuctData(name: "Derp"), count: 16)
-            }
-        }
-    }
-    static var previews: some View {
-        Preview()
-    }
-}
-#endif

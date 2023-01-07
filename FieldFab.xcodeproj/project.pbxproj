@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E89E14873ACECE13D83E76A /* IntakeCalculatorModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E89EEFE162188B0CA0C7318 /* IntakeCalculatorModule.swift */; };
 		EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = EE12F1812592F6F8007F5CE4 /* PopupView */; };
+		EE39100D2963D4F4000E7331 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39100C2963D4F4000E7331 /* ActivityView.swift */; };
+		EE3910102963DCD4000E7331 /* BalancePointCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39100F2963DCD4000E7331 /* BalancePointCalcView.swift */; };
 		EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
 		EE6C3B95259969B600AA70AE /* DuctTransitionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99102527B9EC008AB605 /* DuctTransitionHelpView.swift */; };
 		EE6C3B9B2599778300AA70AE /* StringFix in Frameworks */ = {isa = PBXBuildFile; productRef = EE6C3B9A2599778300AA70AE /* StringFix */; };
@@ -22,6 +25,8 @@
 		EE97EC80295E23A600A9FDBC /* DuctTransitionModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97EC7F295E23A600A9FDBC /* DuctTransitionModuleView.swift */; };
 		EE97EC83295E24CA00A9FDBC /* DuctTransitionModuleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97EC82295E24CA00A9FDBC /* DuctTransitionModuleState.swift */; };
 		EE97EC85295E26E400A9FDBC /* ModuleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97EC84295E26E400A9FDBC /* ModuleProtocol.swift */; };
+		EE9FEB9C296909B800B3C12A /* AppReview in Frameworks */ = {isa = PBXBuildFile; productRef = EE9FEB9B296909B800B3C12A /* AppReview */; settings = {ATTRIBUTES = (Weak, ); }; };
+		EE9FEB9E29690CA000B3C12A /* DuctTransitionToPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9FEB9D29690CA000B3C12A /* DuctTransitionToPDF.swift */; };
 		EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EEB3AE7B258CE95100285C20 /* VectorExtensions */; };
 		EEC7CF3C25034397003389AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF3B25034397003389AB /* Assets.xcassets */; };
 		EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF4025034397003389AB /* LaunchScreen.storyboard */; };
@@ -60,7 +65,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E89EEFE162188B0CA0C7318 /* IntakeCalculatorModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntakeCalculatorModule.swift; sourceTree = "<group>"; };
 		EE29E42725086B01007F4036 /* FieldFab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FieldFab.entitlements; sourceTree = "<group>"; };
+		EE39100C2963D4F4000E7331 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		EE39100F2963DCD4000E7331 /* BalancePointCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancePointCalcView.swift; sourceTree = "<group>"; };
 		EE8D395B25831C7600A1AC39 /* AppMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		EE8D396425831DEE00A1AC39 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EE9022BC258EC87C00EE0C9A /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
@@ -70,6 +78,7 @@
 		EE97EC7F295E23A600A9FDBC /* DuctTransitionModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctTransitionModuleView.swift; sourceTree = "<group>"; };
 		EE97EC82295E24CA00A9FDBC /* DuctTransitionModuleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctTransitionModuleState.swift; sourceTree = "<group>"; };
 		EE97EC84295E26E400A9FDBC /* ModuleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleProtocol.swift; sourceTree = "<group>"; };
+		EE9FEB9D29690CA000B3C12A /* DuctTransitionToPDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctTransitionToPDF.swift; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3B25034397003389AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEC7CF4125034397003389AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -105,6 +114,7 @@
 				EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */,
 				EE6C3B9B2599778300AA70AE /* StringFix in Frameworks */,
 				EEFB98D82526CCA8008AB605 /* Disk in Frameworks */,
+				EE9FEB9C296909B800B3C12A /* AppReview in Frameworks */,
 				EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */,
 				EE8D3990258326B700A1AC39 /* VectorExtensions in Frameworks */,
 			);
@@ -127,6 +137,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E89E6A19B764DB92757BFF2 /* IntakeCalculator */ = {
+			isa = PBXGroup;
+			children = (
+				7E89EEFE162188B0CA0C7318 /* IntakeCalculatorModule.swift */,
+			);
+			path = IntakeCalculator;
+			sourceTree = "<group>";
+		};
 		EE29E40625053CFD007F4036 /* SharedComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,8 +152,17 @@
 				EEDFF21E2546021B00FD9D51 /* VisualEffectView.swift */,
 				EE97EC72295A3D5E00A9FDBC /* InchKeyboard.swift */,
 				EE97EC74295A3E5800A9FDBC /* KBButton.swift */,
+				EE39100C2963D4F4000E7331 /* ActivityView.swift */,
 			);
 			path = SharedComponents;
+			sourceTree = "<group>";
+		};
+		EE39100E2963DC73000E7331 /* BalancePoint */ = {
+			isa = PBXGroup;
+			children = (
+				EE39100F2963DCD4000E7331 /* BalancePointCalcView.swift */,
+			);
+			path = BalancePoint;
 			sourceTree = "<group>";
 		};
 		EE8D398E258326B700A1AC39 /* Frameworks */ = {
@@ -148,9 +175,11 @@
 		EE97EC76295DF24700A9FDBC /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				EE39100E2963DC73000E7331 /* BalancePoint */,
 				EE97EC88295F460E00A9FDBC /* FittingIndex */,
 				EE97EC7E295E236C00A9FDBC /* DuctTransitions */,
 				EE97EC84295E26E400A9FDBC /* ModuleProtocol.swift */,
+				7E89E6A19B764DB92757BFF2 /* IntakeCalculator */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -184,6 +213,7 @@
 				EEFD73DE295FAC0C002E20FB /* DuctTransitionSettingsView.swift */,
 				EEFD73E92960E91A002E20FB /* DuctTransitionNewSessionView.swift */,
 				EEFD73ED2961156B002E20FB /* DuctTransitionDuctSideView.swift */,
+				EE9FEB9D29690CA000B3C12A /* DuctTransitionToPDF.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -287,6 +317,7 @@
 				EEB3AE7B258CE95100285C20 /* VectorExtensions */,
 				EE12F1812592F6F8007F5CE4 /* PopupView */,
 				EE6C3B9A2599778300AA70AE /* StringFix */,
+				EE9FEB9B296909B800B3C12A /* AppReview */,
 			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
@@ -335,7 +366,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = "Robert Sale";
 				TargetAttributes = {
 					EEC7CF3125034396003389AB = {
@@ -366,6 +397,9 @@
 				EEB3AE7A258CE95100285C20 /* XCRemoteSwiftPackageReference "VectorExtensions" */,
 				EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */,
 				EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */,
+				EE9FEB942967033400B3C12A /* XCRemoteSwiftPackageReference "HotReloading" */,
+				EE9FEB97296703E400B3C12A /* XCRemoteSwiftPackageReference "HotSwiftUI" */,
+				EE9FEB9A296909B800B3C12A /* XCRemoteSwiftPackageReference "AppReview" */,
 			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
@@ -411,10 +445,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE6C3BB2259C3F3700AA70AE /* DuctTransitionCameraHelpView.swift in Sources */,
+				EE9FEB9E29690CA000B3C12A /* DuctTransitionToPDF.swift in Sources */,
 				EEFD73E62960A5F6002E20FB /* Extensions.swift in Sources */,
 				EEFD73EE2961156B002E20FB /* DuctTransitionDuctSideView.swift in Sources */,
 				EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */,
 				EE97EC73295A3D5E00A9FDBC /* InchKeyboard.swift in Sources */,
+				EE39100D2963D4F4000E7331 /* ActivityView.swift in Sources */,
 				EE6C3B95259969B600AA70AE /* DuctTransitionHelpView.swift in Sources */,
 				EEFD73DF295FAC0C002E20FB /* DuctTransitionSettingsView.swift in Sources */,
 				EE9022BD258EC87C00EE0C9A /* AppView.swift in Sources */,
@@ -430,9 +466,11 @@
 				EEFD73E82960A7BB002E20FB /* Math.swift in Sources */,
 				EEFD73DD295F5FC4002E20FB /* ReflectionAPI.swift in Sources */,
 				EEDFF21F2546021B00FD9D51 /* VisualEffectView.swift in Sources */,
+				EE3910102963DCD4000E7331 /* BalancePointCalcView.swift in Sources */,
 				EEFD73EA2960E91A002E20FB /* DuctTransitionNewSessionView.swift in Sources */,
 				EE97EC80295E23A600A9FDBC /* DuctTransitionModuleView.swift in Sources */,
 				EEFD73E2295FC693002E20FB /* DuctTransitionWorkshop.swift in Sources */,
+				7E89E14873ACECE13D83E76A /* IntakeCalculatorModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,11 +577,15 @@
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				SDKROOT = iphoneos;
+				STRIP_STYLE = debugging;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -597,11 +639,15 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				SDKROOT = iphoneos;
+				STRIP_STYLE = debugging;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -614,7 +660,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.1.0;
+				CURRENT_PROJECT_VERSION = 3.0.1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -626,7 +672,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 3.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -644,7 +690,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.1.0;
+				CURRENT_PROJECT_VERSION = 3.0.1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -656,7 +702,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 3.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -808,6 +854,30 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		EE9FEB942967033400B3C12A /* XCRemoteSwiftPackageReference "HotReloading" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnno1962/HotReloading";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+		EE9FEB97296703E400B3C12A /* XCRemoteSwiftPackageReference "HotSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnno1962/HotSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		EE9FEB9A296909B800B3C12A /* XCRemoteSwiftPackageReference "AppReview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mezhevikin/AppReview";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.2;
+			};
+		};
 		EEB3AE7A258CE95100285C20 /* XCRemoteSwiftPackageReference "VectorExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/robertmsale/VectorExtensions";
@@ -844,6 +914,11 @@
 		EE8D3994258327A100A1AC39 /* VectorExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VectorExtensions;
+		};
+		EE9FEB9B296909B800B3C12A /* AppReview */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE9FEB9A296909B800B3C12A /* XCRemoteSwiftPackageReference "AppReview" */;
+			productName = AppReview;
 		};
 		EEB3AE7B258CE95100285C20 /* VectorExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

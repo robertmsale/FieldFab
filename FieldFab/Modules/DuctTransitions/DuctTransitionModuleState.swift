@@ -15,7 +15,16 @@ import Disk
 
 extension DuctTransition {
     final class ModuleState: MockableStateObject {
-        enum TranslationMode { case xz, y }
+        enum TranslationMode: Int, CaseIterable, Identifiable {
+            case xz, y
+            var id: Int { rawValue }
+            var localizedString: String {
+                switch self {
+                case .xz: return "xz"
+                case .y: return "y"
+                }
+            }
+        }
         enum MockCases {
             case development, production
         }
@@ -45,13 +54,25 @@ extension DuctTransition {
         @Published var arCameraHelpShown = false
         @Published var settingsViewShown = false
         
+        
         var TDViewneedsReset: Bool {
             renderChanged || bgChanged || textureChanged || measurementsChanged || tabsChanged || energySaverChanged || helpersChanged || drawerChanged
         }
         var ARViewNeedsReset: Bool {
             renderChanged || textureChanged || measurementsChanged || tabsChanged || energySaverChanged || helpersChanged || arViewReset
         }
-        enum FlowDirection: Int { case up, down, left, right }
+        enum FlowDirection: Int, CaseIterable, Identifiable {
+            case up, down, left, right
+            var id: Int { rawValue }
+            var localizedString: String {
+                switch self {
+                case .up: return "Up"
+                case .down: return "Down"
+                case .left: return "Left"
+                case .right: return "Right"
+                }
+            }
+        }
         
         @Published var ductData: [DuctData] = {
             guard let data = try? Disk.retrieve("ductData.json", from: .applicationSupport, as: [DuctData].self) else {

@@ -11,6 +11,9 @@ import SceneKit
 import UIKit
 import ARKit
 import VectorExtensions
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 
 extension DuctTransition {
     class DuctSCNView: SCNView {
@@ -37,7 +40,7 @@ extension DuctTransition {
         var geo: GeometryProxy
         var textShown: Bool
         @EnvironmentObject var state: DuctTransition.ModuleState
-        @AppStorage(AppKey.showDebugInfo) var showDebugInfo = true
+        @AppStorage(AppKey.showDebugInfo) var showDebugInfo = false
         @AppStorage(AppKey.energySaver) var energySaver = false
         @AppStorage(AppKey.crossBrake) var crossBrake = true
         @AppStorage(AppKey.lighting) var lighting: LightingMethod = .physicallyBased
@@ -285,6 +288,9 @@ extension DuctTransition {
                 }
             }
         }
+        #if DEBUG
+        @ObservedObject var iO = injectionObserver
+        #endif
     }
     
     struct DuctAR: UIViewRepresentable {
@@ -295,7 +301,7 @@ extension DuctTransition {
         var geo: GeometryProxy
         var textShown: Bool
         @EnvironmentObject var state: DuctTransition.ModuleState
-        @AppStorage(AppKey.showDebugInfo) var showDebugInfo = true
+        @AppStorage(AppKey.showDebugInfo) var showDebugInfo = false
         @AppStorage(AppKey.energySaver) var energySaver = false
         @AppStorage(AppKey.crossBrake) var crossBrake = true
         @AppStorage(AppKey.lighting) var lighting: LightingMethod = .physicallyBased
@@ -308,6 +314,7 @@ extension DuctTransition {
         @AppStorage(AppKey.bgImage) var bgImage: BackgroundImage = .shop
         var ductwork: DuctTransition.DuctData
         var ductSceneHitTest: (String) -> Void
+        @Binding var resetARSession: Bool
         @Binding var selectorShown: Bool
         @State var cameraRollTime: Date = Date()
         let q = DispatchQueue.global(qos: .userInteractive)
@@ -316,10 +323,11 @@ extension DuctTransition {
         
         
         let view = UIViewType(frame: CGRect.zero)
-        let scene = SCNScene()
-        
-        func ductNode(_ scene: SCNScene?) -> SCNNode {
-            return scene?.rootNode.childNode(withName: "duct", recursively: false) ?? SCNNode()
+        func dnode(_ scene: SCNScene?) -> SCNNode {
+            return flownode(scene).childNode(withName: "duct", recursively: false) ?? SCNNode()
+        }
+        func flownode(_ scene: SCNScene?) -> SCNNode {
+            return scene?.rootNode.childNode(withName: "flow", recursively: false) ?? SCNNode()
         }
         //        func allDuctNodes(_ scene: SCNScene?) -> [SCNNode] {
         //            let nameSet = Set(Duct.allNodeNames)
@@ -342,7 +350,7 @@ extension DuctTransition {
             //        state.events.scene.energySaverChanged = false
         }
         func materialUpdate(_ scene: SCNScene?) {
-            for node in ductNode(scene).childNodes {
+            for node in dnode(scene).childNodes {
                 node.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "\(texture)-diffuse")
                 node.geometry?.firstMaterial?.metalness.contents = UIImage(named: "\(texture)-metallic")
                 node.geometry?.firstMaterial?.normal.contents = UIImage(named: "\(texture)-normal")
@@ -351,20 +359,30 @@ extension DuctTransition {
             }
             //        state.events.scene.textureChanged = false
         }
-        func geometryUpdateAll(_ scene: SCNScene?) {
-            let dNode = ductNode(scene)
-            dNode.childNodes.forEach({ $0.removeFromParentNode()})
+        func geometryUpdateAll(_ scene: SCNScene?, context: Context) {
+            let ndnode = SCNNode()
+            let nflownode = SCNNode()
+            ndnode.eulerAngles = dnode(scene).eulerAngles
+            nflownode.worldPosition = flownode(scene).worldPosition
+            nflownode.eulerAngles = flownode(scene).eulerAngles
+            dnode(scene).childNodes.forEach({ $0.removeFromParentNode()})
+            dnode(scene).removeFromParentNode()
+            flownode(scene).removeFromParentNode()
             for face in DuctTransition.Face.allCases {
                 let faceNode = DuctTransition.FaceGeometry.generate(data: ductwork.vertexData, face: face, crossBrake: crossBrake)
                     .toNode(name: face.localizedString)
-                dNode.addChildNode(faceNode)
+                ndnode.addChildNode(faceNode)
                 for edge in DuctTransition.TabEdge.allCases {
                     if let tab = ductwork.tabs[face, edge] {
                         let tabNode = DuctTransition.TabGeometry.generate(tab, face: face, edge: edge, verts: ductwork.vertexData.getTabPoints(face, edge))
-                        dNode.addChildNode(tabNode)
+                        ndnode.addChildNode(tabNode)
                     }
                 }
             }
+            ndnode.name = "duct"
+            nflownode.name = "flow"
+            nflownode.addChildNode(ndnode)
+            scene?.rootNode.addChildNode(nflownode)
             //            scene?.rootNode.addChildNode(dNode)
             //        state.events.scene.measurementsChanged = false
         }
@@ -386,7 +404,7 @@ extension DuctTransition {
             let r = UIColor(red: 0, green: 0, blue: i, alpha: i)
             let c = showHelpers
             let faceNames = Set(DuctTransition.Face.allCases.map { $0.localizedString })
-            for x in ductNode(scene).childNodes(passingTest: { node, _ in faceNames.contains(node.name ?? "") }) {
+            for x in dnode(scene).childNodes(passingTest: { node, _ in faceNames.contains(node.name ?? "") }) {
                 switch x.name {
                 case "Front": x.geometry?.firstMaterial?.emission.contents = c ? f : NSNumber(value: 0)
                 case "Back":  x.geometry?.firstMaterial?.emission.contents = c ? b : NSNumber(value: 0)
@@ -397,14 +415,21 @@ extension DuctTransition {
             }
         }
         
-        func changeFlow(_ scene: SCNScene?, context: Context) {
-            context.coordinator.currentFlow = state.flowDirection
+        func changeFlow(_ scene: SCNScene?) {
+            let ang90: Float = 1.5708
+            switch state.flowDirection {
+            case .up: dnode(scene).eulerAngles = SCNVector3(0, 0, 0)
+            case .down: dnode(scene).eulerAngles = SCNVector3(0, 0, ang90 * 2)
+            case .right: dnode(scene).eulerAngles = SCNVector3(0, 0, ang90 * 3)
+            case .left: dnode(scene).eulerAngles = SCNVector3(0, 0, ang90)
+            }
         }
         
         func makeUIView(context: Context) -> UIViewType {
             view.session = ARSession()
             view.automaticallyUpdatesLighting = true
             view.session.configuration?.isLightEstimationEnabled = true
+            let scene = SCNScene()
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = []
             configuration.environmentTexturing = .automatic
@@ -416,24 +441,41 @@ extension DuctTransition {
             view.addGestureRecognizer(panG)
             view.addGestureRecognizer(rotG)
             energyUpdate(view)
-            let dnode = SCNNode()
-            dnode.name = "duct"
-            scene.rootNode.addChildNode(dnode)
-            geometryUpdateAll(scene)
+            let ndnode = SCNNode()
+            let nflownode = SCNNode()
+            ndnode.name = "duct"
+            nflownode.name = "flow"
+            nflownode.addChildNode(ndnode)
+            scene.rootNode.addChildNode(nflownode)
+            geometryUpdateAll(scene, context: context)
             materialUpdate(scene)
             helpersUpdate(scene)
-            changeFlow(scene, context: context)
+            changeFlow(scene)
             view.scene = scene
             view.currentDuctwork = ductwork
             view.crossbrake = crossBrake
             return view
         }
+        func resetAR(_ view: UIViewType) {
+            let configuration = ARWorldTrackingConfiguration()
+            configuration.planeDetection = []
+            configuration.environmentTexturing = .automatic
+            flownode(view.scene).worldPosition = .init()
+            flownode(view.scene).eulerAngles = .init()
+            view.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+            Task {
+                resetARSession = false
+            }
+        }
         func updateUIView(_ uiView: UIViewType, context: Context) {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = []
             configuration.environmentTexturing = .automatic
+            if resetARSession {
+                resetAR(uiView)
+            }
             if uiView.currentDuctwork != ductwork || crossBrake != uiView.crossbrake {
-                geometryUpdateAll(uiView.scene)
+                geometryUpdateAll(uiView.scene, context: context)
                 uiView.currentDuctwork = ductwork
                 uiView.crossbrake = crossBrake
 //                uiView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors, .resetSceneReconstruction])
@@ -444,18 +486,26 @@ extension DuctTransition {
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)
             context.coordinator.translationMode = state.translationMode
-            
-            materialUpdate(uiView.scene)
-            helpersUpdate(uiView.scene)
-            changeFlow(uiView.scene, context: context)
+//
+//            materialUpdate(uiView.scene)
+//            helpersUpdate(uiView.scene)
+            changeFlow(uiView.scene)
             uiView.showsStatistics = showDebugInfo
             context.coordinator.translationMode = state.translationMode
         }
         
+        static func dismantleUIView(_ uiView: DuctTransition.DuctARSCNView, coordinator: Coordinator) {
+            uiView.session.pause()
+        }
+        
         func makeCoordinator() -> Coordinator {
-            return Coordinator({ s in
-                ductSceneHitTest(s)
-            }, state.translationMode, currentFlow: state.flowDirection, scene: scene, view: view)
+            return Coordinator(
+                { s in
+                    ductSceneHitTest(s)
+                },
+                state.translationMode,
+                currentFlow: state.flowDirection
+            )
         }
         
         class Coordinator {
@@ -466,20 +516,20 @@ extension DuctTransition {
             var initialPan = CGPoint.zero
             var translationMode: DuctTransition.ModuleState.TranslationMode
             var hitTest: (String) -> Void
-            var currentFlow: DuctTransition.ModuleState.FlowDirection {
-                willSet(v) {
-                    if currentFlow == v { return }
-                }
-            }
-            let view: ARSCNView
-            let scene: SCNScene
+            var currentFlow: DuctTransition.ModuleState.FlowDirection
             
-            init(_ hitTest: @escaping (String) -> Void, _ translationM: DuctTransition.ModuleState.TranslationMode, currentFlow: DuctTransition.ModuleState.FlowDirection, scene: SCNScene, view: ARSCNView) {
+            
+            func dnode(_ scene: SCNScene?) -> SCNNode {
+                flownode(scene).childNode(withName: "duct", recursively: false) ?? SCNNode()
+            }
+            func flownode(_ scene: SCNScene?) -> SCNNode {
+                scene?.rootNode.childNode(withName: "flow", recursively: false) ?? SCNNode()
+            }
+            
+            init(_ hitTest: @escaping (String) -> Void, _ translationM: DuctTransition.ModuleState.TranslationMode, currentFlow: DuctTransition.ModuleState.FlowDirection) {
                 self.hitTest = hitTest
                 self.translationMode = translationM
                 self.currentFlow = currentFlow
-                self.scene = scene
-                self.view = view
             }
             
             @objc func hit(g: UILongPressGestureRecognizer) {
@@ -494,22 +544,20 @@ extension DuctTransition {
             }
             
             @objc func rotate(g: UIRotationGestureRecognizer) {
-                guard let v = (g.view as? ARSCNView) else {return}
                 if g.state == .began {
                     initialRotation = g.rotation
                     
                 }
                 if g.state != .cancelled {
-                    let ductNode = v.scene.rootNode.childNode(withName: "duct", recursively: false) ?? SCNNode()
-                    ductNode.eulerAngles.translate([.y: -(g.rotation - initialRotation).f * 0.01])
-                    ductEuler = ductNode.eulerAngles
+                    
+                    flownode((g.view as? UIViewType)?.scene).eulerAngles.translate([.y: -(g.rotation - initialRotation).f * 0.01])
+                    ductEuler = flownode((g.view as? UIViewType)?.scene).eulerAngles
                 }
             }
             
             @objc func panCam(g: UIPanGestureRecognizer) {
                 guard g.view != nil else {return}
                 let v = (g.view! as! SCNView)
-                let dnode = v.scene?.rootNode.childNode(withName: "duct", recursively: false)
                 
                 let translation = g.translation(in: v)
                 if g.state == .began {
@@ -520,22 +568,15 @@ extension DuctTransition {
                     let dy = -(self.initialPan.y - translation.y).f * rotSpeed
                     let dx = -(self.initialPan.x - translation.x).f * rotSpeed
                     switch translationMode {
-                    case .xz: dnode?.worldPosition.x += dx; dnode?.worldPosition.z += dy
-                    case .y: dnode?.worldPosition.y -= dy
+                    case .xz: flownode((g.view as? UIViewType)?.scene).worldPosition.x += dx; flownode((g.view as? UIViewType)?.scene).worldPosition.z += dy
+                    case .y: flownode((g.view as? UIViewType)?.scene).worldPosition.y -= dy
                     }
                 }
                 
             }
         }
+        #if DEBUG
+        @ObservedObject var iO = injectionObserver
+        #endif
     }
 }
-
-#if DEBUG
-struct DuctTransition3DView_Previews: PreviewProvider {
-    static var previews: some View {
-        GeometryReader { g in
-            DuctTransition.SceneView(geo: g, textShown: false, ductwork: DuctTransition.DuctData(tabs: Array(repeating: DuctTransition.Tab(length: .inch, type: .straight), count: 16)), ductSceneHitTest: {_ in}, selectorShown: Binding.blank(false))
-        }
-    }
-}
-#endif

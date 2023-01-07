@@ -7,6 +7,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 
 struct AboutView: View {
     @Binding var shown: Bool
@@ -28,20 +31,6 @@ struct AboutView: View {
         df.timeStyle = .medium
 
         return VStack(alignment: .center) {
-            HStack {
-                Button(action: {
-                    withAnimation {
-                        shown = false
-                    }
-                }, label: {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .padding()
-                        .background(BlurEffectView())
-                        .clipShape(Circle())
-                })
-                Spacer()
-            }
             Image("FieldFab Logo")
                 .scaleEffect(0.6)
                 .frame(width: cmin * 0.6, height: cmin * 0.6)
@@ -71,28 +60,28 @@ struct AboutView: View {
                     Spacer()
                     Link("robert.sale@outlook.com", destination: URL(string: "mailto:robert.sale@outlook.com")!)
                 }
-                Divider()
             }
             Spacer()
             Text("© Copyright \(copyrightFormat.string(from: Date())), Robert M. Sale")
             Text("All rights reserved")
         }
         .padding()
-        .padding(.top, 50)
-        .frame(width: g.size.width, height: g.size.height)
+        .padding(.top, 30)
     }
 
     var body: some View {
         GeometryReader { g in
-            render(g)
+            ScrollView {
+                render(g)
+            }
         }
+        #if DEBUG
+        .eraseToAnyView()
+        #endif
     }
+
+    #if DEBUG
+    @ObservedObject var iO = injectionObserver
+    #endif
 }
 
-#if DEBUG
-struct AboutView_Previews: PreviewProvider {
-    static var previews: some View {
-        AboutView(shown: Binding(get: {true}, set: {_ in}))
-    }
-}
-#endif

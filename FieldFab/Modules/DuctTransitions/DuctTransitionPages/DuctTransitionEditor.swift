@@ -7,6 +7,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 
 extension DuctTransition {
     struct DuctEditor: View {
@@ -76,14 +79,16 @@ extension DuctTransition {
                     HStack {
                         ZStack {
                             DuctTransition.DuctSideView(ductwork: ductwork, face: .front)
-                            Text("Front")
+                                    .scaleEffect(0.75)
+                            Text("F")
                         }
                             .clipped()
                             .frame(width: sq, height: sq)
                             .border(Color.blue, width: debug ? 2 : 0)
                         ZStack {
                             DuctTransition.DuctSideView(ductwork: ductwork, face: .back)
-                            Text("Back")
+                                    .scaleEffect(0.75)
+                            Text("B")
                         }
                             .clipped()
                             .frame(width: sq, height: sq)
@@ -92,14 +97,16 @@ extension DuctTransition {
                     HStack {
                         ZStack {
                             DuctTransition.DuctSideView(ductwork: ductwork, face: .left)
-                            Text("Left")
+                                    .scaleEffect(0.75)
+                            Text("L")
                         }
                             .clipped()
                             .frame(width: sq, height: sq)
                             .border(Color.blue, width: debug ? 2 : 0)
                         ZStack {
                             DuctTransition.DuctSideView(ductwork: ductwork, face: .right)
-                            Text("Right")
+                                    .scaleEffect(0.75)
+                            Text("R")
                         }
                             .clipped()
                             .frame(width: sq, height: sq)
@@ -108,6 +115,7 @@ extension DuctTransition {
                 }
             } else {
                 DuctTransition.DuctSideView(ductwork: ductwork, face: currentFace.actual)
+//                        .scaleEffect(0.75)
                     .clipped()
                     .frame(width: max(g.size.height, g.size.width) / 2, height: max(g.size.height, g.size.width) / 2)
                     .border(Color.blue, width: debug ? 2 : 0)
@@ -122,6 +130,7 @@ extension DuctTransition {
                         Text(u.localizedString).tag(u)
                     }
                 }
+//                Text("Ayyyy")
                 ForEach(DuctTransition.UserMeasurement.allCases) { m in
                     HStack {
                         Text(m.localizedString)
@@ -137,7 +146,7 @@ extension DuctTransition {
                         }
                     }
                 }
-            }.disabled(currentFace == .all)
+            }//.disabled(currentFace == .all)
         }
         
         @ViewBuilder
@@ -147,19 +156,174 @@ extension DuctTransition {
                     ForEach(DuctTransition.TabEdge.allCases) { e in
                         Text(e.localizedString).tag(e)
                     }
-                }
+                }.disabled(currentFace == .all)
                 .pickerStyle(SegmentedPickerStyle())
                 Picker("Tab Length", selection: $currentTabLength) {
                     ForEach(TabLengthAndNone.allCases) { l in
                         Text(l.localizedString).tag(l)
                     }
-                }
+                }.disabled(currentFace == .all)
                 Picker("Tab Type", selection: $currentTabType) {
                     ForEach(TabTypeAndNone.allCases) { l in
                             Text(l.localizedString).tag(l)
                     }
+                }.disabled(currentFace == .all)
+                Menu("Tab Presets") {
+                    Menu("Inch") {
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) && (face == .left || face == .right) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .inch, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Edges, front and back horizontal")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) && (face == .front || face == .back) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .inch, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Edges, left and right horizontal")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .inch, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Top & Bottom")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for face in DuctTransition.Face.allCases {
+                                ductwork.tabs[face, .top] = Tab(length: .inch, type: .straight)
+                            }
+                        }) {
+                            Text("Top tabs only")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for face in DuctTransition.Face.allCases {
+                                ductwork.tabs[face, .bottom] = Tab(length: .inch, type: .straight)
+                            }
+                        }) {
+                            Text("Bottom tabs only")
+                        }
+                    }
+                    Menu("Half") {
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) && (face == .left || face == .right) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .half, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Edges, front and back horizontal")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) && (face == .front || face == .back) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .half, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Edges, left and right horizontal")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .half, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Top & Bottom")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for face in DuctTransition.Face.allCases {
+                                ductwork.tabs[face, .top] = Tab(length: .half, type: .straight)
+                            }
+                        }) {
+                            Text("Top tabs only")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for face in DuctTransition.Face.allCases {
+                                ductwork.tabs[face, .bottom] = Tab(length: .half, type: .straight)
+                            }
+                        }) {
+                            Text("Bottom tabs only")
+                        }
+                    }
+                    Menu("Three Eighths") {
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) && (face == .left || face == .right) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .threeEighth, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Edges, front and back horizontal")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) && (face == .front || face == .back) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .threeEighth, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Edges, left and right horizontal")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for edge in DuctTransition.TabEdge.allCases {
+                                for face in DuctTransition.Face.allCases {
+                                    if (edge == .left || edge == .right) { continue }
+                                    ductwork.tabs[face, edge] = Tab(length: .threeEighth, type: .straight)
+                                }
+                            }
+                        }) {
+                            Text("All Top & Bottom")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for face in DuctTransition.Face.allCases {
+                                ductwork.tabs[face, .top] = Tab(length: .threeEighth, type: .straight)
+                            }
+                        }) {
+                            Text("Top tabs only")
+                        }
+                        Button(action: {
+                            ductwork.tabs = Array(repeating: nil, count: 16)
+                            for face in DuctTransition.Face.allCases {
+                                ductwork.tabs[face, .bottom] = Tab(length: .threeEighth, type: .straight)
+                            }
+                        }) {
+                            Text("Bottom tabs only")
+                        }
+                    }
                 }
-            }.disabled(currentFace == .all)
+            }
         }
         
         
@@ -325,47 +489,12 @@ extension DuctTransition {
                     }
                 }
             }
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
         }
+        #if DEBUG
+        @ObservedObject var iO = injectionObserver
+        #endif
     }
 }
-
-#if DEBUG
-struct DuctTransitionEditor_Previews: PreviewProvider {
-    struct Preview: View {
-        @State var duct = DuctTransition.DuctData()
-        @State var path = NavigationPath()
-        var body: some View {
-            NavigationStack(path: $path) {
-                TabView {
-                    DuctTransition.DuctEditor(ductwork: $duct)
-                        .tabItem {
-                            Label("Workshop", systemImage: "hammer")
-                        }
-                    
-                    Text("Lmao")
-                        .tabItem {
-                            Label("3D", systemImage: "scale.3d")
-                        }
-                        .tag(1)
-                    Text("Swag")
-                        .tabItem {
-                            Label("AR", systemImage: "camera.viewfinder")
-                        }
-                        .tag(2)
-                }
-                .navigationTitle("Duct")
-                .navigationBarTitleDisplayMode(.inline)
-                .onAppear {
-                    let appearance = UITabBarAppearance()
-                    appearance.backgroundEffect = UIBlurEffect(style: .systemThinMaterial)
-                    UITabBar.appearance().standardAppearance = appearance
-                    UITabBar.appearance().scrollEdgeAppearance = appearance
-                }
-            }
-        }
-    }
-    static var previews: some View {
-        Preview()
-    }
-}
-#endif
