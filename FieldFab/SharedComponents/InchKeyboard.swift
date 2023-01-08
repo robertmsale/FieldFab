@@ -64,7 +64,7 @@ extension DuctTransition {
                             if disabled {
                                 return
                             }
-                            let ztest = ["0", "0.", ""]
+//                            let ztest = ["0", "0.", ""]
                             if text == "0" || text == "-0" {
                                 text = ""
                             }

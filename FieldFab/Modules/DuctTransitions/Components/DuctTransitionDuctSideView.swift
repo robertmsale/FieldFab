@@ -309,13 +309,10 @@ extension DuctTransition {
             
             @ViewBuilder
             func drawPaths() -> some View {
+                
                 ductPath
-                    .fill(Color.clear)
-                    .background {
-                        Image("\(texture)-diffuse")
-                            .opacity(colorScheme == .light ? 0.5 : 1)
-                    }
-                    .clipShape(ductPath)
+                    .fill(ImagePaint(image:Image("\(texture)-diffuse").resizable()))
+                    .opacity(colorScheme == .light ? 0.5 : 1)
                 if showHelpers {
                     ductPath
                         .fill(face == .front ? Color.green : face == .back ? Color.red : face == .left ? Color.yellow : Color.blue)
@@ -330,11 +327,7 @@ extension DuctTransition {
                 ForEach(tabPoints) { point in
                     let path = genPath(g, points: point.points)
                     path
-                        .stroke(lineWidth: 1)
-                        .background {
-                            Image("\(texture)-diffuse")
-                        }
-                        .clipShape(path)
+                        .fill(ImagePaint(image: Image("\(texture)-diffuse")))
                         .opacity(colorScheme == .dark ? 0.75 : 0.25)
                 }
             }
@@ -430,7 +423,7 @@ extension DuctTransition {
                         let tmp = V2(points[2].x, points[1].y)
                         let o = simd_distance(tmp, points[2])
                         let a = simd_distance(tmp, points[1])
-                        var retval = atan(a / o)
+                        let retval = atan(a / o)
                         return points[1].x > points[2].x ? retval : -retval
                     }()))
                     .position(points[1].lerp(points[2], alpha: 0.5).cgpoint)
@@ -442,7 +435,7 @@ extension DuctTransition {
                         let tmp = V2(points[3].x, points[0].y)
                         let o = simd_distance(tmp, points[3])
                         let a = simd_distance(tmp, points[0])
-                        var retval = atan(a / o)
+                        let retval = atan(a / o)
                         return points[0].x > points[3].x ? retval : -retval
                     }()))
                     .position(points[0].lerp(points[3], alpha: 0.5).cgpoint)
@@ -473,10 +466,10 @@ extension DuctTransition {
             GeometryReader { g in
                 let vdata: DuctTransition.VertexData = ductwork.vertexData
                 let q3D: Math.Quad = vdata.get3DQuad(face)
-                var q2D: [V2] = vdata.get2DQuad(face, q3D).arr
+                let q2D: [V2] = vdata.get2DQuad(face, q3D).arr
                 let points: [V2] = genPoints(g, vdata: vdata, q2D: q2D)
                 let tabs: [DuctTransition.Tab?] = ductwork.tabs[face]
-                var bPoints: [V2] = genBoundingPoints(points)
+                let bPoints: [V2] = genBoundingPoints(points)
                 let tPoints: [V2] = genTabBoundingPoints(bPoints)
                 let tabPoints: [Pathable] = genTabPoints(bPoints, points, tabs)
                 let totWPoints: [V2] = [
@@ -519,7 +512,9 @@ extension DuctTransition {
                     screwYouCompiler.drawMeasurements()
                     screwYouCompiler.drawTabInfo()
                 }
-                        .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+//                    .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+                    .offset(x: (g.size.width > g.size.height ? (g.size.width - g.size.height) / 2 : 0) + 4, y: 8)
+                        
             }
             #if DEBUG
             .eraseToAnyView()

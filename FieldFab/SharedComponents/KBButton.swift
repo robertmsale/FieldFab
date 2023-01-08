@@ -7,7 +7,9 @@
 //
 
 import SwiftUI
-
+#if DEBUG
+@_exported import HotSwiftUI
+#endif
 enum KBBtnType {
     case Normal, Primary, Control
     func getTextColor(_ colorScheme: ColorScheme) -> Color {
@@ -83,27 +85,27 @@ struct KBButton<Content: View, KBGesture: Gesture>: View {
     #endif
 }
 
-#if DEBUG
-struct KBButton_PreviewHelper: View {
-    @Environment(\.colorScheme) var colorScheme
-    var bg: Color {
-        colorScheme == .dark ?
-        Color(red: 0.16862745, green: 0.16862745, blue: 0.16862745) :
-        Color(red: 0.81568627, green: 0.82745098, blue: 0.85490196)
-    }
-    var body: some View {
-        VStack {
-            KBButton(gesture: TapGesture(), type: .Primary) {
-                Text("a")
-            }
-            TextField("Ayyy", text: Binding<String>(get: {return ""}, set: {_ in}))
-        }.background(bg)
-    }
-}
-
-struct KBButton_Previews: PreviewProvider {
-    static var previews: some View {
-        KBButton_PreviewHelper()
-    }
-}
-#endif
+//#if DEBUG
+//struct KBButton_PreviewHelper: View {
+//    @Environment(\.colorScheme) var colorScheme
+//    var bg: Color {
+//        colorScheme == .dark ?
+//        Color(red: 0.16862745, green: 0.16862745, blue: 0.16862745) :
+//        Color(red: 0.81568627, green: 0.82745098, blue: 0.85490196)
+//    }
+//    var body: some View {
+//        VStack {
+//            KBButton(gesture: TapGesture(), type: .Primary) {
+//                Text("a")
+//            }
+//            TextField("Ayyy", text: Binding<String>(get: {return ""}, set: {_ in}))
+//        }.background(bg)
+//    }
+//}
+//
+//struct KBButton_Previews: PreviewProvider {
+//    static var previews: some View {
+//        KBButton_PreviewHelper()
+//    }
+//}
+//#endif

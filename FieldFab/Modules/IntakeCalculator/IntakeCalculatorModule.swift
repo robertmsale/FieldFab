@@ -5,7 +5,7 @@
 
 import Foundation
 import SwiftUI
-#if DEBUG
+#if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
 @_exported import HotSwiftUI
 #endif
 
@@ -36,107 +36,127 @@ struct IntakeCalculatorModule: View {
         return Self.nf.string(from: NSNumber(value: (w * d * h) / 50 * 1000))!
     }
     
-    var body: some View {
-        VStack {
-            HStack {
-                Image(systemName: "cube.transparent").font(.system(size: 64))
-                Spacer()
-                VStack {
-                    HStack {
-                        Text("Max BTUs: ")
-                        Text(maxBTUs)
-                            .foregroundColor(Color.green)
-                    }
-                    .font(.title)
-                }
-            }
-            .padding()
-            VStack {
-                Text("Formula:")
-                Text("( w 𝐱 d 𝐱 h ) / 50ft³ 𝐱 1,000 BTU/hr")
-            }
-            .font(.title2)
+    @ViewBuilder func drawData(_ g: GeometryProxy) -> some View {
+        HStack {
+            Image(systemName: "cube.transparent").font(.system(size: 64))
             Spacer()
-            Form {
-                Section("Width") {
-                    HStack {
-                        Text(width)
-                            .sheet(isPresented: $wkbShown) {
-                                DuctTransition.CustomKeyboard(
-                                    canBeNegative: false,
-                                    text: $width,
-                                    shown: $wkbShown,
-                                    measure: .blank(.width),
-                                    ductwork: .blank(BalancePointCalcView.blankDD),
-                                    overrideMeasure: "Width",
-                                    showFractions: false,
-                                    showPlusMinus: false,
-                                    showDot: false
-                                )
-                            }
-                        Spacer()
-                        Text("ft")
-                    }
-                    .background {
-                        Color.white.opacity(0.000000001)
-                    }
-                    
-                    .onTapGesture {
-                        wkbShown = true
-                    }
+            VStack {
+                HStack {
+                    Text("Max BTUs: ")
+                    Text(maxBTUs)
+                        .foregroundColor(Color.green)
+                }
+                .font(.title)
+            }
+        }
+        .padding()
+        VStack {
+            Text("Formula:")
+            Text("( w 𝐱 d 𝐱 h ) / 50ft³ 𝐱 1,000 BTU/hr")
+        }
+        .font(.title2)
+    }
+    
+    @ViewBuilder func drawForm() -> some View {
+        Form {
+            Section("Width") {
+                HStack {
+                    Text(width)
+                        .sheet(isPresented: $wkbShown) {
+                            DuctTransition.CustomKeyboard(
+                                canBeNegative: false,
+                                text: $width,
+                                shown: $wkbShown,
+                                measure: .blank(.width),
+                                ductwork: .blank(BalancePointCalcView.blankDD),
+                                overrideMeasure: "Width",
+                                showFractions: false,
+                                showPlusMinus: false,
+                                showDot: false
+                            )
+                        }
+                    Spacer()
+                    Text("ft")
+                }
+                .background {
+                    Color.white.opacity(0.000000001)
                 }
                 
-                Section("Depth") {
-                    HStack {
-                        Text(depth)
-                            .sheet(isPresented: $dkbShown) {
-                                DuctTransition.CustomKeyboard(
-                                    canBeNegative: false,
-                                    text: $depth,
-                                    shown: $dkbShown,
-                                    measure: .blank(.width),
-                                    ductwork: .blank(BalancePointCalcView.blankDD),
-                                    overrideMeasure: "Depth",
-                                    showFractions: false,
-                                    showPlusMinus: false,
-                                    showDot: false
-                                )
-                            }
-                        Spacer()
-                        Text("ft")
-                    }
-                    .background {
-                        Color.white.opacity(0.000000001)
-                    }
-                    .onTapGesture {
-                        dkbShown = true
-                    }
+                .onTapGesture {
+                    wkbShown = true
                 }
-                Section("Height") {
-                    HStack {
-                        Text(height)
-                            .sheet(isPresented: $hkbShown) {
-                                DuctTransition.CustomKeyboard(
-                                    canBeNegative: false,
-                                    text: $height,
-                                    shown: $hkbShown,
-                                    measure: .blank(.width),
-                                    ductwork: .blank(BalancePointCalcView.blankDD),
-                                    overrideMeasure: "Height",
-                                    showFractions: false,
-                                    showPlusMinus: false,
-                                    showDot: false
-                                )
-                            }
-                        Spacer()
-                        Text("ft")
+            }
+            
+            Section("Depth") {
+                HStack {
+                    Text(depth)
+                        .sheet(isPresented: $dkbShown) {
+                            DuctTransition.CustomKeyboard(
+                                canBeNegative: false,
+                                text: $depth,
+                                shown: $dkbShown,
+                                measure: .blank(.width),
+                                ductwork: .blank(BalancePointCalcView.blankDD),
+                                overrideMeasure: "Depth",
+                                showFractions: false,
+                                showPlusMinus: false,
+                                showDot: false
+                            )
+                        }
+                    Spacer()
+                    Text("ft")
+                }
+                .background {
+                    Color.white.opacity(0.000000001)
+                }
+                .onTapGesture {
+                    dkbShown = true
+                }
+            }
+            Section("Height") {
+                HStack {
+                    Text(height)
+                        .sheet(isPresented: $hkbShown) {
+                            DuctTransition.CustomKeyboard(
+                                canBeNegative: false,
+                                text: $height,
+                                shown: $hkbShown,
+                                measure: .blank(.width),
+                                ductwork: .blank(BalancePointCalcView.blankDD),
+                                overrideMeasure: "Height",
+                                showFractions: false,
+                                showPlusMinus: false,
+                                showDot: false
+                            )
+                        }
+                    Spacer()
+                    Text("ft")
+                }
+                .background {
+                    Color.white.opacity(0.000000001)
+                }
+                .onTapGesture {
+                    hkbShown = true
+                }
+            }
+        }
+    }
+    
+    var body: some View {
+        GeometryReader { g in
+            if g.size.width > g.size.height {
+                HStack {
+                    VStack {
+                        drawData(g)
                     }
-                    .background {
-                        Color.white.opacity(0.000000001)
-                    }
-                    .onTapGesture {
-                        hkbShown = true
-                    }
+                    Spacer()
+                    drawForm()
+                }
+            } else {
+                VStack {
+                    drawData(g)
+                    Spacer()
+                    drawForm()
                 }
             }
         }
@@ -154,11 +174,12 @@ struct IntakeCalculatorModule: View {
             }
             .padding()
         }
-                #if DEBUG
+        .navigationTitle("Intake Calculator")
+                #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
                 .eraseToAnyView()
                 #endif
     }
-    #if DEBUG
+    #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
     @ObservedObject var iO = injectionObserver
     #endif
 }

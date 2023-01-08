@@ -59,6 +59,8 @@ extension DuctTransition {
         
         typealias DTF = DuctTransition.Face
         @Binding var ductwork: DuctTransition.DuctData
+        @Environment(\.horizontalSizeClass) var horizontalSizeClass
+        @Environment(\.verticalSizeClass) var verticalSizeClass
         @State var currentFace: FacesAndAll = .front
         @State var currentMeasurement: DuctTransition.UserMeasurement = .width
         @State var currentValue: String = "0"
@@ -73,53 +75,61 @@ extension DuctTransition {
         
         @ViewBuilder
         func drawSideViews(_ g: GeometryProxy) -> some View {
-            if currentFace == .all {
-                let sq = max(g.size.height, g.size.width) / 4
-                VStack {
-                    HStack {
-                        ZStack {
-                            DuctTransition.DuctSideView(ductwork: ductwork, face: .front)
+                if currentFace == .all {
+                    VStack {
+                        let w = (verticalSizeClass == .compact ? g.size.width / 2 : g.size.width) * 0.5
+                        let h = (verticalSizeClass == .compact ? g.size.height : g.size.height / 2) * 0.5
+                        HStack {
+                            ZStack {
+                                DuctTransition.DuctSideView(ductwork: ductwork, face: .front)
                                     .scaleEffect(0.75)
-                            Text("F")
-                        }
+                                Text("F")
+                            }
+                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
                             .clipped()
-                            .frame(width: sq, height: sq)
                             .border(Color.blue, width: debug ? 2 : 0)
-                        ZStack {
-                            DuctTransition.DuctSideView(ductwork: ductwork, face: .back)
+                            ZStack {
+                                DuctTransition.DuctSideView(ductwork: ductwork, face: .back)
                                     .scaleEffect(0.75)
-                            Text("B")
-                        }
+                                Text("B")
+                            }
+                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
                             .clipped()
-                            .frame(width: sq, height: sq)
                             .border(Color.blue, width: debug ? 2 : 0)
+                        }
+                        HStack {
+                            ZStack {
+                                DuctTransition.DuctSideView(ductwork: ductwork, face: .left)
+                                    .scaleEffect(0.75)
+                                Text("L")
+                            }
+                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
+                            .clipped()
+                            .border(Color.blue, width: debug ? 2 : 0)
+                            ZStack {
+                                DuctTransition.DuctSideView(ductwork: ductwork, face: .right)
+                                    .scaleEffect(0.75)
+                                Text("R")
+                            }
+                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
+                            .clipped()
+                            .border(Color.blue, width: debug ? 2 : 0)
+                        }
                     }
-                    HStack {
-                        ZStack {
-                            DuctTransition.DuctSideView(ductwork: ductwork, face: .left)
-                                    .scaleEffect(0.75)
-                            Text("L")
-                        }
-                            .clipped()
-                            .frame(width: sq, height: sq)
+                    .offset(y: -18)
+//                    .background(Color.blue)
+                } else {
+//                    let sq = min(g.size.width, g.size.height) * 0.75
+                    let w = (verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) ? g.size.width / 2 : g.size.width) * 0.75
+                    let h = (verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) ? g.size.height : g.size.height / 2) * 0.75
+                    VStack {
+                        Spacer()
+                        DuctTransition.DuctSideView(ductwork: ductwork, face: currentFace.actual)
+                            .frame(minWidth: w, minHeight: h)
                             .border(Color.blue, width: debug ? 2 : 0)
-                        ZStack {
-                            DuctTransition.DuctSideView(ductwork: ductwork, face: .right)
-                                    .scaleEffect(0.75)
-                            Text("R")
-                        }
-                            .clipped()
-                            .frame(width: sq, height: sq)
-                            .border(Color.blue, width: debug ? 2 : 0)
+                        Spacer()
                     }
                 }
-            } else {
-                DuctTransition.DuctSideView(ductwork: ductwork, face: currentFace.actual)
-//                        .scaleEffect(0.75)
-                    .clipped()
-                    .frame(width: max(g.size.height, g.size.width) / 2, height: max(g.size.height, g.size.width) / 2)
-                    .border(Color.blue, width: debug ? 2 : 0)
-            }
         }
         
         @ViewBuilder
@@ -326,31 +336,50 @@ extension DuctTransition {
             }
         }
         
+        @ViewBuilder func drawFacePicker() -> some View {
+            Picker("Current Face", selection: $currentFace) {
+                ForEach(FacesAndAll.allCases) { f in
+                    Text(f.localizedString).tag(f)
+                }
+            }
+            .pickerStyle(.segmented)
+            .border(Color.blue, width: debug ? 2 : 0)
+            .padding(.horizontal, 10)
+            .zIndex(5000)
+        }
+        
+        @ViewBuilder func drawContent(_ g: GeometryProxy) -> some View {
+            if verticalSizeClass != .compact && (UIDevice.current.userInterfaceIdiom != .pad) { drawFacePicker() }
+            
+            drawSideViews(g)
+            
+            VStack {
+                if verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) { drawFacePicker() }
+                Form {
+                    drawMeasurements()
+                    drawTabSelectors()
+                }
+                .border(Color.blue, width: debug ? 2 : 0)
+            }
+        }
         
         var body: some View {
             GeometryReader { g in
                 ZStack {
-                    VStack {
-                        Picker("Current Face", selection: $currentFace) {
-                            ForEach(FacesAndAll.allCases) { f in
-                                Text(f.localizedString).tag(f)
-                            }
+                    if verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) {
+                        HStack {
+                            drawContent(g)
                         }
-                        .pickerStyle(.segmented)
+                        .padding(.top)
                         .border(Color.blue, width: debug ? 2 : 0)
-                        .padding(.horizontal, 10)
-                        .zIndex(5000)
+                    } else {
                         
-                        drawSideViews(g)
-                        
-                        Form {
-                            drawMeasurements()
-                            drawTabSelectors()
+                        VStack {
+                            drawContent(g)
                         }
+                        .padding(.top)
                         .border(Color.blue, width: debug ? 2 : 0)
                     }
-                    .padding(.top)
-                    .border(Color.blue, width: debug ? 2 : 0)
                     
                 }
             }

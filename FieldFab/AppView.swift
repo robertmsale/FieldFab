@@ -108,23 +108,23 @@ struct AppView: View {
     #endif
 }
 
-#if DEBUG
-class AppView_Preview: PreviewProvider {
-    static var previews: some View {
-        AppView()
-                .previewDisplayName("iPhone 14 Pro Max")
-                .previewDevice("iPhone 14 Pro Max")
-                .environmentObject(AppState())
+//#if DEBUG
+//class AppView_Preview: PreviewProvider {
+//    static var previews: some View {
 //        AppView()
-//            .previewDisplayName("iPad Pro (12.9-inch) (6th generation)")
-//            .previewDevice("iPad Pro (12.9-inch) (6th generation)")
-//            .environmentObject(AppState())
-    }
-
-    @objc class func injected() {
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        windowScene?.windows.first?.rootViewController =
-                UIHostingController(rootView: AppView())
-    }
-}
-#endif
+//                .previewDisplayName("iPhone 14 Pro Max")
+//                .previewDevice("iPhone 14 Pro Max")
+//                .environmentObject(AppState())
+////        AppView()
+////            .previewDisplayName("iPad Pro (12.9-inch) (6th generation)")
+////            .previewDevice("iPad Pro (12.9-inch) (6th generation)")
+////            .environmentObject(AppState())
+//    }
+//
+//    @objc class func injected() {
+//        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+//        windowScene?.windows.first?.rootViewController =
+//                UIHostingController(rootView: AppView())
+//    }
+//}
+//#endif

@@ -42,6 +42,13 @@ struct BalancePointCalcView: View {
     @State var h26kbShown: Bool = false
     @State var hp17kbShown: Bool = false
     @State var hp47kbShown: Bool = false
+    
+    @Environment(\.horizontalSizeClass) var hSizeClass
+    @Environment(\.verticalSizeClass) var vSizeClass
+    
+    var device: UIUserInterfaceIdiom {
+        UIDevice.current.userInterfaceIdiom
+    }
 
     var h26: Int {
         Int(houseAt26) ?? 1
@@ -91,127 +98,155 @@ struct BalancePointCalcView: View {
         }
                 .padding()
     }
-
-    var body: some View {
-        VStack {
+    
+    @ViewBuilder func drawChart() -> some View {
+        GeometryReader { g in
             Chart([houseData, hpData]) { series in
                 ForEach(series.data, id: \.odt) { element in
                     LineMark(
-                            x: .value("Outdoor Temp", element.odt),
-                            y: .value("BTUs", element.btu))
+                        x: .value("Outdoor Temp", element.odt),
+                        y: .value("BTUs", element.btu))
                 }
-                        .foregroundStyle(by: .value("Object", series.object))
-                        .symbol(by: .value("Object", series.object))
-                        .interpolationMethod(.catmullRom)
+                .foregroundStyle(by: .value("Object", series.object))
+                .symbol(by: .value("Object", series.object))
+                .interpolationMethod(.catmullRom)
             }
-                    .chartXAxis {
-                        AxisMarks(values:
+            .chartXAxis {
+                AxisMarks(values:
                         .stride(by: 10)
-                        )
-                    }
-                    .chartYAxis {
-                        AxisMarks(values: .stride(by: 5000))
-                    }
-                    .padding(.all, 30)
+                )
+            }
+            .chartYAxis {
+                AxisMarks(values: .stride(by: 5000))
+            }
+            .position(x: g.size.width / 2, y: g.size.height / 2)
+            .frame(width: Swift.min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+            .padding(.all, 30)
+        }
+    }
+    
+    @ViewBuilder func drawForm() -> some View {
+        VStack {
             Text("Balance Point: \(bp)℉")
-            HStack(spacing: 0) {
-                Form {
-                    Section("House @ 26℉") {
-                        HStack {
-                            Text(houseAt26)
-                                .sheet(isPresented: $h26kbShown) {
-                                    DuctTransition.CustomKeyboard(
-                                        canBeNegative: false,
-                                        text: $houseAt26,
-                                        shown: $h26kbShown,
-                                        measure: .blank(.width),
-                                        ductwork: .blank(BalancePointCalcView.blankDD),
-                                        overrideMeasure: "House @ 26℉",
-                                        showFractions: false,
-                                        showPlusMinus: false,
-                                        showDot: false
-                                    )
-                                }
-                            Spacer()
-                            Text("BTUs")
-                        }
-                        .background { Color.white.opacity(0.000000001)}
-                        .onTapGesture {
-                            h26kbShown = true
-                        }
-
+            Form {
+                Section("House @ 26℉") {
+                    HStack {
+                        Text(houseAt26)
+                            .sheet(isPresented: $h26kbShown) {
+                                DuctTransition.CustomKeyboard(
+                                    canBeNegative: false,
+                                    text: $houseAt26,
+                                    shown: $h26kbShown,
+                                    measure: .blank(.width),
+                                    ductwork: .blank(BalancePointCalcView.blankDD),
+                                    overrideMeasure: "House @ 26℉",
+                                    showFractions: false,
+                                    showPlusMinus: false,
+                                    showDot: false
+                                )
+                            }
+                        Spacer()
+                        Text("BTUs")
                     }
-                            
-                    Section("HP @ 17℉") {
-                        HStack {
-                            Text(hpAt17)
-                                .sheet(isPresented: $hp17kbShown) {
-                                    DuctTransition.CustomKeyboard(
-                                        canBeNegative: false,
-                                        text: $hpAt17,
-                                        shown: $hp17kbShown,
-                                        measure: .blank(.width),
-                                        ductwork: .blank(BalancePointCalcView.blankDD),
-                                        overrideMeasure: "Heat Pump @ 17℉",
-                                        showFractions: false,
-                                        showPlusMinus: false,
-                                        showDot: false
-                                    )
-                                }
-                            Spacer()
-                            Text("BTUs")
-                        }
-                        .background { Color.white.opacity(0.000000001)}
-                        .onTapGesture {
-                            hp17kbShown = true
-                        }
+                    .background { Color.white.opacity(0.000000001)}
+                    .onTapGesture {
+                        h26kbShown = true
                     }
-                            
-                    Section("HP @ 47℉") {
-                        HStack {
-                            Text(hpAt47)
-                                .sheet(isPresented: $hp47kbShown) {
-                                    DuctTransition.CustomKeyboard(
-                                        canBeNegative: false,
-                                        text: $hpAt47,
-                                        shown: $hp47kbShown,
-                                        measure: .blank(.width),
-                                        ductwork: .blank(BalancePointCalcView.blankDD),
-                                        overrideMeasure: "Heat Pump @ 47℉",
-                                        showFractions: false,
-                                        showPlusMinus: false,
-                                        showDot: false
-                                    )
-                                }
-                            Spacer()
-                            Text("BTUs")
-                        }
-                        .background { Color.white.opacity(0.000000001)}
-                        .onTapGesture {
-                            hp47kbShown = true
-                        }
+                    
+                }
+                
+                Section("HP @ 17℉") {
+                    HStack {
+                        Text(hpAt17)
+                            .sheet(isPresented: $hp17kbShown) {
+                                DuctTransition.CustomKeyboard(
+                                    canBeNegative: false,
+                                    text: $hpAt17,
+                                    shown: $hp17kbShown,
+                                    measure: .blank(.width),
+                                    ductwork: .blank(BalancePointCalcView.blankDD),
+                                    overrideMeasure: "Heat Pump @ 17℉",
+                                    showFractions: false,
+                                    showPlusMinus: false,
+                                    showDot: false
+                                )
+                            }
+                        Spacer()
+                        Text("BTUs")
                     }
-                            
+                    .background { Color.white.opacity(0.000000001)}
+                    .onTapGesture {
+                        hp17kbShown = true
+                    }
+                }
+                
+                Section("HP @ 47℉") {
+                    HStack {
+                        Text(hpAt47)
+                            .sheet(isPresented: $hp47kbShown) {
+                                DuctTransition.CustomKeyboard(
+                                    canBeNegative: false,
+                                    text: $hpAt47,
+                                    shown: $hp47kbShown,
+                                    measure: .blank(.width),
+                                    ductwork: .blank(BalancePointCalcView.blankDD),
+                                    overrideMeasure: "Heat Pump @ 47℉",
+                                    showFractions: false,
+                                    showPlusMinus: false,
+                                    showDot: false
+                                )
+                            }
+                        Spacer()
+                        Text("BTUs")
+                    }
+                    .background { Color.white.opacity(0.000000001)}
+                    .onTapGesture {
+                        hp47kbShown = true
+                    }
                 }
             }
         }
-                .onTapGesture {
-                    hideKeyboard()
-                }
-                .toolbar(content: {
-                    Button(action: {
-                        showHelp = true
-                    }, label: {
-                        Image(systemName: "questionmark.circle")
-                    })
-                })
-                .sheet(isPresented: $showHelp) {
-                    helpAlert()
-                }
+        
+    }
 
-                #if DEBUG
-                .eraseToAnyView()
-                #endif
+    @ViewBuilder func drawView(_ g: GeometryProxy) -> some View {
+        if g.size.width > g.size.height {
+            HStack {
+                drawChart()
+                    .scaleEffect(0.8)
+                drawForm()
+            }
+        } else {
+            VStack {
+                drawChart()
+                    .offset(x: -20, y: -30)
+                drawForm()
+            }
+        }
+    }
+    
+    var body: some View {
+        GeometryReader { g in
+            drawView(g)
+        }
+        .navigationTitle("BP Calculator")
+            .onTapGesture {
+                hideKeyboard()
+            }
+            .toolbar(content: {
+                Button(action: {
+                    showHelp = true
+                }, label: {
+                    Image(systemName: "questionmark.circle")
+                })
+            })
+            .sheet(isPresented: $showHelp) {
+                helpAlert()
+            }
+
+            #if DEBUG
+            .eraseToAnyView()
+            #endif
     }
     #if DEBUG
     @ObservedObject var iO = injectionObserver

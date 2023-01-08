@@ -64,11 +64,11 @@ extension DuctTransition {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .zIndex(2.0)
             }
-            #if DEBUG
+            #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
             .eraseToAnyView()
             #endif
         }
-        #if DEBUG
+        #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
         @ObservedObject var iO = injectionObserver
         #endif
     }

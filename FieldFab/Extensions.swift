@@ -159,7 +159,7 @@ extension SIMD4<Float> {
             v.z = from.x * to.y - from.y * to.x
             v.w = r
         }
-        let norm = v.normal()
+//        let norm = v.normal()
         self.init(v.x, v.y, v.z, v.w)
     }
     
@@ -198,7 +198,7 @@ extension SIMD4<Float> {
         return cpy
     }
     func angle(to: Self) -> Float {
-        return 2 * acos(Swift.abs( min(1.0, max(-1.0, simd_dot(self, to) )) ))
+        return 2 * acos(Swift.abs( Swift.min(1.0, Swift.max(-1.0, simd_dot(self, to) )) ))
     }
 }
 

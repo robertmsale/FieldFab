@@ -53,7 +53,7 @@ extension DuctTransition {
         static func loadModule(_ args: InitArgs) -> some View {
             switch loadMethod {
             case .development:
-                var view = Self(
+                let view = Self(
                     newSessionShown: args.newSessionShown,
                     newSessionName: args.newSessionName,
                     newSessionUnits: args.newSessionUnits

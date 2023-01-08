@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7E89E14873ACECE13D83E76A /* IntakeCalculatorModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E89EEFE162188B0CA0C7318 /* IntakeCalculatorModule.swift */; };
 		EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = EE12F1812592F6F8007F5CE4 /* PopupView */; };
+		EE25E478296A07F7000C7451 /* HotSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = EE25E477296A07F7000C7451 /* HotSwiftUI */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EE39100D2963D4F4000E7331 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39100C2963D4F4000E7331 /* ActivityView.swift */; };
 		EE3910102963DCD4000E7331 /* BalancePointCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39100F2963DCD4000E7331 /* BalancePointCalcView.swift */; };
 		EE6C3B94259969B600AA70AE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFB99152527BBDB008AB605 /* AboutView.swift */; };
@@ -27,6 +28,8 @@
 		EE97EC85295E26E400A9FDBC /* ModuleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE97EC84295E26E400A9FDBC /* ModuleProtocol.swift */; };
 		EE9FEB9C296909B800B3C12A /* AppReview in Frameworks */ = {isa = PBXBuildFile; productRef = EE9FEB9B296909B800B3C12A /* AppReview */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EE9FEB9E29690CA000B3C12A /* DuctTransitionToPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9FEB9D29690CA000B3C12A /* DuctTransitionToPDF.swift */; };
+		EEA79870296A270800D28867 /* multiSimStart.sh in Resources */ = {isa = PBXBuildFile; fileRef = EEA7986E296A270800D28867 /* multiSimStart.sh */; };
+		EEA79871296A270800D28867 /* SimulatorsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEA7986F296A270800D28867 /* SimulatorsList.txt */; };
 		EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EEB3AE7B258CE95100285C20 /* VectorExtensions */; };
 		EEC7CF3C25034397003389AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF3B25034397003389AB /* Assets.xcassets */; };
 		EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEC7CF4025034397003389AB /* LaunchScreen.storyboard */; };
@@ -79,6 +82,8 @@
 		EE97EC82295E24CA00A9FDBC /* DuctTransitionModuleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctTransitionModuleState.swift; sourceTree = "<group>"; };
 		EE97EC84295E26E400A9FDBC /* ModuleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleProtocol.swift; sourceTree = "<group>"; };
 		EE9FEB9D29690CA000B3C12A /* DuctTransitionToPDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuctTransitionToPDF.swift; sourceTree = "<group>"; };
+		EEA7986E296A270800D28867 /* multiSimStart.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = multiSimStart.sh; sourceTree = "<group>"; };
+		EEA7986F296A270800D28867 /* SimulatorsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimulatorsList.txt; sourceTree = "<group>"; };
 		EEC7CF3225034396003389AB /* FieldFab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldFab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEC7CF3B25034397003389AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEC7CF4125034397003389AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -117,6 +122,7 @@
 				EE9FEB9C296909B800B3C12A /* AppReview in Frameworks */,
 				EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */,
 				EE8D3990258326B700A1AC39 /* VectorExtensions in Frameworks */,
+				EE25E478296A07F7000C7451 /* HotSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +234,8 @@
 		EEC7CF2925034396003389AB = {
 			isa = PBXGroup;
 			children = (
+				EEA7986E296A270800D28867 /* multiSimStart.sh */,
+				EEA7986F296A270800D28867 /* SimulatorsList.txt */,
 				EEC7CF3425034396003389AB /* FieldFab */,
 				EEC7CF4B25034397003389AB /* FieldFabTests */,
 				EEC7CF5625034397003389AB /* FieldFabUITests */,
@@ -304,6 +312,7 @@
 				EEC7CF2E25034396003389AB /* Sources */,
 				EEC7CF2F25034396003389AB /* Frameworks */,
 				EEC7CF3025034396003389AB /* Resources */,
+				EEA7986D296A260F00D28867 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -318,6 +327,7 @@
 				EE12F1812592F6F8007F5CE4 /* PopupView */,
 				EE6C3B9A2599778300AA70AE /* StringFix */,
 				EE9FEB9B296909B800B3C12A /* AppReview */,
+				EE25E477296A07F7000C7451 /* HotSwiftUI */,
 			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
@@ -397,9 +407,8 @@
 				EEB3AE7A258CE95100285C20 /* XCRemoteSwiftPackageReference "VectorExtensions" */,
 				EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */,
 				EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */,
-				EE9FEB942967033400B3C12A /* XCRemoteSwiftPackageReference "HotReloading" */,
-				EE9FEB97296703E400B3C12A /* XCRemoteSwiftPackageReference "HotSwiftUI" */,
 				EE9FEB9A296909B800B3C12A /* XCRemoteSwiftPackageReference "AppReview" */,
+				EE25E4712969F1AF000C7451 /* XCRemoteSwiftPackageReference "HotSwiftUI" */,
 			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
@@ -419,7 +428,9 @@
 			files = (
 				EEFD73F229626960002E20FB /* Scene.scn in Resources */,
 				EEC7CF4225034397003389AB /* LaunchScreen.storyboard in Resources */,
+				EEA79871296A270800D28867 /* SimulatorsList.txt in Resources */,
 				EEC7CF3C25034397003389AB /* Assets.xcassets in Resources */,
+				EEA79870296A270800D28867 /* multiSimStart.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +449,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EEA7986D296A260F00D28867 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "custom_sim=`xcrun simctl list | grep 'Multiple Simulators' | awk -F'[()]' '{print $2}'`\nif [ ! -z \"${custom_sim}\" ] && [ \"${TARGET_DEVICE_IDENTIFIER}\" = \"${custom_sim}\" ]; then\n/bin/sh multiSimStart.sh\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EEC7CF2E25034396003389AB /* Sources */ = {
@@ -660,7 +691,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.0.1;
+				CURRENT_PROJECT_VERSION = 3.0.4;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -672,9 +703,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.1;
+				MARKETING_VERSION = 3.0.4;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = all;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -690,7 +726,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.0.1;
+				CURRENT_PROJECT_VERSION = 3.0.4;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -702,9 +738,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.1;
+				MARKETING_VERSION = 3.0.4;
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = all;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
@@ -846,25 +884,17 @@
 				minimumVersion = 0.0.10;
 			};
 		};
+		EE25E4712969F1AF000C7451 /* XCRemoteSwiftPackageReference "HotSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnno1962/HotSwiftUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/robertmsale/StringFix";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		EE9FEB942967033400B3C12A /* XCRemoteSwiftPackageReference "HotReloading" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/johnno1962/HotReloading";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
-			};
-		};
-		EE9FEB97296703E400B3C12A /* XCRemoteSwiftPackageReference "HotSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/johnno1962/HotSwiftUI";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
@@ -901,6 +931,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
+		};
+		EE25E477296A07F7000C7451 /* HotSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE25E4712969F1AF000C7451 /* XCRemoteSwiftPackageReference "HotSwiftUI" */;
+			productName = HotSwiftUI;
 		};
 		EE6C3B9A2599778300AA70AE /* StringFix */ = {
 			isa = XCSwiftPackageProductDependency;
