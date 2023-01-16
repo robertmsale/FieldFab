@@ -131,10 +131,15 @@ extension DuctTransition {
             .sheet(isPresented: $state.cameraHelpShown, content: {DuctTransition.CameraHelpView()})
             .sheet(isPresented: $state.generalHelpShown, content: {DuctTransition.GeneralHelpView(shown: $state.generalHelpShown)})
             .sheet(isPresented: $state.arCameraHelpShown, content: {DuctTransition.ARCameraHelpView()})
-            .sheet(isPresented: $state.settingsViewShown, content: {DuctTransition.SettingsView()})
+            .sheet(isPresented: $state.settingsViewShown, content: {DuctTransition.SettingsView(shown: $state.settingsViewShown)})
             .sheet(isPresented: $newSessionShown) {
                 Form {
-                    TextField("Session Name", text: $newSessionName)
+                    VStack {
+                        TextField("Session Name", text: $newSessionName)
+                        if newSessionName == "" {
+                            Text("Name cannot be empty").font(.footnote).foregroundColor(Color.red)
+                        }
+                    }
                     Picker("Units", selection: $newSessionUnits) {
                         ForEach(DuctTransition.MeasurementUnit.allCases) { m in
                             Text(m.localizedString).tag(m)
@@ -147,7 +152,7 @@ extension DuctTransition {
                         }
                     }) {
                         Text("Create")
-                    }
+                    }.disabled(newSessionName == "")
                 }
             }
             .modifier(DuctTransition.ModuleToolbar(cameraHelpShown: $state.cameraHelpShown, arCameraHelpShown: $state.arCameraHelpShown, generalHelpShown: $state.generalHelpShown, settingsViewShown: $state.settingsViewShown))

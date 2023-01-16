@@ -81,7 +81,8 @@ extension DuctTransition {
              bgR,
              bgG,
              bgB,
-             bgImage
+             bgImage,
+             autoSave
     }
 }
 
@@ -98,6 +99,8 @@ extension AppStorage where Value : RawRepresentable, Value.RawValue == String {i
 extension DuctTransition {
     struct SettingsView: View {
         typealias Key = AppStorageKeys
+        @Binding var shown: Bool
+        @Environment(\.colorScheme) var colorScheme
         @AppStorage(Key.texture) var texture: String = "galvanized"
         @AppStorage(Key.crossBrake) var crossBrake: Bool = true
         @AppStorage(Key.lighting) var lighting: LightingMethod = .physicallyBased
@@ -109,6 +112,7 @@ extension DuctTransition {
         @AppStorage(Key.bgG) var bgG: Double = 0.0
         @AppStorage(Key.bgB) var bgB: Double = 1.0
         @AppStorage(Key.bgImage) var bgImage: BackgroundImage = .shop
+        @AppStorage(Key.autoSave) var autoSave: Bool = true
         
         func genSubText<Content: View>(message: String, @ViewBuilder content: () -> Content) -> some View {
             VStack {
@@ -121,6 +125,13 @@ extension DuctTransition {
         }
         
         var body: some View {
+            HStack {
+                Button(action: {shown = false}, label: { Image(systemName: "xmark") })
+//                    .frame(maxWidth: .infinity)
+                Spacer()
+            }
+            .padding()
+            .background(colorScheme == .dark ? Color(red: 0.10980392, green: 0.10980392, blue: 0.11764706) : Color(red: 0.94901961, green: 0.94901961, blue: 0.96862745))
             Form {
                 Section("Helpful Features") {
                     genSubText(message: "Colors the faces of the ductwork so you always know which side you're looking at. Useful if your background is not an image or you rotate your duct in AR view so much you forget which face is the front.") {
@@ -151,6 +162,9 @@ extension DuctTransition {
                     }
                 }
                 Section("Preferences") {
+                    genSubText(message: "With this disabled you have to manually save your work using the button in the top toolbar") {
+                        Toggle("Auto Save", isOn: $autoSave)
+                    }
                     Picker("Background Type", selection: $bgType) {
                         ForEach(BackgroundType.allCases) { t in
                             Text(t.localizedString).tag(t)

@@ -9,6 +9,7 @@
 import SwiftUI
 import Charts
 import simd
+import Foundation
 #if DEBUG
 @_exported import HotSwiftUI
 #endif
@@ -22,10 +23,11 @@ extension View {
 
 struct BalancePointCalcView: View {
     typealias V2 = SIMD2<Double>
+    typealias Num = Int64
 
     struct ChartData: Identifiable {
         let object: String
-        let data: [(odt: Int, btu: Int)]
+        let data: [(odt: Num, btu: Num)]
         var id: String {
             object
         }
@@ -50,14 +52,14 @@ struct BalancePointCalcView: View {
         UIDevice.current.userInterfaceIdiom
     }
 
-    var h26: Int {
-        Int(houseAt26) ?? 1
+    var h26: Num {
+        Swift.max(1, Swift.min(999999, Num(houseAt26) ?? 1))
     }
-    var hp17: Int {
-        Int(hpAt17) ?? 1
+    var hp17: Num {
+        Swift.max(1, Swift.min(999999, Num(hpAt17) ?? 1))
     }
-    var hp47: Int {
-        Int(hpAt47) ?? 1
+    var hp47: Num {
+        Swift.max(1, Swift.min(999999, Num(hpAt47) ?? 1))
     }
 
     var houseData: ChartData {
@@ -67,7 +69,7 @@ struct BalancePointCalcView: View {
             (1, (h26) / 44 * 70)
         ])
     }
-    var hpm: Int {
+    var hpm: Num {
         (hp47 - hp17) / (47 - 17)
     }
     var hpData: ChartData {
@@ -82,8 +84,11 @@ struct BalancePointCalcView: View {
 //            let X1 = x1, X2 = x2, X3 = x3, X4 = x4, Y1 = _.toNumber(y1), Y2 = y2, Y3 = _.toNumber(y3), Y4 = _.toNumber(y4)//
 //        }
 
-    var bp: Int {
-        let X1 = 26, X2 = 70, X3 = 17, X4 = 47, Y1 = Int(houseAt26) ?? 1, Y2 = 2, Y3 = Int(hpAt17) ?? 1, Y4 = Int(hpAt47) ?? 1
+    var bp: Num {
+        let a = Num(houseAt26)
+        let b = Num(hpAt17)
+        let c = Num(hpAt47)
+        let X1 = Num(26), X2 = Num(70), X3 = Num(17), X4 = Num(47), Y1 = Num(houseAt26) ?? Num(1), Y2 = Num(2), Y3 = Num(hpAt17) ?? Num(1), Y4 = Num(hpAt47) ?? Num(1)
 
         return ((X1 * Y2 - Y1 * X2) * (X3 - X4) - (X3 * Y4 - Y3 * X4) * (X1 - X2)) / (((X1 - X2) * (Y3 - Y4)) - ((Y1 - Y2) * (X3 - X4)))
     }
@@ -91,10 +96,15 @@ struct BalancePointCalcView: View {
     @ViewBuilder
     func helpAlert() -> some View {
         VStack(spacing: 25) {
+            Spacer()
             Text("This tool helps with finding the balance point for a particular system and for PTCS heat pump commissioning.")
                     .padding()
             Text("Look up the AHRI certificate for your equipment and use the BTUs at 17 and 47 degrees, then do a Manual J heat load calculation to determine the building's heat loss at 26 degrees to find the balance point.")
                     .padding()
+            Spacer()
+            Button(action: {showHelp = false}) {
+                Text("Close")
+            }.tint(.red)
         }
                 .padding()
     }

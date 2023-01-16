@@ -61,7 +61,7 @@ extension DuctTransition {
         @Binding var ductwork: DuctTransition.DuctData
         @Environment(\.horizontalSizeClass) var horizontalSizeClass
         @Environment(\.verticalSizeClass) var verticalSizeClass
-        @State var currentFace: FacesAndAll = .front
+        @State var currentFace: FacesAndAll = .all
         @State var currentMeasurement: DuctTransition.UserMeasurement = .width
         @State var currentValue: String = "0"
         @State var currentTabEdge: DuctTransition.TabEdge = .top

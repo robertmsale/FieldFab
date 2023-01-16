@@ -433,6 +433,7 @@ extension DuctTransition {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = []
             configuration.environmentTexturing = .automatic
+//            configuration.frameSemantics.insert(.)
             view.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
             let hitG = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.hit(g:)))
             let rotG = UIRotationGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.rotate(g:)))

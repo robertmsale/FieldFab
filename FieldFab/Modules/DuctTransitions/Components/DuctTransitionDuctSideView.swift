@@ -373,7 +373,7 @@ extension DuctTransition {
                     .rotationEffect(Angle(degrees: -90))
                     .position(totHPoints[1].lerp(totHPoints[2], alpha: 0.5).cgpoint)
                     .offset(x: -10)
-                Text(measurements[2])
+                Text(measurements[face == .front || face == .left ? 2 : 3])
                     .fixedSize()
                     .position(
                         points[1].x > points[2].x ?
@@ -388,7 +388,7 @@ extension DuctTransition {
                     )
                     .foregroundColor(Color.red)
                     .opacity(points[1].x == points[2].x ? 0 : 1)
-                Text(measurements[3])
+                Text(measurements[face == .front || face == .left ? 3 : 2])
                     .fixedSize()
 //                            .background(colorScheme == .dark ? Color.black : Color.white)
                     .position(
@@ -485,7 +485,7 @@ extension DuctTransition {
                     tPoints[2] - V2(8, 0),
                 ]
                 let measurements: [String] = genRawMeasurements(q3D: q3D.arr, q2D: q2D, tabs: tabs)
-                let screwYouCompiler = CompilerRelief(
+                let compilerBeNice = CompilerRelief(
                         g: g,
                         ductwork: ductwork,
                         vdata: vdata,
@@ -507,10 +507,10 @@ extension DuctTransition {
                         colorScheme: colorScheme
                 )
                 ZStack {
-                    screwYouCompiler.drawPaths()
-                    screwYouCompiler.drawMorePaths().zIndex(5)
-                    screwYouCompiler.drawMeasurements()
-                    screwYouCompiler.drawTabInfo()
+                    compilerBeNice.drawPaths()
+                    compilerBeNice.drawMorePaths().zIndex(5)
+                    compilerBeNice.drawMeasurements()
+                    compilerBeNice.drawTabInfo()
                 }
 //                    .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
                     .offset(x: (g.size.width > g.size.height ? (g.size.width - g.size.height) / 2 : 0) + 4, y: 8)

@@ -64,6 +64,10 @@ struct AboutView: View {
             Spacer()
             Text("© Copyright \(copyrightFormat.string(from: Date())), Robert M. Sale")
             Text("All rights reserved")
+            Spacer()
+            Button(action: {shown = false}) {
+                Text("Close")
+            }.tint(.red)
         }
         .padding()
         .padding(.top, 30)

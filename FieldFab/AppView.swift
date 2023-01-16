@@ -43,6 +43,7 @@ struct AppView: View {
 
     @EnvironmentObject var state: AppState
     @State var splitViewMode: NavigationSplitViewVisibility = .detailOnly
+    @State var changeLogShown: Bool = false
     var modules = AvailableModules.allCases
     
     @ViewBuilder
@@ -55,6 +56,9 @@ struct AppView: View {
         .toolbar {
             Button(action: { state.aboutSheetShown = true }) {
                 Text("About")
+            }
+            Button(action: { changeLogShown = true}) {
+                Text("Change Log")
             }
             .sheet(isPresented: $state.aboutSheetShown) {
                 AboutView(shown: $state.aboutSheetShown)
@@ -88,7 +92,7 @@ struct AppView: View {
     @ViewBuilder
     func navSplitView() -> some View {
         NavigationSplitView(columnVisibility: $splitViewMode, sidebar: {
-                navList()
+            navList()
         }, detail: {
             navStack()
         })
@@ -98,6 +102,31 @@ struct AppView: View {
         navSplitView()
             .onAppear {
                 AppReview.requestIf(days: 5)
+            }
+            .sheet(isPresented: $changeLogShown) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Spacer()
+                        Text("Change Log").font(.title)
+                        Spacer()
+                    }
+                    Spacer()
+                    Text("• Added auto save feature and made it the default behavior (can be changed in settings)")
+                    Text("• Fixed offsets producing inaccurate measurements")
+                    HStack(alignment: .top, spacing: 0) {
+                        Text("• Allow 2")
+                        Text("64").font(.footnote)
+                        Text(" larger numbers in balance point calculator")
+                    }
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button(action: {changeLogShown = false}) {
+                            Text("Close")
+                        }.tint(.red)
+                        Spacer()
+                    }
+                }.padding()
             }
                 #if DEBUG
                 .eraseToAnyView()

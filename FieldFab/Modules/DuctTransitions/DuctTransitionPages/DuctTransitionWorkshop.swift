@@ -13,6 +13,7 @@ import SwiftUI
 
 extension DuctTransition {
     struct Workshop: View {
+        @AppStorage(AppStorageKeys.autoSave) var autoSave = true
         @State var ductwork: DuctTransition.DuctData
         @EnvironmentObject var state: DuctTransition.ModuleState
         @EnvironmentObject var appState: AppState
@@ -22,6 +23,7 @@ extension DuctTransition {
         @State var faceHit: String = ""
         @State var showSideFlatDialog: Bool = false
         @State var resetARSession: Bool = false
+        @State var ogDuctwork: DuctTransition.DuctData = DuctTransition.DuctData()
         
         func generateShareLink() -> String {
             let encoder = JSONEncoder()
@@ -52,6 +54,25 @@ extension DuctTransition {
             }
             
             return url
+        }
+        
+        @ViewBuilder func drawSaveBtn() -> some View {
+            Button(action: {
+                Task {
+                    if let idx = state.ductData.firstIndex(where: { $0.id == ductwork.id }) {
+                        state.ductData[idx] = ductwork
+                    }
+                    saveCompleteShown = true
+                    ogDuctwork = ductwork
+                }
+            }) {
+                Image(systemName: "tray.and.arrow.down")
+            }
+            .alert("Ductwork Saved", isPresented: $saveCompleteShown, actions: {
+                Button(action: {Task {saveCompleteShown = false}}) {
+                    Text("Ok")
+                }
+            })
         }
         
         var body: some View {
@@ -140,26 +161,32 @@ extension DuctTransition {
                 appearance.backgroundEffect = UIBlurEffect(style: .systemThinMaterial)
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
+                ogDuctwork = ductwork
             }
-            .transition(.slide)
-            .navigationTitle(ductwork.name)
-            .navigationBarTitleDisplayMode(.inline)
-            .modifier(DuctTransition.ModuleToolbar(cameraHelpShown: $state.cameraHelpShown, arCameraHelpShown: $state.arCameraHelpShown, generalHelpShown: $state.generalHelpShown, settingsViewShown: $state.settingsViewShown))
-            .toolbar {
-                Button(action: {
+            .onChange(of: ductwork, perform: { d in
+                if autoSave {
                     Task {
                         if let idx = state.ductData.firstIndex(where: { $0.id == ductwork.id }) {
                             state.ductData[idx] = ductwork
                         }
                         saveCompleteShown = true
+                        ogDuctwork = ductwork
                     }
-                }) {
-                    Image(systemName: "tray.and.arrow.down")
-                }.alert("Ductwork Saved", isPresented: $saveCompleteShown, actions: {
-                    Button(action: {Task {saveCompleteShown = false}}) {
-                        Text("Ok")
+                }
+            })
+            .transition(.slide)
+            .navigationTitle(ductwork.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .modifier(DuctTransition.ModuleToolbar(cameraHelpShown: $state.cameraHelpShown, arCameraHelpShown: $state.arCameraHelpShown, generalHelpShown: $state.generalHelpShown, settingsViewShown: $state.settingsViewShown))
+            .toolbar {
+                if !autoSave {
+                    if ogDuctwork != ductwork {
+                        drawSaveBtn()
+                            .foregroundColor(Color.red)
+                    } else {
+                        drawSaveBtn()
                     }
-                })
+                }
                 Menu(content: {
                     ShareLink("Share Link", item: generateShareLink())
                     ShareLink("Share PDF", item: renderPDF)

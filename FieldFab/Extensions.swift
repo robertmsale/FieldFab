@@ -11,6 +11,7 @@ import CoreGraphics
 import SceneKit
 import SwiftUI
 import simd
+import StringFix
 
 protocol SIMDType {
     func cross(with v: Self) -> Self

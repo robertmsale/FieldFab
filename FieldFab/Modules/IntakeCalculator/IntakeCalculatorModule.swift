@@ -10,6 +10,7 @@ import SwiftUI
 #endif
 
 struct IntakeCalculatorModule: View {
+    typealias Num = Int64
     @State var width: String = "20"
     @State var depth: String = "10"
     @State var height: String = "10"
@@ -28,9 +29,9 @@ struct IntakeCalculatorModule: View {
         return f
     }()
     
-    var w: Int { Int(width) ?? 0 }
-    var d: Int { Int(depth) ?? 0 }
-    var h: Int { Int(height) ?? 0 }
+    var w: Num { Num(width) ?? 0 }
+    var d: Num { Num(depth) ?? 0 }
+    var h: Num { Num(height) ?? 0 }
     
     var maxBTUs: String {
         return Self.nf.string(from: NSNumber(value: (w * d * h) / 50 * 1000))!
@@ -167,10 +168,15 @@ struct IntakeCalculatorModule: View {
         }
         .sheet(isPresented: $helpShown) {
             VStack(spacing: 25) {
+                Spacer()
                 Text("If you're installing a gas appliance in a space with no mechanical intake and do not want to run a dedicated intake pipe, you must take the sum of all the gas appliances in that space and ensure they do not exceed the maximum allowable BTUs given the volume.")
                     .padding()
                 Text("If the sum of all the gas appliances exceeds the maximum BTUs, you have to run dedicated intake pipes for as many appliances as it takes to end up below the max BTUs.")
                     .padding()
+                Spacer()
+                Button(action: {helpShown = false}) {
+                    Text("Close")
+                }.tint(.red)
             }
             .padding()
         }
