@@ -23,9 +23,9 @@ extension DuctTransition {
         func body(content: Content) -> some View {
             content
                 .toolbar {
-                    Button(action: {Task { settingsViewShown = true }}) {
-                        Image(systemName: "gear")
-                    }
+//                    Button(action: {Task { settingsViewShown = true }}) {
+//                        Image(systemName: "gear")
+//                    }
                     Button(action: {Task { menuShown = true }}) {
                         Image(systemName: "questionmark.circle")
                     }
@@ -40,6 +40,11 @@ extension DuctTransition {
 }
 
 extension DuctTransition {
+    struct SessionPreset: Identifiable {
+        let description: String
+        var id: String { description }
+        let duct: DuctTransition.DuctData
+    }
     struct ModuleView: ModularView {
         static let loadMethod: ModuleLoadMethod = FieldFabApp.loadMethod
         struct InitArgs {
@@ -78,46 +83,72 @@ extension DuctTransition {
         @State var editID: UUID? = nil
         @State var editString: String = ""
         
+        static var sessionPresets: [SessionPreset] {[
+            .init(description: "17½x20 Box", duct: DuctData(measurements: [17.5, 20, 12, 0, 0, 17.5, 20], unit: .inch, name: "17½x20 Box")),
+            .init(description: "20x20 Box", duct: DuctData(measurements: [20, 20, 12, 0, 0, 20, 20], unit: .inch, name: "20x20 Box")),
+            .init(description: "20x25 Box", duct: DuctData(measurements: [20, 25, 12, 0, 0, 20, 25], unit: .inch, name: "20x25 Box")),
+            .init(description: "17½x20 -> 20x20", duct: DuctData(measurements: [16, 20, 12, 0, 0, 16, 20], unit: .inch, name: "17½x20 -> 20x20")),
+            .init(description: "20x20 -> 20x25", duct: DuctData(measurements: [20, 20, 12, 0, 0, 20, 20], unit: .inch, name: "20x20 -> 20x25")),
+        ]}
+        
         var body: some View {
             VStack {
-                List($state.ductData, editActions: .move) { d in
-                    VStack {
-                        NavigationLink(value: d.wrappedValue) {
-                            Text(d.name.wrappedValue)
-                        }
-                        Text("Created On \(d.date.wrappedValue.formatted(date: .numeric, time: .standard))")
-                    }
-                    .swipeActions(content: {
-                        Button(action: {
-                            state.ductData.removeAll(where: { $0.id == d.id })
-                        }) {
-                            Label("Delete", systemImage: "trash")
-                        }
-                        .tint(.red)
-                        Button(action: {
-                            editID = d.id
-                            editShown = true
-                        }) {
-                            Label("Rename", systemImage: "pencil")
-                        }
-                        
-                    })
-                    .alert(
-                        String("Rename Session"),
-                        isPresented: $editShown,
-                        actions: {
-                            TextField("New Name", text: $editString)
-                            Button(action: {
-                                if let idx = state.ductData.firstIndex(where: {$0.id == editID}) {
-                                    state.ductData[idx].name = editString
+                Form {
+                    Section(content: {
+                        ForEach($state.ductData) { d in
+                            VStack {
+                                NavigationLink(value: d.wrappedValue) {
+                                    Text(d.name.wrappedValue)
                                 }
-                                editString = ""
-                                editID = nil
-                                editShown = false
-                            }) {
-                                Text("Save")
+                                Text("Created On \(d.date.wrappedValue.formatted(date: .numeric, time: .standard))")
                             }
-                        })
+                            .swipeActions(content: {
+                                Button(action: {
+                                    state.ductData.removeAll(where: { $0.id == d.id })
+                                }) {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                .tint(.red)
+                                Button(action: {
+                                    editID = d.id
+                                    editShown = true
+                                }) {
+                                    Label("Rename", systemImage: "pencil")
+                                }
+                                
+                            })
+                            .alert(
+                                String("Rename Session"),
+                                isPresented: $editShown,
+                                actions: {
+                                    TextField("New Name", text: $editString)
+                                    Button(action: {
+                                        if let idx = state.ductData.firstIndex(where: {$0.id == editID}) {
+                                            state.ductData[idx].name = editString
+                                        }
+                                        editString = ""
+                                        editID = nil
+                                        editShown = false
+                                    }) {
+                                        Text("Save")
+                                    }
+                                })
+                        }
+                    }, header: {Text("Sessions")}, footer: {Text("Swipe left to edit name or delete")})
+                    Section(content: {
+                        ForEach(Self.sessionPresets) { p in
+                            Button(action: {
+                                Task {
+                                    let nd = DuctData(measurements: p.duct.measurements, unit: p.duct.unit, name: p.duct.name)
+                                    state.ductData.append(nd)
+                                    appState.navPath.append(nd)
+                                }
+                            }) {
+                                Text(p.description)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                    }, header: {Text("Presets")}, footer: {Text("Selecting a preset adds it to your list of sessions")})
                 }
                 Spacer()
                 Button(action: {Task {newSessionShown = true}}) {
@@ -156,6 +187,7 @@ extension DuctTransition {
                 }
             }
             .modifier(DuctTransition.ModuleToolbar(cameraHelpShown: $state.cameraHelpShown, arCameraHelpShown: $state.arCameraHelpShown, generalHelpShown: $state.generalHelpShown, settingsViewShown: $state.settingsViewShown))
+            .navigationTitle("Sessions")
             #if DEBUG
             .eraseToAnyView()
             #endif

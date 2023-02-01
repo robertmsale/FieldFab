@@ -13,6 +13,7 @@ import SwiftUI
 
 @main
 struct FieldFabApp: App {
+    /// This property is deprecated now that my app uses InjectionIII
     static let loadMethod: ModuleLoadMethod = .development
     static let appState = AppState()
     static let ductTransitionModuleState = DuctTransition.ModuleState()

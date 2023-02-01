@@ -11,6 +11,7 @@ import SceneKit
 import UIKit
 import ARKit
 import VectorExtensions
+import SIMDExtensions
 #if DEBUG
 @_exported import HotSwiftUI
 #endif
@@ -55,8 +56,8 @@ extension DuctTransition {
         var ductSceneHitTest: (String) -> Void
         @Binding var selectorShown: Bool
         @State var cameraRollTime: Date = Date()
-        let q = DispatchQueue.global(qos: .userInteractive)
-        let s = DispatchSemaphore(value: 1)
+//        let q = DispatchQueue.global(qos: .userInteractive)
+//        let s = DispatchSemaphore(value: 1)
         
         func ductNode(_ scene: SCNScene?) -> SCNNode {
             return scene?.rootNode.childNode(withName: "duct", recursively: false) ?? SCNNode()
@@ -95,6 +96,7 @@ extension DuctTransition {
         }
         func materialUpdate(_ scene: SCNScene?) {
             for node in ductNode(scene).childNodes {
+                if node.name == "tnode" { continue }
                 node.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "\(texture)-diffuse")
                 node.geometry?.firstMaterial?.metalness.contents = UIImage(named: "\(texture)-metallic")
                 node.geometry?.firstMaterial?.normal.contents = UIImage(named: "\(texture)-normal")
@@ -118,6 +120,7 @@ extension DuctTransition {
                     }
                 }
             }
+            
             scene?.rootNode.addChildNode(dNode)
     //        state.events.scene.measurementsChanged = false
         }
@@ -146,8 +149,13 @@ extension DuctTransition {
                     max(ductwork[.width].convert(to: .meters, from: ductwork.unit), ductwork[.twidth].convert(to: .meters, from: ductwork.unit)),
                     max(ductwork[.depth].convert(to: .meters, from: ductwork.unit), ductwork[.tdepth].convert(to: .meters, from: ductwork.unit))
                 ))
-                cam.worldPosition = SCNVector3(0, 0, maxXZ * 4)
+//                let ndist = maxXZ * 4
+//                let dist = simd_length(cam.position.simd)
                 
+//                print(cam.position)
+//                cam.position = V3(ndist, ndist, ndist).scn
+//                print(cam.position)
+                cam.worldPosition = .init(0, 0, maxXZ * 4)
                 cam.look(at: SCNVector3(0, 0, 0))
                 view.pointOfView = cam
             }
@@ -165,6 +173,7 @@ extension DuctTransition {
             let camNode = SCNNode()
             camNode.name = "Camera"
             camNode.camera = camera
+            scene.rootNode.addChildNode(camNode)
     //        let maxXZ = max(state.currentWork?.data.width.rendered3D ?? 0, state.currentWork?.data.depth.rendered3D ?? 0)
             view.pointOfView = camNode
             energyUpdate(view)
@@ -173,14 +182,13 @@ extension DuctTransition {
             materialUpdate(scene)
             helpersUpdate(scene)
             view.crossbrake = crossBrake
-    //        let panG = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panCam(g:)))
-    //        let zoomG = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.zoomCam(g:)))
+//            let panG = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panCam(g:)))
+//            let zoomG = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.zoomCam(g:)))
             let pressG = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.hit(g:)))
             
-    //        view.addGestureRecognizer(panG)
-    //        view.addGestureRecognizer(zoomG)
+//            view.addGestureRecognizer(panG)
+//            view.addGestureRecognizer(zoomG)
             view.addGestureRecognizer(pressG)
-            scene.rootNode.addChildNode(camNode)
             view.scene = scene
             moveCamera(view)
             view.currentDuctwork = ductwork
@@ -197,9 +205,9 @@ extension DuctTransition {
 //            if state.measurementsChanged {
             if ductwork != uiView.currentDuctwork || crossBrake != uiView.crossbrake {
                 geometryUpdateAll(uiView.scene)
+                if ductwork != uiView.currentDuctwork {moveCamera(uiView)}
                 uiView.currentDuctwork = ductwork
                 uiView.crossbrake = crossBrake
-                moveCamera(uiView)
             }
                 materialUpdate(uiView.scene)
                 helpersUpdate(uiView.scene)
@@ -259,15 +267,15 @@ extension DuctTransition {
                 }
                 if g.state == .changed {
                     let camNode = v.scene?.rootNode.childNode(withName: "Camera", recursively: false) ?? SCNNode()
-                    camNode.position = (camNode.position.simd * (g.scale < self.scale ? 0.95 : 1.05)).scn
+                    camNode.position = (camNode.position.simd * (g.scale < self.scale ? 0.95 : 1.05)).asSCNV3
                 }
             }
             
             @objc func panCam(g: UIPanGestureRecognizer) {
                 guard g.view != nil else {return}
                 let v = (g.view! as! SCNView)
-                
-                let translation = g.translation(in: v).simd
+                let t = g.translation(in: v)
+                let translation = V2(t.x, t.y)
                 if g.state == .began {
                     self.initialPan = translation
                 }
@@ -276,12 +284,11 @@ extension DuctTransition {
                     let d = initialPan - translation * V2(repeating: rotSpeed)
                     let camNode = v.scene?.rootNode.childNode(withName: "Camera", recursively: false)
                     let camPos = camNode?.worldPosition ?? SCNVector3()
-                    let camPosSph = Math.Spherical(from: camPos.simd)
+                    let camPosSph = SIMDExtensions.Spherical<Float>(cartesian: camPos.asSIMDF)
                     var camPosSphEnd = camPosSph
-                    camPosSphEnd.data += V3(0, Float(d.y), Float(d.x))
-                    var posEnd = SIMD3<Float>()
-                    posEnd.set(spherical: camPosSphEnd)
-                    camNode?.worldPosition = posEnd.scn
+                    camPosSphEnd.simd += V3(0, Float(d.y), Float(d.x))
+                    let posEnd = camPosSph.asCartesian
+                    camNode?.worldPosition = posEnd.asSCNV3
                     camNode?.worldOrientation = v.scene!.rootNode.worldOrientation
                     camNode?.look(at: SCNVector3(0,0,0))
     //                print(camNode?.worldUp)
@@ -433,6 +440,7 @@ extension DuctTransition {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = []
             configuration.environmentTexturing = .automatic
+            configuration.isLightEstimationEnabled = true
 //            configuration.frameSemantics.insert(.)
             view.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
             let hitG = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.hit(g:)))
@@ -461,6 +469,7 @@ extension DuctTransition {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = []
             configuration.environmentTexturing = .automatic
+            configuration.isLightEstimationEnabled = true
             flownode(view.scene).worldPosition = .init()
             flownode(view.scene).eulerAngles = .init()
             view.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])

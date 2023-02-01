@@ -57,3 +57,9 @@ extension DuctTransition {
 #endif
     }
 }
+
+struct DuctTransition_DuctToPDFPreview: PreviewProvider {
+    static var previews: some View {
+        DuctTransition.DuctToPDF()
+    }
+}

@@ -81,13 +81,14 @@ struct Math {
             radius = length
             if length != 0 {
                 theta = atan2(from.x, from.z)
-                phi = acos(min(-1, max(1, (from.y / length))))
+                phi = acos(max(-1, min(1, (from.y / length))))
             }
         }
         init() {
             data = V3()
         }
     }
+    
     
     struct BlockGeometryBuilder {
         var quads: [Quad] = []
@@ -164,19 +165,19 @@ struct Math {
                 let v2norm = nvf1 + nvf2
                 
                 positions.append(quad.v0)
-                normals.append(v0norm.normal())
+                normals.append(v0norm.normalized)
                 tcoords.append(uv0)
                 
                 positions.append(quad.v1)
-                normals.append(nvf1.normal())
+                normals.append(nvf1.normalized)
                 tcoords.append(uv1)
                 
                 positions.append(quad.v2)
-                normals.append(v2norm.normal())
+                normals.append(v2norm.normalized)
                 tcoords.append(uv2)
                 
                 positions.append(quad.v3)
-                normals.append(nvf2.normal())
+                normals.append(nvf2.normalized)
                 tcoords.append(uv3)
                 
                 faceIndices.append(UInt16(positions.count-4))
@@ -219,5 +220,15 @@ struct Math {
             node.name = name
             return node
         }
+    }
+    
+    struct OrbitalCameraController {
+        typealias V3 = SIMD3<Float>
+        static let minDistance: Float = 0
+        static let maxDistance: Float = .infinity
+        static let minPolarAngle: Float = 0
+        static let maxPolarAngle: Float = .pi
+        static let minAzimuth: Float = -(.infinity)
+        static let maxAzimuth: Float = .infinity
     }
 }

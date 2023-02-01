@@ -10,6 +10,8 @@ import Foundation
 import Accelerate
 import SceneKit
 import SwiftUI
+import SIMDExtensions
+import ComplexModule
 
 typealias DuctSideView = DuctTransition.DuctSideView
 
@@ -131,6 +133,8 @@ extension DuctTransition {
         typealias VertexData = DuctTransition.VertexData
         typealias FaceIndices = DuctTransition.FaceIndices
         typealias MeasurementUnit = DuctTransition.MeasurementUnit
+        typealias V2 = SIMD2<Double>
+        typealias V3 = SIMD3<Float>
         
         var measurements: [Double] = [12.0, 12.0, 12.0, 0.0, 0.0, 12.0, 12.0]
         var unit: MeasurementUnit = .inch {
@@ -159,6 +163,57 @@ extension DuctTransition {
                 Measurement<UnitLength>(value: value, unit: unit.actualUnit).converted(to: to.actualUnit).value
             }
         }
+        
+        func genRawMeasurements(q3D: [V3], q2D: [V2], tabs: [DuctTransition.Tab?], face: DuctTransition.Face) -> [String] {
+            let minXY: V2 = q2D.reduce(V2(100000.0, 100000.0), {res, next in V2(Swift.min(res.x, next.x), Swift.min(res.y, next.y))})
+            let maxXY: V2 = q2D.reduce(V2(-100000.0, -100000.0), {res, next in V2(Swift.max(res.x, next.x), Swift.max(res.y, next.y))})
+            var totalWidth: Double = simd_distance(V2(minXY.x, 0), V2(maxXY.x, 0))
+            let tabWidthEdges: [DuctTransition.TabEdge] = [.left, .right]
+            for edge in tabWidthEdges {
+                if let tab = tabs[edge.rawValue] {
+                    totalWidth += Double(tab.length.meters)
+                }
+            }
+            
+            let tabHeightEdges: [DuctTransition.TabEdge] = [.top, .bottom]
+            
+            var totalHeight: Double = 0.0
+            if face == .front || face == .back {
+                totalHeight = Double(q3D[1].distance(to:V3(q3D[1].x, q3D[2].y, q3D[2].z)))
+            } else {
+                totalHeight = Double(q3D[1].distance(to:V3(q3D[2].x, q3D[2].y, q3D[1].z)))
+            }
+            for edge in tabHeightEdges {
+                if let tab: DuctTransition.Tab = tabs[edge.rawValue] {
+                    totalHeight += Double(tab.length.meters)
+                }
+            }
+            
+            let leftCut: Double = V2(q2D[1].x, 0).distance(to: V2(q2D[2].x, 0))
+            let rightCut: Double = V2(q2D[0].x, 0).distance(to: V2(q2D[3].x, 0))
+            
+            var topEdge: Double = face == .front || face == .back ? self[.twidth] : self[.tdepth]
+            var bottomEdge: Double = face == .front || face == .back ? self[.width] : self[.depth]
+            topEdge = topEdge.convert(to: .meters, from: self.unit)
+            bottomEdge = bottomEdge.convert(to: .meters, from: self.unit)
+            
+            let leftEdge: Double = Double(q3D[1].distance(to: q3D[2]))
+            let rightEdge: Double = Double(q3D[0].distance(to: q3D[3]))
+            
+            return [
+                totalWidth,
+                totalHeight,
+                leftCut,
+                rightCut,
+                topEdge,
+                bottomEdge,
+                leftEdge,
+                rightEdge
+            ]
+                .map { $0.convert(to: self.unit, from: .meters) }
+                .map { self.unit.asViewOnlyString($0) }
+        }
+        
         mutating func makeSideFlat(_ side: String) {
             let depth = self[.depth]
             let tdepth = self[.tdepth]
@@ -438,9 +493,31 @@ extension DuctTransition {
             if cb {
                 let cbdist: Float = 0.0163
                 let oc: V3 = {
-                    let t = ov[id[1]].lerp(ov[id[0]], alpha: 0.5)
-                    let b = ov[id[3]].lerp(ov[id[2]], alpha: 0.5)
-                    let c = t.lerp(b, alpha: 0.5)
+                    let p1 = ov[id[0]]
+                    let p2 = ov[id[2]]
+                    let p3 = ov[id[1]]
+                    let p4 = ov[id[3]]
+                    
+                    let p13 = p1 - p3
+                    let p43 = p4 - p3
+                    let p21 = p2 - p1
+                    
+                    let d1343 = p13.dot(with: p43)
+                    let d4321 = p43.dot(with: p21)
+                    let d1321 = p13.dot(with: p21)
+                    let d4343 = p43.dot(with: p43)
+                    let d2121 = p21.dot(with: p21)
+                    let denom = d2121 * d4343 - d4321 * d4321
+                    let numer = d1343 * d4321 - d1321 * d4343
+                    
+                    let mua = numer / denom
+                    let mub = (d1343 + d4321 * mua) / d4343
+                    
+                    let pa = p1 + mua * p21
+                    let pb = p3 + mub * p43
+
+                    let c = pa.lerp(with: pb, by: 0.5)
+                    
                     let to = V3(
                         f == .left || f == .right ? f == .right ? cbdist : -cbdist : 0, 0,
                         f == .front || f == .back ? f == .front ? cbdist : -cbdist : 0
@@ -491,16 +568,16 @@ extension DuctTransition {
                     var n: [V3] = []
                     for i in 0..<8 {
                         let ii = i*3
-                        let h01 = positions[ii].lerp(positions[ii+1], alpha: 0.5)
-                        let c = h01.lerp(positions[ii+2], alpha: 0.5).normal()
+                        let h01 = positions[ii].lerp(with: positions[ii+1], by: 0.5)
+                        let c = h01.lerp(with: positions[ii+2], by: 0.5).normalized
                         n.append(contentsOf: [
                             c,
                             c,
                             c
                         ])
                     }
-                    let t = V3(0, 1, 0).normal()
-                    let b = V3(0, 1, 0).normal()
+                    let t = V3(0, 1, 0).normalized
+                    let b = V3(0, 1, 0).normalized
                     n.append(contentsOf: [
                         t, t, t, t, t, t,
                         b, b, b, b, b, b,
@@ -647,8 +724,40 @@ extension DuctTransition {
                     verts = verts.map({ $0 + (axis * -mag) })
                 }
             } else if tab.type == .tapered || tab.type == .foldIn || tab.type == .foldOut {
-                if f == .front {
-                    //                verts[0] = verts[0].translated([.x: -mag])
+                if f == .front || f == .back {
+                    if  e == .bottom && tab.type != .foldOut ||
+                        e == .top && tab.type == .foldIn ||
+                            f == .back && tab.type == .tapered
+                    { mag = -mag }
+                    if f == .back && e == .bottom && tab.type == .tapered {
+                        mag = -mag
+                    }
+                    let xmag = V3(mag, 0, 0)
+                    let nxmag = V3(-mag, 0, 0)
+                    verts[0] = verts[0] + xmag
+                    verts[4] = verts[4] + xmag
+                    verts[1] = verts[1] + nxmag
+                    verts[5] = verts[5] + nxmag
+                }
+                if f == .left || f == .right {
+                    if f == .left && e == .top && tab.type == .foldOut {
+                        mag = -mag
+                    }
+                    if f == .left && e == .bottom && (tab.type == .tapered || tab.type == .foldOut) {
+                        mag = -mag
+                    }
+                    if f == .right && e == .top && (tab.type == .tapered || tab.type == .foldOut) {
+                        mag = -mag
+                    }
+                    if f == .right && e == .bottom && (tab.type == .foldOut) {
+                        mag = -mag
+                    }
+                    let zmag = V3(0, 0, mag)
+                    let nzmag = V3(0, 0, -mag)
+                    verts[0] = verts[0] + zmag
+                    verts[4] = verts[4] + zmag
+                    verts[1] = verts[1] + nzmag
+                    verts[5] = verts[5] + nzmag
                 }
             }
             return Math.BlockGeometryBuilder(quads: [

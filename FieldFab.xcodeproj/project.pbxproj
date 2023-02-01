@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		7E89E14873ACECE13D83E76A /* IntakeCalculatorModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E89EEFE162188B0CA0C7318 /* IntakeCalculatorModule.swift */; };
 		EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = EE12F1812592F6F8007F5CE4 /* PopupView */; };
+		EE148C2C2980685100731D0E /* SIMDExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = EE148C2B2980685100731D0E /* SIMDExtensions */; };
+		EE148C2F29807BD100731D0E /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = EE148C2E29807BD100731D0E /* ComplexModule */; };
+		EE148C3129807BD100731D0E /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = EE148C3029807BD100731D0E /* Numerics */; };
+		EE148C3329807BD100731D0E /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = EE148C3229807BD100731D0E /* RealModule */; };
 		EE25E478296A07F7000C7451 /* HotSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = EE25E477296A07F7000C7451 /* HotSwiftUI */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EE39100D2963D4F4000E7331 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39100C2963D4F4000E7331 /* ActivityView.swift */; };
 		EE3910102963DCD4000E7331 /* BalancePointCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE39100F2963DCD4000E7331 /* BalancePointCalcView.swift */; };
@@ -117,9 +121,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE12F1822592F6F8007F5CE4 /* PopupView in Frameworks */,
+				EE148C2F29807BD100731D0E /* ComplexModule in Frameworks */,
 				EE6C3B9B2599778300AA70AE /* StringFix in Frameworks */,
 				EEFB98D82526CCA8008AB605 /* Disk in Frameworks */,
+				EE148C3129807BD100731D0E /* Numerics in Frameworks */,
+				EE148C2C2980685100731D0E /* SIMDExtensions in Frameworks */,
 				EE9FEB9C296909B800B3C12A /* AppReview in Frameworks */,
+				EE148C3329807BD100731D0E /* RealModule in Frameworks */,
 				EEB3AE7C258CE95100285C20 /* VectorExtensions in Frameworks */,
 				EE8D3990258326B700A1AC39 /* VectorExtensions in Frameworks */,
 				EE25E478296A07F7000C7451 /* HotSwiftUI in Frameworks */,
@@ -328,6 +336,10 @@
 				EE6C3B9A2599778300AA70AE /* StringFix */,
 				EE9FEB9B296909B800B3C12A /* AppReview */,
 				EE25E477296A07F7000C7451 /* HotSwiftUI */,
+				EE148C2B2980685100731D0E /* SIMDExtensions */,
+				EE148C2E29807BD100731D0E /* ComplexModule */,
+				EE148C3029807BD100731D0E /* Numerics */,
+				EE148C3229807BD100731D0E /* RealModule */,
 			);
 			productName = FieldFab;
 			productReference = EEC7CF3225034396003389AB /* FieldFab.app */;
@@ -409,6 +421,8 @@
 				EE6C3B992599778300AA70AE /* XCRemoteSwiftPackageReference "StringFix" */,
 				EE9FEB9A296909B800B3C12A /* XCRemoteSwiftPackageReference "AppReview" */,
 				EE25E4712969F1AF000C7451 /* XCRemoteSwiftPackageReference "HotSwiftUI" */,
+				EE148C2A2980685100731D0E /* XCRemoteSwiftPackageReference "SIMDExtensions" */,
+				EE148C2D29807BD100731D0E /* XCRemoteSwiftPackageReference "swift-numerics" */,
 			);
 			productRefGroup = EEC7CF3325034396003389AB /* Products */;
 			projectDirPath = "";
@@ -691,7 +705,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.0.5;
+				CURRENT_PROJECT_VERSION = 3.0.6;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -703,7 +717,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.5;
+				MARKETING_VERSION = 3.0.6;
 				OTHER_LDFLAGS = (
 					"-Xlinker",
 					"-interposable",
@@ -726,7 +740,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FieldFab/FieldFab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.0.5;
+				CURRENT_PROJECT_VERSION = 3.0.6;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = J737B85W5Z;
 				ENABLE_PREVIEWS = YES;
@@ -738,7 +752,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.5;
+				MARKETING_VERSION = 3.0.6;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = Just1Guy.FieldFab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -884,6 +898,22 @@
 				minimumVersion = 0.0.10;
 			};
 		};
+		EE148C2A2980685100731D0E /* XCRemoteSwiftPackageReference "SIMDExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/robertmsale/SIMDExtensions";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		EE148C2D29807BD100731D0E /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		EE25E4712969F1AF000C7451 /* XCRemoteSwiftPackageReference "HotSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnno1962/HotSwiftUI";
@@ -931,6 +961,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EE12F1802592F6F8007F5CE4 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
+		};
+		EE148C2B2980685100731D0E /* SIMDExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE148C2A2980685100731D0E /* XCRemoteSwiftPackageReference "SIMDExtensions" */;
+			productName = SIMDExtensions;
+		};
+		EE148C2E29807BD100731D0E /* ComplexModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE148C2D29807BD100731D0E /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = ComplexModule;
+		};
+		EE148C3029807BD100731D0E /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE148C2D29807BD100731D0E /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
+		};
+		EE148C3229807BD100731D0E /* RealModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE148C2D29807BD100731D0E /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = RealModule;
 		};
 		EE25E477296A07F7000C7451 /* HotSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

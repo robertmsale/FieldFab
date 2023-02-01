@@ -336,28 +336,43 @@ extension DuctTransition {
             func drawMorePaths() -> some View {
                 if points[1].x > points[2].x {
                     Path { p in
-                        
                         p.move(to: (tPoints[1]).cgpoint)
-                        p.addLine(to: V2(points[1].x - (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[1].y).cgpoint)
+                        let next = V2(points[1].x - (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[1].y)
+                        p.addLine(to: next.cgpoint)
+                        if let t = ductwork.tabs[face, .top] {
+                            p.addLine(to: (next + V2(0, Self.tabLen * t.length.ratio)).cgpoint )
+                        }
                     }
                     .stroke(Color.red)
                 } else if points[1].x < points[2].x {
                     Path { p in
                         p.move(to: tPoints[2].cgpoint)
-                        p.addLine(to: V2(points[2].x - (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[2].y).cgpoint)
+                        let next = V2(points[2].x - (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.left]?.length.ratio ?? 0)), tPoints[2].y)
+                        p.addLine(to: next.cgpoint)
+                        if let t = ductwork.tabs[face, .bottom] {
+                            p.addLine(to: (next - V2(0, Self.tabLen * t.length.ratio)).cgpoint )
+                        }
                     }
                     .stroke(Color.red)
                 }
                 if points[0].x < points[3].x {
                     Path { p in
                         p.move(to: tPoints[0].cgpoint)
-                        p.addLine(to: V2(points[0].x + (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[0].y).cgpoint)
+                        let next = V2(points[0].x + (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[0].y)
+                        p.addLine(to: next.cgpoint)
+                        if let t = ductwork.tabs[face, .top] {
+                            p.addLine(to: (next + V2(0, Self.tabLen * t.length.ratio)).cgpoint )
+                        }
                     }
                     .stroke(Color.red)
                 } else if points[0].x > points[3].x {
                     Path { p in
                         p.move(to: tPoints[3].cgpoint)
-                        p.addLine(to: V2(points[3].x + (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[3].y).cgpoint)
+                        let next = V2(points[3].x + (Self.tabLen * (ductwork.tabs[face, DuctTransition.TabEdge.right]?.length.ratio ?? 0)), tPoints[3].y)
+                        p.addLine(to: next.cgpoint)
+                        if let t = ductwork.tabs[face, .bottom] {
+                            p.addLine(to: (next - V2(0, Self.tabLen * t.length.ratio)).cgpoint )
+                        }
                     }
                     .stroke(Color.red)
                 }
@@ -416,7 +431,7 @@ extension DuctTransition {
                     .position(points[2].lerp(points[3], alpha: 0.5).cgpoint)
                     .offset(y: 11)
                     .offset(y: tabs[TE.bottom.rawValue] != nil ? CompilerRelief.tabLen * tabs[TE.bottom.rawValue]!.length.ratio : 0)
-                Text(measurements[6])
+                Text(measurements[face == .front || face == .left ? 6 : 7])
                     .fixedSize()
                     .rotationEffect(Angle(degrees: -90))
                     .rotationEffect(Angle(radians: {
@@ -428,7 +443,7 @@ extension DuctTransition {
                     }()))
                     .position(points[1].lerp(points[2], alpha: 0.5).cgpoint)
                     .offset(x: 11)
-                Text(measurements[7])
+                Text(measurements[face == .front || face == .left ? 7 : 6])
                     .fixedSize()
                     .rotationEffect(Angle(degrees: -90))
                     .rotationEffect(Angle(radians: {

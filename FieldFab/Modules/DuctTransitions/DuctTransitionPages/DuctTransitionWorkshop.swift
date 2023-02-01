@@ -13,10 +13,23 @@ import SwiftUI
 
 extension DuctTransition {
     struct Workshop: View {
-        @AppStorage(AppStorageKeys.autoSave) var autoSave = true
+        typealias Key = AppStorageKeys
         @State var ductwork: DuctTransition.DuctData
         @EnvironmentObject var state: DuctTransition.ModuleState
         @EnvironmentObject var appState: AppState
+        @Environment(\.horizontalSizeClass) var horizontalSizeClass
+        @AppStorage(Key.texture) var texture: String = "galvanized"
+        @AppStorage(Key.crossBrake) var crossBrake: Bool = true
+        @AppStorage(Key.lighting) var lighting: LightingMethod = .physicallyBased
+        @AppStorage(Key.energySaver) var energySaver: Bool = false
+        @AppStorage(Key.showHelpers) var showHelpers: Bool = false
+        @AppStorage(Key.showDebugInfo) var showDebugInfo: Bool = false
+        @AppStorage(Key.bgType) var bgType: BackgroundType = .image
+        @AppStorage(Key.bgR) var bgR: Double = 0.0
+        @AppStorage(Key.bgG) var bgG: Double = 0.0
+        @AppStorage(Key.bgB) var bgB: Double = 1.0
+        @AppStorage(Key.bgImage) var bgImage: BackgroundImage = .shop
+        @AppStorage(Key.autoSave) var autoSave: Bool = true
         @State var tabSelected = 0
         @State var menuShown = false
         @State var saveCompleteShown = false
@@ -75,69 +88,91 @@ extension DuctTransition {
             })
         }
         
-        var body: some View {
-            TabView(selection: $tabSelected) {
-                DuctTransition.DuctEditor(ductwork: $ductwork)
-                    .tabItem {
-                        Label("Workshop", systemImage: "hammer")
-                    }
-                    .tag(0)
-                GeometryReader { g in
-                    DuctTransition.SceneView(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
+        var ductEditor: some View {
+            DuctTransition.DuctEditor(ductwork: $ductwork, faceHit: $faceHit, showSideFlatDialog: $showSideFlatDialog)
+                .tabItem {
+                    Label("Workshop", systemImage: "hammer")
+                }
+                .tag(0)
+        }
+        
+        var duct3D: some View {
+            GeometryReader { g in
+                DuctTransition.SceneView(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
+                    faceHit = s
+                    showSideFlatDialog = true
+                }, selectorShown: Binding.blank(false))
+            }
+                .tabItem {
+                    Label("3D", systemImage: "scale.3d")
+                }
+                .tag(1)
+        }
+        
+        var ductAR: some View {
+            GeometryReader { g in
+                ZStack {
+                    DuctTransition.DuctAR(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
                         faceHit = s
                         showSideFlatDialog = true
-                    }, selectorShown: Binding.blank(false))
-                }
-                    .tabItem {
-                        Label("3D", systemImage: "scale.3d")
-                    }
-                    .tag(1)
-                GeometryReader { g in
-                    ZStack {
-                        DuctTransition.DuctAR(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
-                            faceHit = s
-                            showSideFlatDialog = true
-                        }, resetARSession: $resetARSession, selectorShown: Binding.blank(false))
-                        VStack {
-                            HStack {
-                                Menu("Translation Mode") {
-                                    Picker("Translation Mode", selection: $state.translationMode) {
-                                        ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
-                                            Text(tm.localizedString).tag(tm)
-                                        }
+                    }, resetARSession: $resetARSession, selectorShown: Binding.blank(false))
+                    VStack {
+                        HStack {
+                            Menu("Translation Mode") {
+                                Picker("Translation Mode", selection: $state.translationMode) {
+                                    ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
+                                        Text(tm.localizedString).tag(tm)
                                     }
                                 }
-                                Spacer()
-                                Menu("Flow Direction") {
-                                    Picker("Flow Direction", selection: $state.flowDirection) {
-                                        ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
-                                            Text(fd.localizedString).tag(fd)
-                                        }
-                                    }
-                                }
-                                Spacer()
-                                Button(action: {
-                                    Task {
-                                        resetARSession = true
-                                    }
-                                }) {
-                                    Image(systemName: "arrow.counterclockwise")
-                                }
-                                .font(.title)
-                            }
-                            .padding(.all)
-                            .background {
-                                BlurEffectView()
                             }
                             Spacer()
+                            Menu("Flow Direction") {
+                                Picker("Flow Direction", selection: $state.flowDirection) {
+                                    ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
+                                        Text(fd.localizedString).tag(fd)
+                                    }
+                                }
+                            }
+                            Spacer()
+                            Button(action: {
+                                Task {
+                                    resetARSession = true
+                                }
+                            }) {
+                                Image(systemName: "arrow.counterclockwise")
+                            }
+                            .font(.title)
                         }
+                        .padding(.all)
+                        .background {
+                            BlurEffectView()
+                        }
+                        Spacer()
                     }
                 }
-                    .tabItem {
-                        Label("AR", systemImage: "camera.viewfinder")
-                    }
-                    .tag(2)
             }
+                .tabItem {
+                    Label("AR", systemImage: "camera.viewfinder")
+                }
+                .tag(2)
+        }
+        
+        @ViewBuilder
+        func renderTabView() -> some View {
+            let ui = UIDevice.current.userInterfaceIdiom
+            if ui == .phone || (ui == .pad && horizontalSizeClass == .compact) {
+                TabView(selection: $tabSelected) {
+                    ductEditor
+                    duct3D
+                    ductAR
+                }
+            } else {
+                ductEditor
+            }
+        }
+        
+        var body: some View {
+            renderTabView()
             .alert(String("Make \(faceHit) side flat?"), isPresented: $showSideFlatDialog) {
                 Button(action: {
                     Task {
@@ -192,6 +227,19 @@ extension DuctTransition {
                     ShareLink("Share PDF", item: renderPDF)
                 }, label: {
                     Image(systemName: "square.and.arrow.up")
+                })
+                Menu(content: {
+                    Toggle("Show Helpers", isOn: $showHelpers)
+                    Toggle("Crossbrake", isOn: $crossBrake)
+                    Toggle("Auto Save", isOn: $autoSave)
+                    Toggle("Debug Info", isOn: $showDebugInfo)
+                    Button(action: {Task {
+                        state.settingsViewShown = true
+                    }}) {
+                        Text("... More Settings")
+                    }
+                }, label: {
+                    Image(systemName: "gear")
                 })
             }
             #if DEBUG

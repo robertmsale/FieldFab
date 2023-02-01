@@ -12,6 +12,7 @@ import SwiftUI
 #endif
 
 extension DuctTransition {
+    
     struct DuctEditor: View {
         enum TabLengthAndNone: Int, CaseIterable, Identifiable {
             case none, inch, half, threeEighth
@@ -58,9 +59,13 @@ extension DuctTransition {
         }
         
         typealias DTF = DuctTransition.Face
+        typealias Key = AppStorageKeys
         @Binding var ductwork: DuctTransition.DuctData
         @Environment(\.horizontalSizeClass) var horizontalSizeClass
         @Environment(\.verticalSizeClass) var verticalSizeClass
+        @Environment(\.colorScheme) var colorScheme
+        @EnvironmentObject var state: DuctTransition.ModuleState
+        @State var resetARSession: Bool = false
         @State var currentFace: FacesAndAll = .all
         @State var currentMeasurement: DuctTransition.UserMeasurement = .width
         @State var currentValue: String = "0"
@@ -68,68 +73,159 @@ extension DuctTransition {
         @State var currentTabLength: TabLengthAndNone = .none
         @State var currentTabType: TabTypeAndNone = .none
         @State var keyboardShown = false
+        @State var fullScreen: Bool = false
+        @Binding var faceHit: String
+        @Binding var showSideFlatDialog: Bool
         var currentCanBeNegative: Bool {
             currentMeasurement == .offsetx || currentMeasurement == .offsety
         }
-        let debug = false
+        var ui: UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
         
+        var isPad: Bool { ui == .pad || ui == .mac }
+        var isPadCompactHorizontal: Bool { isPad && horizontalSizeClass == .compact}
+        var isPadFullHorizontal: Bool { isPad && horizontalSizeClass != .compact}
+        var isPhone: Bool { ui == .phone }
+        var isPhoneLandscape: Bool { isPhone && horizontalSizeClass == .regular && verticalSizeClass == .compact}
+        var isPhoneSmall: Bool { isPhone && horizontalSizeClass == .compact && verticalSizeClass == .compact}
+        
+        
+        let debug = false
+        @ViewBuilder
+        func draw4SideViews(_ w: CGFloat, _ h: CGFloat, _ ox: CGFloat, _ oy: CGFloat) -> some View {
+            HStack {
+                ZStack {
+                    DuctTransition.DuctSideView(ductwork: ductwork, face: .front)
+                        .scaleEffect(0.75)
+                    Text("F")
+                }
+                .frame(width: w / 2, height: h / 2)
+                .offset(x: ox, y: oy)
+                .border(Color.blue, width: debug ? 2 : 0)
+                ZStack {
+                    DuctTransition.DuctSideView(ductwork: ductwork, face: .back)
+                        .scaleEffect(0.75)
+                    Text("B")
+                }
+                .frame(width: w / 2, height: h / 2)
+                .offset(x: ox, y: oy)
+                .border(Color.blue, width: debug ? 2 : 0)
+            }
+            HStack {
+                ZStack {
+                    DuctTransition.DuctSideView(ductwork: ductwork, face: .left)
+                        .scaleEffect(0.75)
+                    Text("L")
+                }
+                .frame(width: w / 2, height: h / 2)
+                .offset(x: ox, y: oy)
+                .border(Color.blue, width: debug ? 2 : 0)
+                ZStack {
+                    DuctTransition.DuctSideView(ductwork: ductwork, face: .right)
+                        .scaleEffect(0.75)
+                    Text("R")
+                }
+                .frame(width: w / 2, height: h / 2)
+                .offset(x: ox, y: oy)
+                .border(Color.blue, width: debug ? 2 : 0)
+            }
+        }
         @ViewBuilder
         func drawSideViews(_ g: GeometryProxy) -> some View {
                 if currentFace == .all {
                     VStack {
-                        let w = (verticalSizeClass == .compact ? g.size.width / 2 : g.size.width) * 0.5
-                        let h = (verticalSizeClass == .compact ? g.size.height : g.size.height / 2) * 0.5
-                        HStack {
-                            ZStack {
-                                DuctTransition.DuctSideView(ductwork: ductwork, face: .front)
-                                    .scaleEffect(0.75)
-                                Text("F")
+                        let w = isPadFullHorizontal ?
+                            (g.size.width > g.size.height ?
+                                g.size.width / 3 :
+                                g.size.width / 2) :
+                        g.size.width > g.size.height ? g.size.height : g.size.width * 0.6
+                        let h = w
+                        let ox = CGFloat(11)
+                        let oy = CGFloat(11)
+//                        Text(horizontalSizeClass == .compact ? "Compact" : "Regular")
+                        if isPhone && g.size.width > g.size.height {
+                            ScrollView {
+                                draw4SideViews(w, h, ox, oy)
                             }
-                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
-                            .clipped()
-                            .border(Color.blue, width: debug ? 2 : 0)
-                            ZStack {
-                                DuctTransition.DuctSideView(ductwork: ductwork, face: .back)
-                                    .scaleEffect(0.75)
-                                Text("B")
-                            }
-                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
-                            .clipped()
-                            .border(Color.blue, width: debug ? 2 : 0)
-                        }
-                        HStack {
-                            ZStack {
-                                DuctTransition.DuctSideView(ductwork: ductwork, face: .left)
-                                    .scaleEffect(0.75)
-                                Text("L")
-                            }
-                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
-                            .clipped()
-                            .border(Color.blue, width: debug ? 2 : 0)
-                            ZStack {
-                                DuctTransition.DuctSideView(ductwork: ductwork, face: .right)
-                                    .scaleEffect(0.75)
-                                Text("R")
-                            }
-                            .frame(width: UIDevice.current.userInterfaceIdiom != .pad ? w : w * 0.5, height: h)
-                            .clipped()
-                            .border(Color.blue, width: debug ? 2 : 0)
+                        } else {
+                            draw4SideViews(w, h, ox, oy)
                         }
                     }
-                    .offset(y: -18)
+                    .offset(y: -2)
 //                    .background(Color.blue)
                 } else {
 //                    let sq = min(g.size.width, g.size.height) * 0.75
-                    let w = (verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) ? g.size.width / 2 : g.size.width) * 0.75
-                    let h = (verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) ? g.size.height : g.size.height / 2) * 0.75
+                    let w = (verticalSizeClass == .compact || (isPad) ? g.size.width / 2 : g.size.width) * 0.75
+                    let h = (verticalSizeClass == .compact || (isPad) ? g.size.height : g.size.height / 2) * 0.75
+                    let d = UIDevice.current.userInterfaceIdiom
                     VStack {
                         Spacer()
                         DuctTransition.DuctSideView(ductwork: ductwork, face: currentFace.actual)
-                            .frame(minWidth: w, minHeight: h)
+                            .frame(minWidth: w * (d != .phone ? 0.5 : 1), minHeight: h * (d != .phone ? 0.5 : 1))
                             .border(Color.blue, width: debug ? 2 : 0)
                         Spacer()
                     }
                 }
+        }
+        
+        var duct3D: some View {
+            GeometryReader { g in
+                DuctTransition.SceneView(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
+                    faceHit = s
+                    showSideFlatDialog = true
+                }, selectorShown: Binding.blank(false))
+            }
+                .tabItem {
+                    Label("3D", systemImage: "scale.3d")
+                }
+                .tag(1)
+        }
+        
+        var ductAR: some View {
+            GeometryReader { g in
+                ZStack {
+                    DuctTransition.DuctAR(geo: g, textShown: false, ductwork: ductwork, ductSceneHitTest: {s in
+                        faceHit = s
+                        showSideFlatDialog = true
+                    }, resetARSession: $resetARSession, selectorShown: Binding.blank(false))
+                    VStack {
+                        HStack {
+                            Menu("Translation Mode") {
+                                Picker("Translation Mode", selection: $state.translationMode) {
+                                    ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
+                                        Text(tm.localizedString).tag(tm)
+                                    }
+                                }
+                            }
+                            Spacer()
+                            Menu("Flow Direction") {
+                                Picker("Flow Direction", selection: $state.flowDirection) {
+                                    ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
+                                        Text(fd.localizedString).tag(fd)
+                                    }
+                                }
+                            }
+                            Spacer()
+                            Button(action: {
+                                Task {
+                                    resetARSession = true
+                                }
+                            }) {
+                                Image(systemName: "arrow.counterclockwise")
+                            }
+                            .font(.title)
+                        }
+                        .padding(.all)
+                        .background {
+                            BlurEffectView()
+                        }
+                        Spacer()
+                    }
+                }
+            }
+                .tabItem {
+                    Label("AR", systemImage: "camera.viewfinder")
+                }
+                .tag(2)
         }
         
         @ViewBuilder
@@ -348,25 +444,66 @@ extension DuctTransition {
             .zIndex(5000)
         }
         
+        
         @ViewBuilder func drawContent(_ g: GeometryProxy) -> some View {
-            if verticalSizeClass != .compact && (UIDevice.current.userInterfaceIdiom != .pad) { drawFacePicker() }
-            
-            drawSideViews(g)
-            
+            let ui = UIDevice.current.userInterfaceIdiom
+            if verticalSizeClass != .compact && (ui != .pad) || (ui == .pad && horizontalSizeClass == .compact) { drawFacePicker() }
             VStack {
-                if verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) { drawFacePicker() }
+                if ui == .phone || (ui == .pad && horizontalSizeClass == .compact)  { drawSideViews(g) }
+                #if targetEnvironment(macCatalyst)
+                duct3D
+                #else
+                if ui == .pad && horizontalSizeClass != .compact {
+                    ZStack {
+                        TabView {
+                            duct3D
+                            ductAR
+                        }
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    withAnimation(.easeInOut, {
+                                        fullScreen = !fullScreen
+                                    })
+                                }) {
+                                    Image(systemName: fullScreen ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+                                        .padding(.all, 10)
+                                        .background {
+                                            BlurEffectView(style: .dark)
+                                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                                        }
+                                }
+                                
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .zIndex(1000)
+                    }
+                }
+                #endif
+            }
+            VStack {
+                if verticalSizeClass == .compact || (isPad && horizontalSizeClass != .compact) { drawFacePicker() }
+                if ui == .pad && horizontalSizeClass != .compact {
+                    drawSideViews(g)
+                }
                 Form {
                     drawMeasurements()
                     drawTabSelectors()
                 }
                 .border(Color.blue, width: debug ? 2 : 0)
             }
+            .frame(width: ui == .pad ? fullScreen ? 0 : horizontalSizeClass == .compact ? g.size.width : g.size.width / 2 : verticalSizeClass == .compact ? g.size.width / 2 : g.size.width)
+            .opacity(fullScreen ? 0 : 1)
         }
         
         var body: some View {
+            let ui = UIDevice.current.userInterfaceIdiom
             GeometryReader { g in
                 ZStack {
-                    if verticalSizeClass == .compact || (UIDevice.current.userInterfaceIdiom == .pad) {
+                    if verticalSizeClass == .compact || (ui == .pad && horizontalSizeClass != .compact) {
                         HStack {
                             drawContent(g)
                         }

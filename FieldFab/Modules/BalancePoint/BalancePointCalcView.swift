@@ -85,9 +85,9 @@ struct BalancePointCalcView: View {
 //        }
 
     var bp: Num {
-        let a = Num(houseAt26)
-        let b = Num(hpAt17)
-        let c = Num(hpAt47)
+//        let a = Num(houseAt26)
+//        let b = Num(hpAt17)
+//        let c = Num(hpAt47)
         let X1 = Num(26), X2 = Num(70), X3 = Num(17), X4 = Num(47), Y1 = Num(houseAt26) ?? Num(1), Y2 = Num(2), Y3 = Num(hpAt17) ?? Num(1), Y4 = Num(hpAt47) ?? Num(1)
 
         return ((X1 * Y2 - Y1 * X2) * (X3 - X4) - (X3 * Y4 - Y3 * X4) * (X1 - X2)) / (((X1 - X2) * (Y3 - Y4)) - ((Y1 - Y2) * (X3 - X4)))
