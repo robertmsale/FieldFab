@@ -310,9 +310,10 @@ extension DuctTransition {
             @ViewBuilder
             func drawPaths() -> some View {
                 
-                ductPath
-                    .fill(ImagePaint(image:Image("\(texture)-diffuse").resizable()))
+                Image("\(texture)-diffuse")
+                    .resizable()
                     .opacity(colorScheme == .light ? 0.5 : 1)
+                    .clipShape(ductPath)
                 if showHelpers {
                     ductPath
                         .fill(face == .front ? Color.green : face == .back ? Color.red : face == .left ? Color.yellow : Color.blue)
@@ -326,9 +327,9 @@ extension DuctTransition {
                     .stroke(lineWidth: 1)
                 ForEach(tabPoints) { point in
                     let path = genPath(g, points: point.points)
-                    path
-                        .fill(ImagePaint(image: Image("\(texture)-diffuse")))
+                    Image("\(texture)-diffuse")
                         .opacity(colorScheme == .dark ? 0.75 : 0.25)
+                        .clipShape(path)
                 }
             }
             static let tabLen: Double = 15.0

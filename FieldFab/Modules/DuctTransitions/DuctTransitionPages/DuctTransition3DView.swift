@@ -211,22 +211,6 @@ extension DuctTransition {
             }
                 materialUpdate(uiView.scene)
                 helpersUpdate(uiView.scene)
-//            }
-//            else if state.tabsChanged {
-//                geometryUpdateAll(uiView.scene)
-//                materialUpdate(uiView.scene)
-//                helpersUpdate(uiView.scene)
-//            }
-//            if state.textureChanged { materialUpdate(uiView.scene) }
-//            if state.helpersChanged { helpersUpdate(uiView.scene) }
-//            if state.drawerChanged { moveCamera(uiView) }
-//            if state.needsReset {
-//                Task {
-//                    state.sceneEvents = EventState.Scene()
-//                }
-//            }
-//            if state.currentWorkTab == 1 && !uiView.isPlaying { uiView.play(nil) }
-//            if state.currentWorkTab != 1 && uiView.isPlaying { uiView.pause(nil) }
             uiView.showsStatistics = showDebugInfo
         }
         
