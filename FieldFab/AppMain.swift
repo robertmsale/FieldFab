@@ -40,7 +40,6 @@ struct FieldFabApp: App {
                         Self.appState.currentModule = AppView.AvailableModules.ductTransition
                         var params: [String: String] = [:]
                         URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {params[$0.name] = $0.value}
-                        
                         let urle = params["encoded"]
                         let b64 = urle?.removingPercentEncoding ?? ""
                         guard let data = Data(base64Encoded: b64) else { return }
