@@ -10,9 +10,6 @@ import SwiftUI
 import Charts
 import simd
 import Foundation
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension View {
     func hideKeyboard() {
@@ -254,11 +251,7 @@ struct BalancePointCalcView: View {
                 helpAlert()
             }
 
-            #if DEBUG
             .eraseToAnyView()
-            #endif
     }
-    #if DEBUG
-    @ObservedObject var iO = injectionObserver
-    #endif
+    @ObserveInjection var redraw
 }

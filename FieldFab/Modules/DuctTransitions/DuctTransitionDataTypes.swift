@@ -76,7 +76,7 @@ extension DuctTransition {
             if self == .inch {
                 var suffix = ""
                 var floor = num.rounded(.towardZero)
-                switch abs(num.distance(to: floor)) {
+                switch Swift.abs(num.distance(to: floor)) {
                 case let x where x >= 0.0625 && x < 0.1875: suffix = "⅛"
                 case let x where x >= 0.1875 && x < 0.3125: suffix = "¼"
                 case let x where x >= 0.3125 && x < 0.4375: suffix = "⅜"
@@ -102,7 +102,7 @@ extension DuctTransition {
             case .millimeters: return estring + " mm"
             case .centimeters: return estring + " cm"
             case .feet: return estring + " ft"
-            default: return estring + "m"
+            default: return estring + " m"
             }
         }
     }
@@ -125,6 +125,22 @@ extension DuctTransition {
         }
     }
 }
+
+extension DuctTransition {
+    struct AirflowData: Codable, Identifiable, Hashable, Equatable {
+        var id: UUID = UUID()
+        var expectedCFM: Double
+        var kFactor: Double
+        var area: Double
+        var velocityPressure: Double {
+            (velocity/4005.0) * (velocity/4005.0)
+        }
+        var velocity: Double {
+            expectedCFM / area
+        }
+    }
+}
+
 extension DuctTransition {
     struct DuctData: Codable, Identifiable, Hashable, Equatable {
         typealias Tab = DuctTransition.Tab
@@ -162,6 +178,23 @@ extension DuctTransition {
             measurements = measurements.map { value in
                 Measurement<UnitLength>(value: value, unit: unit.actualUnit).converted(to: to.actualUnit).value
             }
+        }
+        
+        func getAirflowData(expectedCFM: Double) -> AirflowData {
+            let dd: DuctData = self.converted(to: .feet) // for CFM and FPM
+            // outlet offset relative to inlet
+            let centerlineOffset: Double = {
+                let inlet = SIMD2<Double>(dd[.width], dd[.depth])
+                let offsets = SIMD2<Double>(dd[.offsetx], dd[.offsety]).abs
+                
+                return offsets.length / inlet.length
+            }()
+            let inletArea = dd[.width] * dd[.depth]
+            let outletArea = dd[.twidth] * dd[.tdepth]
+            let inletDiag = SIMD2<Double>(dd[.width], dd[.depth]).length / 2
+            
+            return AirflowData(expectedCFM: expectedCFM, kFactor: 1.0 + centerlineOffset/inletDiag, area: inletArea)
+            
         }
         
         func genRawMeasurements(q3D: [V3], q2D: [V2], tabs: [DuctTransition.Tab?], face: DuctTransition.Face) -> [String] {
@@ -222,13 +255,13 @@ extension DuctTransition {
             switch side {
                 case "Front":
                     print("Made side flat")
-                    self[.offsety] = abs(depth - tdepth)
+                self[.offsety] = Swift.abs(depth - tdepth)
                 case "Back":
-                    self[.offsety] = -abs(depth - tdepth)
+                self[.offsety] = -Swift.abs(depth - tdepth)
                 case "Right":
-                    self[.offsetx] = abs(width - twidth)
+                self[.offsetx] = Swift.abs(width - twidth)
                 case "Left":
-                    self[.offsetx] = -abs(width - twidth)
+                self[.offsetx] = -Swift.abs(width - twidth)
                 default: break
             }
         }
@@ -254,6 +287,8 @@ extension DuctTransition {
         static let GAUGE: Float = 0.00045
         var outer: [V3]
         var inner: [V3]
+        var ox: Float
+        var oy: Float
         init(_ data: DuctData) {
             let toMeters = data.converted(to: .meters)
             let w = Float(toMeters[.width]) / 2
@@ -264,6 +299,8 @@ extension DuctTransition {
             let u = Float(toMeters[.twidth]) / 2
             let b = Float(toMeters[.tdepth]) / 2
             let g = VertexData.GAUGE
+            ox = Float(toMeters[.offsetx])
+            oy = Float(toMeters[.offsety])
             outer = [
                 V3( u,  l,  b) + V3(x, 0, y),
                 V3(-u,  l,  b) + V3(x, 0, y),
@@ -769,5 +806,14 @@ extension DuctTransition {
                 Math.Quad(verts[0], verts[4], verts[7], verts[3])
             ]).getGeometryParts().toNode(name: "tab-" + f.localizedString + e.localizedString)
         }
+    }
+}
+
+extension DuctTransition {
+    struct JobData: Codable, Identifiable {
+        var id: UUID = UUID()
+        var modifiedOn: Date = Date.now
+        var name: String
+        var ducts: [UUID]
     }
 }

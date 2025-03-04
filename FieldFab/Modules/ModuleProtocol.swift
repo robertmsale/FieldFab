@@ -23,7 +23,12 @@ struct ModuleProtocolPreviews: PreviewProvider {
     struct ModuleChildTest: View {
         var body: some View {
             Text("Ayyyyy")
+            .enableInjection()
         }
+
+        #if DEBUG
+        @ObserveInjection var forceRedraw
+        #endif
     }
     static var previews: some View {
         ModuleChildTest()

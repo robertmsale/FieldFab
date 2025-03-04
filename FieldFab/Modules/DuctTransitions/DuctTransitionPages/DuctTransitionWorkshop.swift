@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct Workshop: View {
@@ -121,7 +118,7 @@ extension DuctTransition {
                             Menu("Translation Mode") {
                                 Picker("Translation Mode", selection: $state.translationMode) {
                                     ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
-                                        Text(tm.localizedString).tag(tm)
+                                        Text(tm.description).tag(tm)
                                     }
                                 }
                             }
@@ -129,7 +126,7 @@ extension DuctTransition {
                             Menu("Flow Direction") {
                                 Picker("Flow Direction", selection: $state.flowDirection) {
                                     ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
-                                        Text(fd.localizedString).tag(fd)
+                                        Text(fd.description).tag(fd)
                                     }
                                 }
                             }
@@ -212,7 +209,18 @@ extension DuctTransition {
             .transition(.slide)
             .navigationTitle(ductwork.name)
             .navigationBarTitleDisplayMode(.inline)
-            .modifier(DuctTransition.ModuleToolbar(cameraHelpShown: $state.cameraHelpShown, arCameraHelpShown: $state.arCameraHelpShown, generalHelpShown: $state.generalHelpShown, settingsViewShown: $state.settingsViewShown))
+            .modifier(
+                DuctTransition.ModuleToolbar(
+                    cameraHelpShown: $state.cameraHelpShown,
+                    arCameraHelpShown: $state.arCameraHelpShown,
+                    generalHelpShown: $state.generalHelpShown,
+                    settingsViewShown: $state.settingsViewShown,
+                    airflowDataHelpShown: $state.airflowDataHelpShown,
+                    newSessionShown: Binding.constant(nil),
+                    newJobShown: Binding.constant(nil),
+                    newPresetShown: Binding.constant(nil)
+                )
+            )
             .toolbar {
                 if !autoSave {
                     if ogDuctwork != ductwork {
@@ -242,13 +250,9 @@ extension DuctTransition {
                     Image(systemName: "gear")
                 })
             }
-            #if DEBUG
             .eraseToAnyView()
-            #endif
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 

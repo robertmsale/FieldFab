@@ -8,9 +8,6 @@
 
 import SwiftUI
 import simd
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct DuctSideView: View {
@@ -69,10 +66,8 @@ extension DuctTransition {
             q2D: [V2]
         ) -> [V2] {
             var bb: Quad = genBoundingBox(g)
-//            let obb: Quad = bb
             
             let fOrB: Bool = face == .front || face == .back
-//            let fOrL: Bool = face == .front || face == .left
             
             let measureX: DuctTransition.UserMeasurement = fOrB ? .width : .depth
             let measureTX: DuctTransition.UserMeasurement = fOrB ? .twidth : .tdepth
@@ -110,16 +105,16 @@ extension DuctTransition {
                 let ratio: Double = atr.x / maxX
                 bb.tr = bb.tr.lerp(cbb.tl, alpha: min(0.4, max(0.0, (1-ratio) )))
             }
-            if abs(atl.x) < abs(minX) {
-                let ratio: Double = abs(atl.x) / abs(minX)
+            if Swift.abs(atl.x) < Swift.abs(minX) {
+                let ratio: Double = Swift.abs(atl.x) / Swift.abs(minX)
                 bb.tl = bb.tl.lerp(cbb.tr, alpha: min(0.4, max(0.0, (1-ratio) )))
             }
             if abr.x < maxX {
                 let ratio: Double = abr.x / maxX
                 bb.br = bb.br.lerp(cbb.bl, alpha: min(0.4, max(0.0, (1-ratio) )))
             }
-            if abs(abl.x) < abs(minX) {
-                let ratio: Double = abs(abl.x) / abs(minX)
+            if Swift.abs(abl.x) < Swift.abs(minX) {
+                let ratio: Double = Swift.abs(abl.x) / Swift.abs(minX)
                 bb.bl = bb.bl.lerp(cbb.br, alpha: min(0.4, max(0.0, (1-ratio) )))
             }
             if face == .back || face == .right {
@@ -532,13 +527,9 @@ extension DuctTransition {
                     .offset(x: (g.size.width > g.size.height ? (g.size.width - g.size.height) / 2 : 0) + 4, y: 8)
                         
             }
-            #if DEBUG
             .eraseToAnyView()
-            #endif
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 

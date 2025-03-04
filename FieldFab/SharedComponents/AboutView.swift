@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 struct AboutView: View {
     @Binding var shown: Bool
@@ -79,13 +76,9 @@ struct AboutView: View {
                 render(g)
             }
         }
-        #if DEBUG
         .eraseToAnyView()
-        #endif
     }
-
-    #if DEBUG
-    @ObservedObject var iO = injectionObserver
-    #endif
+    
+    @ObserveInjection var redraw
 }
 

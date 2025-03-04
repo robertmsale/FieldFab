@@ -39,38 +39,6 @@
             endingLineNumber = "34"
             landmarkName = "body"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "51458963-B1BB-47BA-AAD3-A0141B0A420D - 50f8eaed5243c415"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.clipShape&lt;A where A1: SwiftUI.Shape&gt;(_: A1, style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0 in FieldFab.FractionWheel.body.getter : some"
-                  moduleName = "FieldFab"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Components/Controls/DigitWheel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "548">
-               </Location>
-               <Location
-                  uuid = "51458963-B1BB-47BA-AAD3-A0141B0A420D - c8b2b109078e4e14"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.clipShape&lt;A where A1: SwiftUI.Shape&gt;(_: A1, style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0 in FieldFab.FractionWheel.body.getter : some"
-                  moduleName = "FieldFab"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Components/Controls/DigitWheel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "81">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -151,68 +119,6 @@
             endingLineNumber = "415"
             landmarkName = "makeSideFlat(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e1b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
-                  moduleName = "FieldFab"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382"
-                  offsetFromSymbolStart = "706">
-               </Location>
-               <Location
-                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e1b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
-                  moduleName = "FieldFab"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382"
-                  offsetFromSymbolStart = "1295">
-               </Location>
-               <Location
-                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e1b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
-                  moduleName = "FieldFab"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382"
-                  offsetFromSymbolStart = "1666">
-               </Location>
-               <Location
-                  uuid = "52699714-A56B-488B-B06E-7F7D3FC3CF45 - 325991c18c989e1b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "FieldFab.Duct.makeSideFlat(Swift.String) -&gt; ()"
-                  moduleName = "FieldFab"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/robertsale/code/FieldFab/FieldFab/Utility/Duct/Duct.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382"
-                  offsetFromSymbolStart = "2037">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

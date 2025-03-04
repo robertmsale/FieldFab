@@ -9,9 +9,6 @@
 import SwiftUI
 import SceneKit
 import StringFix
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 enum LightingMethod: Int, CaseIterable, Identifiable {
     case physicallyBased, blinn, phong, constant, lambert, shadowOnly
@@ -192,13 +189,9 @@ extension DuctTransition {
                     }
                 }
             }
-            #if DEBUG
             .eraseToAnyView()
-            #endif
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 

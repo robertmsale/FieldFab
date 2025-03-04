@@ -8,9 +8,6 @@
 
 import SwiftUI
 import StringFix
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct CustomKeyboard: View {
@@ -253,14 +250,10 @@ extension DuctTransition {
                     }
                     .ignoresSafeArea(.all)
                     .gesture(closeAction())
-                    #if DEBUG
                     .eraseToAnyView()
-                    #endif
 
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 

@@ -10,11 +10,7 @@ import SwiftUI
 import SceneKit
 import UIKit
 import ARKit
-import VectorExtensions
 import SIMDExtensions
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     class DuctSCNView: SCNView {
@@ -30,7 +26,12 @@ extension DuctTransition {
     struct Duct3DView: View {
         var body: some View {
             Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            .enableInjection()
         }
+
+        #if DEBUG
+        @ObserveInjection var forceRedraw
+        #endif
     }
 
     struct SceneView: UIViewRepresentable {
@@ -56,31 +57,15 @@ extension DuctTransition {
         var ductSceneHitTest: (String) -> Void
         @Binding var selectorShown: Bool
         @State var cameraRollTime: Date = Date()
-//        let q = DispatchQueue.global(qos: .userInteractive)
-//        let s = DispatchSemaphore(value: 1)
         
         func ductNode(_ scene: SCNScene?) -> SCNNode {
             return scene?.rootNode.childNode(withName: "duct", recursively: false) ?? SCNNode()
         }
-//        func allDuctNodes(_ scene: SCNScene?) -> [SCNNode] {
-//            let nameSet = Set(Duct.allNodeNames)
-//            return ductNode(scene).childNodes(passingTest: {(n, _) in nameSet.contains(n.name ?? "Fail Miserably")})
-//        }
-//        func allTabNodes(_ scene: SCNScene?) -> [SCNNode] {
-//            let nameSet = Set(Duct.tabNodeNames)
-//            return ductNode(scene).childNodes(passingTest: {(n, _) in nameSet.contains(n.name ?? "Fail Miserably")})
-//        }
-//        func allFaceNodes(_ scene: SCNScene?) -> [SCNNode] {
-//            let nameSet = Set(Duct.ductNodeNames)
-//            return ductNode(scene).childNodes(passingTest: {(n, _) in nameSet.contains(n.name ?? "Fail Miserably")})
-//        }
-
         func energyUpdate(_ view: UIViewType) {
             if !energySaver {
                 view.antialiasingMode = .multisampling2X
             }
             view.rendersContinuously = !energySaver
-    //        state.events.scene.energySaverChanged = false
         }
         func bgTextureUpdate(_ view: UIViewType, _ scene: SCNScene?) {
             if bgType == .image {
@@ -92,7 +77,6 @@ extension DuctTransition {
                 scene?.background.contents = color
                 scene?.lightingEnvironment.contents = color
             }
-    //        state.events.scene.bgChanged = false
         }
         func materialUpdate(_ scene: SCNScene?) {
             for node in ductNode(scene).childNodes {
@@ -103,26 +87,25 @@ extension DuctTransition {
                 node.geometry?.firstMaterial?.roughness.contents = UIImage(named: "\(texture)-roughness")
                 node.geometry?.firstMaterial?.lightingModel = lighting.scn
             }
-    //        state.events.scene.textureChanged = false
         }
         func geometryUpdateAll(_ scene: SCNScene?) {
             ductNode(scene).removeFromParentNode()
             let dNode = SCNNode()
             dNode.name = "duct"
+            let vdata = ductwork.vertexData
             for face in DuctTransition.Face.allCases {
-                let faceNode = DuctTransition.FaceGeometry.generate(data: ductwork.vertexData, face: face, crossBrake: crossBrake)
+                let faceNode = DuctTransition.FaceGeometry.generate(data: vdata, face: face, crossBrake: crossBrake)
                     .toNode(name: face.localizedString)
                 dNode.addChildNode(faceNode)
                 for edge in DuctTransition.TabEdge.allCases {
                     if let tab = ductwork.tabs[face, edge] {
-                        let tabNode = DuctTransition.TabGeometry.generate(tab, face: face, edge: edge, verts: ductwork.vertexData.getTabPoints(face, edge))
+                        let tabNode = DuctTransition.TabGeometry.generate(tab, face: face, edge: edge, verts: vdata.getTabPoints(face, edge))
                         dNode.addChildNode(tabNode)
                     }
                 }
             }
-            
+            dNode.simdPosition -= (simd_float3(x: vdata.ox, y: vdata.oy, z: 0.0) / 4.0)
             scene?.rootNode.addChildNode(dNode)
-    //        state.events.scene.measurementsChanged = false
         }
         func helpersUpdate(_ scene: SCNScene?) {
             let i = CGFloat(0.25)
@@ -141,7 +124,6 @@ extension DuctTransition {
                     default: break
                 }
             }
-    //        state.events.scene.helpersChanged = false
         }
         func moveCamera(_ view: UIViewType) {
             if let cam = view.scene?.rootNode.childNode(withName: "Camera", recursively: false) {
@@ -149,12 +131,6 @@ extension DuctTransition {
                     max(ductwork[.width].convert(to: .meters, from: ductwork.unit), ductwork[.twidth].convert(to: .meters, from: ductwork.unit)),
                     max(ductwork[.depth].convert(to: .meters, from: ductwork.unit), ductwork[.tdepth].convert(to: .meters, from: ductwork.unit))
                 ))
-//                let ndist = maxXZ * 4
-//                let dist = simd_length(cam.position.simd)
-                
-//                print(cam.position)
-//                cam.position = V3(ndist, ndist, ndist).scn
-//                print(cam.position)
                 cam.worldPosition = .init(0, 0, maxXZ * 4)
                 cam.look(at: SCNVector3(0, 0, 0))
                 view.pointOfView = cam
@@ -168,13 +144,11 @@ extension DuctTransition {
             view.allowsCameraControl = true
             let camera = SCNCamera()
             camera.automaticallyAdjustsZRange = true
-    //        SCNCameraController()
             camera.wantsHDR = true
             let camNode = SCNNode()
             camNode.name = "Camera"
             camNode.camera = camera
             scene.rootNode.addChildNode(camNode)
-    //        let maxXZ = max(state.currentWork?.data.width.rendered3D ?? 0, state.currentWork?.data.depth.rendered3D ?? 0)
             view.pointOfView = camNode
             energyUpdate(view)
             bgTextureUpdate(view, scene)
@@ -182,35 +156,29 @@ extension DuctTransition {
             materialUpdate(scene)
             helpersUpdate(scene)
             view.crossbrake = crossBrake
-//            let panG = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panCam(g:)))
-//            let zoomG = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.zoomCam(g:)))
             let pressG = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.hit(g:)))
             
-//            view.addGestureRecognizer(panG)
-//            view.addGestureRecognizer(zoomG)
             view.addGestureRecognizer(pressG)
             view.scene = scene
             moveCamera(view)
             view.currentDuctwork = ductwork
+            #if DEBUG
+            view.debugOptions = [SCNDebugOptions(rawValue: 2048)]
+            #endif
             return view
         }
         
         func updateUIView(_ uiView: UIViewType, context: Context) {
-//            if state.bgChanged {
-                bgTextureUpdate(uiView, uiView.scene)
-//            }
-//            if state.energySaverChanged {
-                energyUpdate(uiView)
-//            }
-//            if state.measurementsChanged {
+            bgTextureUpdate(uiView, uiView.scene)
+            energyUpdate(uiView)
             if ductwork != uiView.currentDuctwork || crossBrake != uiView.crossbrake {
                 geometryUpdateAll(uiView.scene)
                 if ductwork != uiView.currentDuctwork {moveCamera(uiView)}
                 uiView.currentDuctwork = ductwork
                 uiView.crossbrake = crossBrake
             }
-                materialUpdate(uiView.scene)
-                helpersUpdate(uiView.scene)
+            materialUpdate(uiView.scene)
+            helpersUpdate(uiView.scene)
             uiView.showsStatistics = showDebugInfo
         }
         
@@ -222,7 +190,6 @@ extension DuctTransition {
         }
         
         class Coordinator {
-    //        let changePosition: (CGPoint) -> Void
             var initialPan: V2 = V2()
             var scale: Double = 1.0
             var hitTest: (String) -> Void
@@ -275,13 +242,10 @@ extension DuctTransition {
                     camNode?.worldPosition = posEnd.asSCNV3
                     camNode?.worldOrientation = v.scene!.rootNode.worldOrientation
                     camNode?.look(at: SCNVector3(0,0,0))
-    //                print(camNode?.worldUp)
                 }
             }
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
     
     struct DuctAR: UIViewRepresentable {
@@ -320,25 +284,12 @@ extension DuctTransition {
         func flownode(_ scene: SCNScene?) -> SCNNode {
             return scene?.rootNode.childNode(withName: "flow", recursively: false) ?? SCNNode()
         }
-        //        func allDuctNodes(_ scene: SCNScene?) -> [SCNNode] {
-        //            let nameSet = Set(Duct.allNodeNames)
-        //            return ductNode(scene).childNodes(passingTest: {(n, _) in nameSet.contains(n.name ?? "Fail Miserably")})
-        //        }
-        //        func allTabNodes(_ scene: SCNScene?) -> [SCNNode] {
-        //            let nameSet = Set(Duct.tabNodeNames)
-        //            return ductNode(scene).childNodes(passingTest: {(n, _) in nameSet.contains(n.name ?? "Fail Miserably")})
-        //        }
-        //        func allFaceNodes(_ scene: SCNScene?) -> [SCNNode] {
-        //            let nameSet = Set(Duct.ductNodeNames)
-        //            return ductNode(scene).childNodes(passingTest: {(n, _) in nameSet.contains(n.name ?? "Fail Miserably")})
-        //        }
         
         func energyUpdate(_ view: UIViewType) {
             if !energySaver {
                 view.antialiasingMode = .multisampling2X
             }
             view.rendersContinuously = !energySaver
-            //        state.events.scene.energySaverChanged = false
         }
         func materialUpdate(_ scene: SCNScene?) {
             for node in dnode(scene).childNodes {
@@ -348,7 +299,6 @@ extension DuctTransition {
                 node.geometry?.firstMaterial?.roughness.contents = UIImage(named: "\(texture)-roughness")
                 node.geometry?.firstMaterial?.lightingModel = lighting.scn
             }
-            //        state.events.scene.textureChanged = false
         }
         func geometryUpdateAll(_ scene: SCNScene?, context: Context) {
             let ndnode = SCNNode()
@@ -374,19 +324,7 @@ extension DuctTransition {
             nflownode.name = "flow"
             nflownode.addChildNode(ndnode)
             scene?.rootNode.addChildNode(nflownode)
-            //            scene?.rootNode.addChildNode(dNode)
-            //        state.events.scene.measurementsChanged = false
         }
-        //        func tabsUpdate(_ scene: SCNScene?) {
-        //            for i in allTabNodes(scene) { i.removeFromParentNode() }
-        //            let dNode = ductNode(scene)
-        //            for tab in DuctTab.FaceTab.allCases {
-        //                if let node = state.currentWork?.geometry.tabs[tab]?.toNode(name: tab.tabNodeName) {
-        //                    dNode.addChildNode(node)
-        //                }
-        //            }
-        //    //        state.events.ar.tabsChanged = false
-        //        }
         func helpersUpdate(_ scene: SCNScene?) {
             let i = CGFloat(0.25)
             let f = UIColor(red: 0, green: i, blue: 0, alpha: i)
@@ -425,7 +363,6 @@ extension DuctTransition {
             configuration.planeDetection = []
             configuration.environmentTexturing = .automatic
             configuration.isLightEstimationEnabled = true
-//            configuration.frameSemantics.insert(.)
             view.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
             let hitG = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.hit(g:)))
             let rotG = UIRotationGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.rotate(g:)))
@@ -472,17 +409,10 @@ extension DuctTransition {
                 geometryUpdateAll(uiView.scene, context: context)
                 uiView.currentDuctwork = ductwork
                 uiView.crossbrake = crossBrake
-//                uiView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors, .resetSceneReconstruction])
-//                let dnode = ductNode(uiView.scene)
-//                dnode.worldPosition = SCNVector3(0,0,0)
-//                dnode.eulerAngles = SCNVector3(0,0,0)
             }
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)
             context.coordinator.translationMode = state.translationMode
-//
-//            materialUpdate(uiView.scene)
-//            helpersUpdate(uiView.scene)
             changeFlow(uiView.scene)
             uiView.showsStatistics = showDebugInfo
             context.coordinator.translationMode = state.translationMode
@@ -544,7 +474,7 @@ extension DuctTransition {
                 }
                 if g.state != .cancelled {
                     
-                    flownode((g.view as? UIViewType)?.scene).eulerAngles.translate([.y: -(g.rotation - initialRotation).f * 0.01])
+                    flownode((g.view as? UIViewType)?.scene).eulerAngles.simd += SIMD3<Float>(0.0, -(g.rotation - initialRotation).f * 0.01, 0.0)
                     ductEuler = flownode((g.view as? UIViewType)?.scene).eulerAngles
                 }
             }
@@ -569,8 +499,6 @@ extension DuctTransition {
                 
             }
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }

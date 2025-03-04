@@ -5,9 +5,6 @@
 
 import Foundation
 import SwiftUI
-#if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
-@_exported import HotSwiftUI
-#endif
 
 struct IntakeCalculatorModule: View {
     typealias Num = Int64

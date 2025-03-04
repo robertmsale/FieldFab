@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 enum KBBtnType {
     case Normal, Primary, Control
     func getTextColor(_ colorScheme: ColorScheme) -> Color {
@@ -80,9 +77,7 @@ struct KBButton<Content: View, KBGesture: Gesture>: View {
             .eraseToAnyView()
             #endif
     }
-    #if DEBUG
-    @ObservedObject var iO = injectionObserver
-    #endif
+    @ObserveInjection var redraw
 }
 
 //#if DEBUG

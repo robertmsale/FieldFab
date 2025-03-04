@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct DuctToPDF: View {
@@ -48,13 +45,9 @@ extension DuctTransition {
             }
             .padding()
 //            .border(Color.blue)
-#if DEBUG
                 .eraseToAnyView()
-#endif
         }
-#if DEBUG
-        @ObservedObject var iO = injectionObserver
-#endif
+        @ObserveInjection var redraw
     }
 }
 

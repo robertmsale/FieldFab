@@ -12,19 +12,53 @@ import Combine
 import StringFix
 import SceneKit
 import Disk
+import RxSwift
 
 extension DuctTransition {
-    final class ModuleState: MockableStateObject {
-        enum TranslationMode: Int, CaseIterable, Identifiable {
+    class ModuleViewModel {
+        enum TranslationMode: Int, CaseIterable, Identifiable, CustomStringConvertible {
             case xz, y
             var id: Int { rawValue }
-            var localizedString: String {
+            
+            var description: String {
                 switch self {
                 case .xz: return "xz"
                 case .y: return "y"
                 }
             }
         }
+        enum FlowDirection: Int, CaseIterable, Identifiable, CustomStringConvertible {
+            case up, down, left, right
+            var id: Int { rawValue }
+            
+            var description: String {
+                switch self {
+                case .up: return "Up"
+                case .down: return "Down"
+                case .left: return "Left"
+                case .right: return "Right"
+                }
+            }
+        }
+        var renderChanged = PublishSubject<Bool>()
+        var textureChanged = PublishSubject<Bool>()
+        var measurementsChanged = PublishSubject<Bool>()
+        var tabsChanged = PublishSubject<Bool>()
+        var energySaverChanged = PublishSubject<Bool>()
+        var helpersChanged = PublishSubject<Bool>()
+        var arViewReset = PublishSubject<Bool>()
+        var drawerChanged = PublishSubject<Bool>()
+        var bgChanged = PublishSubject<Bool>()
+        var flowDirection = PublishSubject<FlowDirection>()
+        var translationMode = PublishSubject<TranslationMode>()
+        var cameraHelpShown = PublishSubject<Bool>()
+        var generalHelpShown = PublishSubject<Bool>()
+        var arCameraHelpShown = PublishSubject<Bool>()
+        var settingsViewShown = PublishSubject<Bool>()
+    }
+    final class ModuleState: MockableStateObject {
+        typealias FlowDirection = DuctTransition.ModuleViewModel.FlowDirection
+        typealias TranslationMode = DuctTransition.ModuleViewModel.TranslationMode
         enum MockCases {
             case development, production
         }
@@ -51,27 +85,20 @@ extension DuctTransition {
         
         @Published var cameraHelpShown = false
         @Published var generalHelpShown = false
+        @Published var AirflowDataHelpShown = false
         @Published var arCameraHelpShown = false
         @Published var settingsViewShown = false
+        @Published var airflowDataHelpShown = false
+        @Published var newSessionShown = false
+        @Published var newJobShown = false
+        @Published var newPresetShown = false
         
         
-        var TDViewneedsReset: Bool {
+        var TDViewNeedsReset: Bool {
             renderChanged || bgChanged || textureChanged || measurementsChanged || tabsChanged || energySaverChanged || helpersChanged || drawerChanged
         }
         var ARViewNeedsReset: Bool {
             renderChanged || textureChanged || measurementsChanged || tabsChanged || energySaverChanged || helpersChanged || arViewReset
-        }
-        enum FlowDirection: Int, CaseIterable, Identifiable {
-            case up, down, left, right
-            var id: Int { rawValue }
-            var localizedString: String {
-                switch self {
-                case .up: return "Up"
-                case .down: return "Down"
-                case .left: return "Left"
-                case .right: return "Right"
-                }
-            }
         }
         
         @Published var ductData: [DuctData] = {
@@ -86,6 +113,18 @@ extension DuctTransition {
                 } catch {
                     
                 }
+            }
+        }
+        @Published var jobData: [JobData] = {
+            guard let data = try? Disk.retrieve("jobData.json", from: .applicationSupport, as: [JobData].self) else {
+                return []
+            }
+            return data
+        }() {
+            didSet {
+                do {
+                    try Disk.save(jobData, to: .applicationSupport, as: "jobData.json")
+                } catch {}
             }
         }
         

@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct NewSessionView: View {
@@ -20,9 +17,7 @@ extension DuctTransition {
             .eraseToAnyView()
             #endif
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 

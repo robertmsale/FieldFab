@@ -7,9 +7,7 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
+import SIMDExtensions
 
 extension DuctTransition {
     
@@ -74,6 +72,7 @@ extension DuctTransition {
         @State var currentTabType: TabTypeAndNone = .none
         @State var keyboardShown = false
         @State var fullScreen: Bool = false
+        @State var expectedCFM: String = "1600"
         @Binding var faceHit: String
         @Binding var showSideFlatDialog: Bool
         var currentCanBeNegative: Bool {
@@ -192,7 +191,7 @@ extension DuctTransition {
                             Menu("Translation Mode") {
                                 Picker("Translation Mode", selection: $state.translationMode) {
                                     ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
-                                        Text(tm.localizedString).tag(tm)
+                                        Text(tm.description).tag(tm)
                                     }
                                 }
                             }
@@ -200,7 +199,7 @@ extension DuctTransition {
                             Menu("Flow Direction") {
                                 Picker("Flow Direction", selection: $state.flowDirection) {
                                     ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
-                                        Text(fd.localizedString).tag(fd)
+                                        Text(fd.description).tag(fd)
                                     }
                                 }
                             }
@@ -253,6 +252,39 @@ extension DuctTransition {
                     }
                 }
             }//.disabled(currentFace == .all)
+        }
+        
+        enum TransitionType: CustomStringConvertible {
+            case Convergent, Divergent, Equal
+            
+            var description: String {
+                switch self {
+                case .Convergent: return "Convergent"
+                case .Divergent: return "Divergent"
+                case .Equal: return "Equal"
+                }
+            }
+            static func from(inlet a1 : Double, outlet a2: Double) -> Self {
+                if (Swift.abs(a1 - a2) <= 0.0000001) { return .Equal }
+                if (a1 < a2) { return .Divergent }
+                return .Convergent
+            }
+        }
+        
+        var cfm: Double { Double(expectedCFM) ?? 1600.0 }
+        var dd: DuctData { ductwork.converted(to: .inch) }
+        var approxLoss: Double { pressureDrop(W1: dd[.width], H1: dd[.depth], W2: dd[.twidth], H2: dd[.tdepth], X: dd[.offsetx], Y: dd[.offsety], L: dd[.length], Q: cfm) }
+        @ViewBuilder
+        func drawAirflowData() -> some View {
+            Section("Airflow Data") {
+                HStack {
+                    Text("Expected CFM: ")
+                    TextField("Expected CFM", text: $expectedCFM)
+                        .keyboardType(.decimalPad)
+                        .foregroundStyle(.blue)
+                }
+                Text("Approx. Pressure Loss: \(approxLoss) \"wc")
+            }
         }
         
         @ViewBuilder
@@ -492,6 +524,7 @@ extension DuctTransition {
                 Form {
                     drawMeasurements()
                     drawTabSelectors()
+                    drawAirflowData()
                 }
                 .border(Color.blue, width: debug ? 2 : 0)
             }
@@ -655,12 +688,8 @@ extension DuctTransition {
                     }
                 }
             }
-            #if DEBUG
             .eraseToAnyView()
-            #endif
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }

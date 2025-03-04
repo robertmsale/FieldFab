@@ -8,9 +8,6 @@
 
 import SwiftUI
 import WebKit
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct HelpWebKitView: UIViewRepresentable {
@@ -28,9 +25,7 @@ extension DuctTransition {
                 uiView.removeFromSuperview()
             }
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
     
     struct GeneralHelpView: View {
@@ -41,13 +36,9 @@ extension DuctTransition {
                 Rectangle().frame(height: 42)
                 DuctTransition.HelpWebKitView(shown: $shown)
             }
-            #if DEBUG
             .eraseToAnyView()
-            #endif
         }
-        #if DEBUG
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 

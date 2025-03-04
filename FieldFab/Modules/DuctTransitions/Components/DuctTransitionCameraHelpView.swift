@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 extension DuctTransition {
     struct CameraHelpView: View {
@@ -108,12 +105,8 @@ extension DuctTransition {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .zIndex(2.0)
             }
-#if DEBUG
             .eraseToAnyView()
-#endif
         }
-#if DEBUG
-        @ObservedObject var iO = injectionObserver
-#endif
+        @ObserveInjection var redraw
     }
 }

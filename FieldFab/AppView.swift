@@ -10,9 +10,6 @@ import SwiftUI
 import SceneKit
 import ARKit
 import AppReview
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 struct AppView: View {
     enum AvailableModules: Int, CaseIterable, Hashable, Identifiable, Codable {
@@ -75,7 +72,7 @@ struct AppView: View {
             } else {
                 switch state.currentModule {
                 case .ductFittings:
-                    Text("Coming Soon!")
+                    FittingIndex.ModuleView()
                 case .ductTransition:
                     DuctTransition.ModuleView()
                 case .balancePoint:
@@ -132,9 +129,7 @@ struct AppView: View {
                 .eraseToAnyView()
                 #endif
     }
-    #if DEBUG
-    @ObservedObject var iO = injectionObserver
-    #endif
+    @ObserveInjection var redraw
 }
 
 //#if DEBUG

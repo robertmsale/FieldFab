@@ -7,9 +7,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-@_exported import HotSwiftUI
-#endif
 
 @main
 struct FieldFabApp: App {
@@ -17,18 +14,6 @@ struct FieldFabApp: App {
     static let loadMethod: ModuleLoadMethod = .development
     static let appState = AppState()
     static let ductTransitionModuleState = DuctTransition.ModuleState()
-
-    #if DEBUG
-    init() {
-        var injectionBundlePath = "/Application/InjectionIII.app/Contents/Resources"
-//        #if targetEnvironment(macCatalyst)
-//        injectionBundlePath = "\(injectionBundlePath)/macOSInjection.bundle"
-//        #elseif os(iOS)
-        injectionBundlePath = "\(injectionBundlePath)/iOSInjection.bundle"
-//        #endif
-        Bundle(path: injectionBundlePath)?.load()
-    }
-    #endif
 
     var body: some Scene {
         WindowGroup {
@@ -58,3 +43,76 @@ struct FieldFabApp: App {
         }
     }
 }
+
+//#if canImport(HotSwiftUI)
+//@_exported import HotSwiftUI
+//#elseif canImport(Inject)
+//@_exported import Inject
+//#else
+//// This code can be found in the Swift package:
+//// https://github.com/johnno1962/HotSwiftUI or
+//// https://github.com/krzysztofzablocki/Inject
+
+#if DEBUG
+import Combine
+
+public class InjectionObserver: ObservableObject {
+    public static let shared = InjectionObserver()
+    @Published var injectionNumber = 0
+    var cancellable: AnyCancellable? = nil
+    let publisher = PassthroughSubject<Void, Never>()
+    init() {
+        cancellable = NotificationCenter.default.publisher(for:
+            Notification.Name("INJECTION_BUNDLE_NOTIFICATION"))
+            .sink { [weak self] change in
+            self?.injectionNumber += 1
+            self?.publisher.send()
+        }
+    }
+}
+
+public extension SwiftUI.View {
+    public func eraseToAnyView() -> some SwiftUI.View {
+        return AnyView(self)
+    }
+    public func enableInjection() -> some SwiftUI.View {
+        return self.eraseToAnyView()
+    }
+    public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
+        return self
+            .onReceive(InjectionObserver.shared.publisher, perform: bumpState)
+            .eraseToAnyView()
+    }
+}
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@propertyWrapper
+public struct ObserveInjection: DynamicProperty {
+    @ObservedObject private var iO = InjectionObserver.shared
+    public init() {}
+    public private(set) var wrappedValue: Int {
+        get {0} set {}
+    }
+}
+#else
+public extension SwiftUI.View {
+    @inline(__always)
+    public func eraseToAnyView() -> some SwiftUI.View { return self }
+    @inline(__always)
+    public func enableInjection() -> some SwiftUI.View { return self }
+    @inline(__always)
+    public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
+        return self
+    }
+}
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@propertyWrapper
+public struct ObserveInjection {
+    public init() {}
+    public private(set) var wrappedValue: Int {
+        get {0} set {}
+    }
+}
+#endif
+//#endif
