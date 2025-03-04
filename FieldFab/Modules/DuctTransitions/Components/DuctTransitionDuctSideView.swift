@@ -66,68 +66,39 @@ extension DuctTransition {
             q2D: [V2]
         ) -> [V2] {
             var bb: Quad = genBoundingBox(g)
-            
+            let squareDims = Swift.min(g.size.width, g.size.height)
+            let squareVec: V2 = V2(squareDims, squareDims)
+            let squareMid: V2 = squareVec / V2(2.0,2.0)
             let fOrB: Bool = face == .front || face == .back
-            
-            let measureX: DuctTransition.UserMeasurement = fOrB ? .width : .depth
-            let measureTX: DuctTransition.UserMeasurement = fOrB ? .twidth : .tdepth
-            let oX: DuctTransition.UserMeasurement = fOrB ? .offsetx : .offsety
-            
-            let w: Double = ductwork[measureX]
-            let tW: Double = ductwork[measureTX]
-            let oW: Double = ductwork[oX]
-            let h: Double = ductwork[.length]
-            
-            let totalW: Double = Swift.max(Swift.min(w, tW) + Swift.abs(oW), Swift.max(w, tW))
-            let ratioW: Double = Swift.max(0.7, Swift.min(1.0, totalW / h))
-            let ratioH: Double = Swift.max(0.7, Swift.min(1.0, h / totalW))
-            
-            var cbb: Quad = bb
-            bb.tr = bb.tr.lerp(cbb.br, alpha: 1 - ratioH)
-            bb.tl = bb.tl.lerp(cbb.bl, alpha: 1 - ratioH)
-            bb.bl = bb.bl.lerp(cbb.tl, alpha: 1 - ratioH)
-            bb.br = bb.br.lerp(cbb.tr, alpha: 1 - ratioH)
-            cbb = bb
-            bb.tr = bb.tr.lerp(cbb.tl, alpha: 1 - ratioW)
-            bb.tl = bb.tl.lerp(cbb.tr, alpha: 1 - ratioW)
-            bb.bl = bb.bl.lerp(cbb.br, alpha: 1 - ratioW)
-            bb.br = bb.br.lerp(cbb.bl, alpha: 1 - ratioW)
-            cbb = bb
-            
-            let atr: V2 = q2D[0]
-            let atl: V2 = q2D[1]
-            let abl: V2 = q2D[2]
-            let abr: V2 = q2D[3]
-            let xOnly: [Double] = q2D.map { $0.x }
-            let minX: Double = xOnly.min()!
-            let maxX: Double = xOnly.max()!
-            if atr.x < maxX {
-                let ratio: Double = atr.x / maxX
-                bb.tr = bb.tr.lerp(cbb.tl, alpha: min(0.4, max(0.0, (1-ratio) )))
+            let idxs: [FaceIndices] = {
+                switch face {
+                case .front: return [.ftr, .ftl, .fbl, .fbr]
+                case .back: return [.btr, .btl, .bbl, .bbr]
+                case .left: return [.ltr, .ltl, .lbl, .lbr]
+                case .right: return [.rtr, .rtl, .rbl, .rbr]
+                }
+            }()
+            let rawPoints: [V2] = idxs
+                .map { pt3d in // converted to XY
+                    let p = vdata[pt3d]
+                    switch face {
+                    case .front: return p.xy * V2(1.0, -1.0)
+                    case .back: return p.xy * V2(-1.0, -1.0)
+                    case .left: return p.zy * V2(1.0, -1.0)
+                    case .right: return p.zy * V2(-1.0, -1.0)
+                    }
+                }
+            let magnitudes = rawPoints.map { $0.length }
+            guard let maxMagnitudes = magnitudes.max(), maxMagnitudes > 0 else {
+                return [V2.zero,V2.zero,V2.zero,V2.zero]
             }
-            if Swift.abs(atl.x) < Swift.abs(minX) {
-                let ratio: Double = Swift.abs(atl.x) / Swift.abs(minX)
-                bb.tl = bb.tl.lerp(cbb.tr, alpha: min(0.4, max(0.0, (1-ratio) )))
-            }
-            if abr.x < maxX {
-                let ratio: Double = abr.x / maxX
-                bb.br = bb.br.lerp(cbb.bl, alpha: min(0.4, max(0.0, (1-ratio) )))
-            }
-            if Swift.abs(abl.x) < Swift.abs(minX) {
-                let ratio: Double = Swift.abs(abl.x) / Swift.abs(minX)
-                bb.bl = bb.bl.lerp(cbb.br, alpha: min(0.4, max(0.0, (1-ratio) )))
-            }
-            if face == .back || face == .right {
-                let dleft: Double = bb.tl.x - cbb.tl.x
-                let dright: Double = cbb.tr.x - bb.tr.x
-                bb.tr.x = cbb.tr.x - dleft
-                bb.tl.x = cbb.tl.x + dright
-                let dleft2: Double = bb.bl.x - cbb.bl.x
-                let dright2: Double = cbb.br.x - bb.br.x
-                bb.br.x = cbb.br.x - dleft2
-                bb.bl.x = cbb.bl.x + dright2
-            }
-            return bb.arr
+            let norms: [V2] = rawPoints.map { $0 / V2(maxMagnitudes,maxMagnitudes) }
+            let result: [V2] = norms
+                .map { norm in
+                    (norm * squareMid + squareMid) * V2(0.8,0.8) + (squareMid * V2(0.2,0.2))
+                }
+//                .map { $0 * V2(0.2,0.2) + $0 }
+            return result
         }
         
         func genBoundingPoints(_ points: [V2]) -> [V2] {

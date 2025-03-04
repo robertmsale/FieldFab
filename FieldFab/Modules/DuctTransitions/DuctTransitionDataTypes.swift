@@ -310,7 +310,9 @@ extension DuctTransition {
                 V3(-u,  l, -b) + V3(x, 0, y),
                 V3(-w, -l, -d),
                 V3( w, -l, -d)
-            ]
+            ].map {
+                $0 - (V3(x, 0, y) / 2)
+            }
             inner = outer.map { vert in
                 vert - V3(vert.x < 0 ? -g : g, 0, vert.z < 0 ? -g : g)
             }

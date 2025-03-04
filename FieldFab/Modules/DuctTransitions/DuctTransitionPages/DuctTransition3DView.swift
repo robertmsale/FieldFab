@@ -104,7 +104,6 @@ extension DuctTransition {
                     }
                 }
             }
-            dNode.simdPosition -= (simd_float3(x: vdata.ox, y: vdata.oy, z: 0.0) / 4.0)
             scene?.rootNode.addChildNode(dNode)
         }
         func helpersUpdate(_ scene: SCNScene?) {
@@ -127,11 +126,14 @@ extension DuctTransition {
         }
         func moveCamera(_ view: UIViewType) {
             if let cam = view.scene?.rootNode.childNode(withName: "Camera", recursively: false) {
-                let maxXZ: Float = Float(max(
-                    max(ductwork[.width].convert(to: .meters, from: ductwork.unit), ductwork[.twidth].convert(to: .meters, from: ductwork.unit)),
-                    max(ductwork[.depth].convert(to: .meters, from: ductwork.unit), ductwork[.tdepth].convert(to: .meters, from: ductwork.unit))
-                ))
-                cam.worldPosition = .init(0, 0, maxXZ * 4)
+                let r = CGFloat(ductNode(view.scene!).boundingSphere.radius)
+                guard let camera = cam.camera else { return }
+                let fov = camera.fieldOfView
+                let aspect = view.frame.width / view.frame.height
+                let minAspect = min(CGFloat(1.0), aspect)
+                let d: CGFloat = r / (CGFloat(0.8) * tan(fov / CGFloat(2.0) * CGFloat.pi / CGFloat(180)) * minAspect)
+                
+                cam.position = .init(0, 0, d)
                 cam.look(at: SCNVector3(0, 0, 0))
                 view.pointOfView = cam
             }
