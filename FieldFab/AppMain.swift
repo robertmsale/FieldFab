@@ -71,7 +71,7 @@ public class InjectionObserver: ObservableObject {
     }
 }
 
-public extension SwiftUI.View {
+extension SwiftUI.View {
     public func eraseToAnyView() -> some SwiftUI.View {
         return AnyView(self)
     }

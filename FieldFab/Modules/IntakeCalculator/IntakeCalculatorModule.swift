@@ -178,11 +178,7 @@ struct IntakeCalculatorModule: View {
             .padding()
         }
         .navigationTitle("Intake Calculator")
-                #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
-                .eraseToAnyView()
-                #endif
+        .enableInjection()
     }
-    #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
-    @ObservedObject var iO = injectionObserver
-    #endif
+    @ObserveInjection var redraw
 }

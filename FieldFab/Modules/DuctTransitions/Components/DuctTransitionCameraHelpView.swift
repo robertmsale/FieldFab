@@ -61,13 +61,9 @@ extension DuctTransition {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .zIndex(2.0)
             }
-            #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
-            .eraseToAnyView()
-            #endif
+            .enableInjection()
         }
-        #if DEBUG && canImport(HotSwiftUI) && targetEnvironment(simulator)
-        @ObservedObject var iO = injectionObserver
-        #endif
+        @ObserveInjection var redraw
     }
 }
 
@@ -105,7 +101,7 @@ extension DuctTransition {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .zIndex(2.0)
             }
-            .eraseToAnyView()
+            .enableInjection()
         }
         @ObserveInjection var redraw
     }

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Disk
+import StringFix
 
 extension DuctTransition {
     struct ModuleToolbar: ViewModifier {
@@ -55,6 +56,106 @@ extension DuctTransition {
 }
 
 extension DuctTransition {
+    struct ModalSessionEditView: View {
+        enum EditMode {
+            case createDirectory
+            case renameDirectory(String)
+            case createSession
+            case renameSession(String)
+        }
+        @Binding var pathComponents: [String]
+        var directories: [String]
+        var ductFiles: [String]
+        @Binding var editMode: EditMode?
+        @State var newName: String = ""
+        
+        var modalTitle: String {
+            switch editMode {
+            case .createDirectory: return "Create Directory"
+            case .renameDirectory: return "Rename Directory"
+            case .createSession: return "Create Session"
+            case .renameSession: return "Rename Session"
+            default: return ""
+            }
+        }
+        var nameAlreadyExists: Bool {
+            switch editMode {
+            case .createDirectory, .renameDirectory:
+                return directories.firstIndex(of: newName) != nil
+            case .createSession, .renameSession:
+                return ductFiles.firstIndex(of: newName + ".fieldfabdt") != nil
+            default: return false
+            }
+        }
+        var body: some View {
+            Form {
+                Section(content: {
+                    TextField("New Name", text: $newName)
+                }, header: {
+                    Text(modalTitle)
+                }, footer: {
+                    if nameAlreadyExists {
+                        Text("Error: Name already exists")
+                            .foregroundStyle(Color.red)
+                    } else if newName.isEmpty {
+                        Text("Error: Name cannot be empty")
+                            .foregroundStyle(Color.red)
+                    } else if !newName.isValidFileName {
+                        Text("Error: Name contains invalid characters")
+                            .foregroundStyle(Color.red)
+                    }
+                })
+                Button(action: {
+                    if !nameAlreadyExists && !newName.isEmpty {
+                        let manager = FileManager.default
+                        var rootDirPath = try! manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                        rootDirPath = rootDirPath.appendingPathComponent("Duct Transitions")
+                        for path in pathComponents {
+                            rootDirPath = rootDirPath.appendingPathComponent(path)
+                        }
+                        let newPath = rootDirPath.appendingPathComponent(newName)
+                        switch editMode {
+                        case .createDirectory:
+                            try! manager.createDirectory(at: newPath, withIntermediateDirectories: true)
+                        case .renameDirectory(let string): do {
+                            let oldPath = rootDirPath.appendingPathComponent(string)
+                            try! manager.moveItem(at: oldPath, to: newPath)
+                        }
+                        case .createSession:
+                            let data = try! JSONEncoder().encode(DuctData())
+                            try! data.write(to: newPath.appendingPathExtension("fieldfabdt"))
+                        case .renameSession(let string): do {
+                            let oldSesh = rootDirPath.appendingPathComponent(string).appendingPathExtension("fieldfabdt")
+                            try! manager.moveItem(at: oldSesh, to: newPath)
+                        }
+                        case nil:
+                            return
+                        }
+                        pathComponents = pathComponents
+                        editMode = nil
+                    }
+                }, label: {
+                    Text("Save")
+                }).disabled(nameAlreadyExists || newName.isEmpty || !newName.isValidFileName)
+                Button(action: {
+                    editMode = nil
+                }, label: {
+                    Text("Cancel")
+                }).foregroundStyle(Color.red)
+            }
+            .onAppear {
+                switch editMode {
+                case .renameDirectory(let existingName): newName = existingName
+                case .renameSession(let existingName):
+                    let ext = ".fieldfabdt"
+                    newName = String(existingName.prefix(existingName.count - ext.count))
+                default: return
+                }
+            }
+            .enableInjection()
+        }
+        @ObserveInjection var redraw
+    }
     struct SessionPreset: Identifiable {
         let description: String
         var id: String { description }
@@ -71,35 +172,46 @@ extension DuctTransition {
         }
         @ViewBuilder
         static func loadModule(_ args: InitArgs) -> some View {
-//            switch loadMethod {
-//            case .development:
-//                let view = Self(
-//                    newSessionShown: args.newSessionShown,
-//                    newSessionName: args.newSessionName,
-//                    newSessionUnits: args.newSessionUnits
-//                    path: args.path
-//                )
-//                if args.createEnvironmentObject {
-//                    view.environmentObject(DuctTransition.ModuleState())
-//                }
-//                view
-//            case .production:
                 Self()
-//            }
         }
         
         @EnvironmentObject var state: DuctTransition.ModuleState
         @EnvironmentObject var appState: AppState
-        @State var newSessionName: String = ""
-        @State var newSessionUnits: DuctTransition.MeasurementUnit = .inch
-        @State var newJobName: String = ""
-        @State var newJobLinkedSessions: Set<UUID> = Set()
-        
-        @State var editShown: Bool = false
-        @State var editID: UUID? = nil
-        @State var editString: String = ""
-        
-        @State var currentRootTab: TabSelection = .sessions
+        @State var editMode: DuctTransition.ModalSessionEditView.EditMode? = nil
+        var hasMigrated: Bool {
+            state.ductData.isEmpty
+        }
+        @State var currentPathHierarchy: [String] = []
+        @State var moveSessionHierarchy: [String]? = nil
+        var inMoveMode: Bool { moveSessionHierarchy != nil }
+        var moveSessionIsCurrentPath: Bool {
+            inMoveMode && Array(moveSessionHierarchy![0..<moveSessionHierarchy!.count-1]) == currentPathHierarchy
+        }
+        var currentPath: URL {
+            makePathURL(with: currentPathHierarchy)
+        }
+        var currentPathIsDuctFile: Bool { currentPath.pathExtension == "fieldfabdt" }
+        var pathContents: ([String], [String]) {
+            if currentPathIsDuctFile { return ([],[]) }
+            let manager = FileManager.default
+            let contents = try! manager.contentsOfDirectory(at: currentPath, includingPropertiesForKeys: [.isDirectoryKey], options: .skipsHiddenFiles)
+            let pathStrings = contents.map { $0.path }
+            let directories = pathStrings
+                .filter { path in
+                    let url = URL(fileURLWithPath: path)
+                    return url.hasDirectoryPath
+                }
+                .sorted()
+            let ductFiles = pathStrings
+                .filter { path in
+                    let url = URL(fileURLWithPath: path)
+                    return url.pathExtension == "fieldfabdt"
+                }
+                .sorted()
+            return (directories.map { $0.split(separator: "/").last!.string }, ductFiles.map { $0.split(separator: "/").last!.string})
+        }
+        var directories: [String] { pathContents.0 }
+        var ductFiles: [String] { pathContents.1 }
         
         static var sessionPresets: [SessionPreset] {[
             .init(description: "17½x20 Box", duct: DuctData(measurements: [17.5, 20, 12, 0, 0, 17.5, 20], unit: .inch, name: "17½x20 Box")),
@@ -109,80 +221,17 @@ extension DuctTransition {
             .init(description: "20x20 -> 20x25", duct: DuctData(measurements: [20, 20, 12, 0, 0, 20, 20], unit: .inch, name: "20x20 -> 20x25")),
         ]}
         
-        var sessionsView: some View {
-            VStack {
-                Form {
-                    Section(content: {
-                        ForEach($state.ductData) { d in
-                            VStack {
-                                NavigationLink(value: d.wrappedValue) {
-                                    Text(d.name.wrappedValue)
-                                }
-                                Text("Created On \(d.date.wrappedValue.formatted(date: .numeric, time: .standard))")
-                            }
-                            .swipeActions(content: {
-                                Button(action: {
-                                    state.ductData.removeAll(where: { $0.id == d.id })
-                                }) {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                .tint(.red)
-                                Button(action: {
-                                    editID = d.id
-                                    editString = d.name.wrappedValue
-                                    editShown = true
-                                }) {
-                                    Label("Rename", systemImage: "pencil")
-                                }
-                                
-                            })
-                            .alert(
-                                String("Rename Session"),
-                                isPresented: $editShown,
-                                actions: {
-                                    TextField("New Name", text: $editString)
-                                    Button("Save", action: {
-                                        if let idx = state.ductData.firstIndex(where: {$0.id == editID}) {
-                                            state.ductData[idx].name = editString
-                                        }
-                                        editString = ""
-                                        editID = nil
-                                        editShown = false
-                                    })
-                                    Button("Cancel", action: {
-                                        editString = ""
-                                        editID = nil
-                                        editShown = false
-                                    }).tint(.red)
-                                })
-                        }
-                    }, header: {Text("Sessions")}, footer: {Text("Swipe left to edit name or delete")})
-                }
+        func makePathURL(with hierarchy: [String]) -> URL {
+            let manager = FileManager.default
+            var rootDirPath = try! manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            rootDirPath = rootDirPath.appendingPathComponent("Duct Transitions")
+            for path in hierarchy {
+                rootDirPath = rootDirPath.appendingPathComponent(path)
             }
-        }
-        
-        var jobsView: some View {
-            Form {
-                Section(content: {
-                    List($state.jobData) { d in
-                        NavigationLink(d.name.wrappedValue) {
-                            Form {
-                                Section(content: {
-                                    ForEach(state.ductData.filter({ d.wrappedValue.ducts.contains($0.id) })) { dd in
-                                        NavigationLink(value: dd) {
-                                            Text(dd.name)
-                                        }
-                                    }
-                                }, header: {Text("Transitions for \(d.name.wrappedValue)")}, footer: {Text("Ayoo")})
-                            }
-                            .navigationDestination(for: DuctTransition.DuctData.self) { data in
-                                DuctTransition.Workshop(ductwork: data)
-                            }
-                        }
-                    }
-                }, header: {Text("Jobs")}, footer: {Text("Swipe left to edit or delete")})
+            if rootDirPath.pathExtension != "fieldfabdt" && !manager.directoryExists(at: rootDirPath) {
+                try! manager.createDirectory(at: rootDirPath, withIntermediateDirectories: true, attributes: nil)
             }
-            
+            return rootDirPath
         }
         
         enum TabSelection: Hashable, Identifiable {
@@ -190,98 +239,168 @@ extension DuctTransition {
             var id: Self { self }
         }
         
-        var body: some View {
-            TabView(selection: $currentRootTab) {
-                sessionsView
-                    .tabItem {Image(systemName: "compass.drawing")}
-                    .tag(TabSelection.sessions)
-                jobsView
-                    .tabItem {Image(systemName: "folder.fill")}
-                    .tag(TabSelection.jobs)
+        var fileNavigator: some View {
+            Form {
+                Section(
+                    content: {
+                        List(directories, id: \.self) { dirName in
+                            Button(action: {
+                                currentPathHierarchy.append(dirName)
+                            }, label: {
+                                HStack {
+                                    Label(dirName, systemImage: "folder")
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                }
+                            })
+                            .swipeActions {
+                                Button("Delete", systemImage: "trash") {
+                                    let manager = FileManager.default
+                                    try! manager.removeItem(atPath: currentPath.path() + "/" + dirName)
+                                    currentPathHierarchy = currentPathHierarchy
+                                }.tint(Color.red)
+                                Button("Rename", systemImage: "pencil") {
+                                    editMode = .renameDirectory(dirName)
+                                }.tint(Color.green)
+                            }
+                        }
+                        Button("Create Directory", systemImage: "folder.badge.plus") {
+                            editMode = .createDirectory
+                        }.foregroundStyle(Color.green)
+                    }, header: {
+                        HStack {
+                            Text("Directories")
+                            Spacer()
+                            Group {
+                                if inMoveMode {
+                                    if !moveSessionIsCurrentPath {
+                                        Button(action: {
+                                            let manager = FileManager.default
+                                            try! manager.copyItem(at: makePathURL(with: moveSessionHierarchy!), to: makePathURL(with: currentPathHierarchy + [moveSessionHierarchy!.last!]))
+                                            currentPathHierarchy = currentPathHierarchy
+                                            moveSessionHierarchy = nil
+                                        }) {
+                                            Label("Paste", systemImage: "document.on.clipboard")
+                                        }.foregroundStyle(Color.yellow)
+                                    } else {
+                                        Button(action: {
+                                            moveSessionHierarchy = nil
+                                        }) {
+                                            Label("Cancel", systemImage: "document.on.clipboard")
+                                        }.foregroundStyle(Color.red)
+                                    }
+                                } else {
+                                    EmptyView()
+                                }
+                            }
+                            Button(action: {
+                                let _ = currentPathHierarchy.popLast()
+                            }) {
+                                Label("Back", systemImage: "chevron.backward")
+                            }
+                            .disabled(currentPathHierarchy.isEmpty)
+                        }
+                    }, footer: {
+                        VStack(alignment: .leading) {
+                            Text("Current Directory: /\(currentPathHierarchy.joined(separator: "/"))")
+                            Text("Swipe left to rename or delete directory")
+                        }
+                    }
+                )
+                
+                Section(
+                    content: {
+                        List(ductFiles, id: \.self) { file in
+                            Button(action: {
+                                currentPathHierarchy.append(file)
+                            }, label: {
+                                HStack {
+                                    Label(file.prefix(file.count - ".fieldfabdt".count), systemImage: "compass.drawing")
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                }
+                            })
+                            .swipeActions {
+                                Button("Delete", systemImage: "trash") {
+                                    let manager = FileManager.default
+                                    try! manager.removeItem(at: makePathURL(with: currentPathHierarchy + [file]))
+                                    currentPathHierarchy.append(file)
+                                    let _ = currentPathHierarchy.popLast()
+                                }.tint(Color.red)
+                                Button("Rename", systemImage: "pencil") {
+                                    editMode = .renameSession(file)
+                                }.tint(Color.green)
+                                Button("Copy", systemImage: "document.on.document") {
+                                    moveSessionHierarchy = currentPathHierarchy + [file]
+                                }.tint(Color.yellow)
+                            }
+                        }
+                        Button("Create Session", systemImage: "document.badge.plus") {
+                            editMode = .createSession
+                        }.foregroundStyle(Color.green)
+                    }, header: {
+                        Text("Sessions in current directory")
+                    }, footer: {
+                        Text("Swipe left to rename or delete session")
+                    }
+                )
+                
             }
-            .navigationDestination(for: DuctTransition.DuctData.self) { data in
-                DuctTransition.Workshop(ductwork: data)
+        }
+        
+        var body: some View {
+            Group {
+                if currentPathIsDuctFile {
+                    let data = try! Data(contentsOf: currentPath)
+                    let decoded = try! JSONDecoder().decode(DuctTransition.DuctData.self, from: data)
+                    DuctTransition.Workshop(ductwork: decoded, url: currentPath)
+                        .toolbar {
+                            Button("Back", systemImage: "chevron.backward") {
+                                let _ = currentPathHierarchy.popLast()
+                            }
+                            Menu {
+                                Button("Airflow Data Help") { state.airflowDataHelpShown = true }
+                                Button("AR Camera Help") { state.arCameraHelpShown = true }
+                                Button("3D Camera Help") { state.cameraHelpShown = true }
+                                Button("General Help") { state.generalHelpShown = true }
+                            } label: {
+                                Image(systemName: "questionmark.circle")
+                            }
+                        }
+                } else {
+                    fileNavigator
+                }
+            }
+            .alert("FieldFab recently updated to a hierarchical session system. Would you like to migrate your sessions to the new system?", isPresented: Binding(get: { hasMigrated }, set: {
+                if !$0 {
+                    state.ductData = []
+                }
+            })) {
+                Button(role: .destructive) {
+                    state.ductData = []
+                } label: {
+                    Label("Clear Old Sessions", systemImage: "trash")
+                }
+                Button("Migrate") {
+                    let manager = FileManager.default
+                    let oldSessions = ["Old Sessions"]
+                    try! manager.createDirectory(at: makePathURL(with: oldSessions), withIntermediateDirectories: true)
+                    for (i, duct) in state.ductData.enumerated() {
+                        let encode = try! JSONEncoder().encode(duct)
+                        try? encode.write(to: makePathURL(with: oldSessions + [duct.name.camelize().capitalized + "\(i)"]).appendingPathExtension("fieldfabdt"))
+                    }
+                    currentPathHierarchy += oldSessions
+                    state.ductData = []
+                }
             }
             .sheet(isPresented: $state.airflowDataHelpShown) { AirflowDataHelpView() }
             .sheet(isPresented: $state.cameraHelpShown) { DuctTransition.CameraHelpView() }
             .sheet(isPresented: $state.generalHelpShown) { DuctTransition.GeneralHelpView(shown: $state.generalHelpShown) }
             .sheet(isPresented: $state.arCameraHelpShown) { DuctTransition.ARCameraHelpView() }
             .sheet(isPresented: $state.settingsViewShown) { DuctTransition.SettingsView(shown: $state.settingsViewShown) }
-            .sheet(isPresented: $state.newSessionShown) {
-                Form {
-                    VStack {
-                        TextField("Session Name", text: $newSessionName)
-                        if newSessionName == "" {
-                            Text("Name cannot be empty").font(.footnote).foregroundColor(Color.red)
-                        }
-                    }
-                    Picker("Units", selection: $newSessionUnits) {
-                        ForEach(DuctTransition.MeasurementUnit.allCases) { m in
-                            Text(m.localizedString).tag(m)
-                        }
-                    }
-                    Button(action: {
-                        Task {
-                            state.ductData.append(DuctTransition.DuctData(unit: newSessionUnits, name: newSessionName))
-                            state.newSessionShown = false
-                        }
-                    }) {
-                        Text("Create")
-                    }.disabled(newSessionName == "")
-                }
+            .sheet(isPresented: Binding<Bool>(get: {editMode != nil}, set: { editMode = $0 ? editMode : nil })) {
+                ModalSessionEditView(pathComponents: $currentPathHierarchy, directories: directories, ductFiles: ductFiles, editMode: $editMode)
             }
-            .sheet(isPresented: $state.newJobShown) {
-                Form {
-                    VStack {
-                        TextField("Job Name", text: $newJobName)
-                        if newJobName == "" {
-                            Text("Name cannot be empty").font(.footnote).foregroundColor(Color.red)
-                        }
-                    }
-                    Section("Linked sessions") {
-                        List(state.ductData) { dd in
-                            Toggle("\(dd.name)", isOn: Binding(get: { newJobLinkedSessions.contains(where: { $0 == dd.id }) }, set: {
-                                if $0 { newJobLinkedSessions.insert(dd.id) } else { newJobLinkedSessions.remove(dd.id) }
-                            }))
-                        }
-                    }
-                    Button(action: { Task {
-                        state.jobData.append(DuctTransition.JobData(name: newJobName, ducts: newJobLinkedSessions.map { $0 }))
-                        state.newJobShown = false
-                    }}) {
-                        Text("Create")
-                    }.disabled(newJobName == "")
-                }
-            }
-            .sheet(isPresented: $state.newPresetShown) {
-                Form {
-                    Section(content: {
-                        ForEach(Self.sessionPresets) { p in
-                            Button(action: {
-                                Task {
-                                    let nd = DuctData(measurements: p.duct.measurements, unit: p.duct.unit, name: p.duct.name)
-                                    state.ductData.append(nd)
-                                    appState.navPath.append(nd)
-                                    state.newPresetShown = false
-                                }
-                            }) {
-                                Text(p.description)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }, header: {Text("Presets")}, footer: {Text("Selecting a preset adds it to your list of sessions")})
-                }
-            }
-            .modifier(DuctTransition.ModuleToolbar(
-                cameraHelpShown: $state.cameraHelpShown,
-                arCameraHelpShown: $state.arCameraHelpShown,
-                generalHelpShown: $state.generalHelpShown,
-                settingsViewShown: $state.settingsViewShown,
-                airflowDataHelpShown: $state.airflowDataHelpShown,
-                newSessionShown: Binding(get: { state.newSessionShown }, set: { state.newSessionShown = $0 ?? false }),
-                newJobShown: Binding(get: { state.newJobShown }, set: { state.newJobShown = $0 ?? false }),
-                newPresetShown: Binding(get: { state.newPresetShown }, set: { state.newPresetShown = $0 ?? false })
-            ))
             .navigationTitle("Duct Transitions")
             .eraseToAnyView()
         }
@@ -289,3 +408,9 @@ extension DuctTransition {
     }
 }
 
+extension String {
+    var isValidFileName: Bool {
+        let regex = "^[a-zA-Z0-9._-][a-zA-Z0-9._ -]*$"
+        return range(of: regex, options: .regularExpression) == startIndex..<endIndex
+    }
+}

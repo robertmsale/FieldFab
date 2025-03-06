@@ -12,6 +12,7 @@ extension DuctTransition {
     struct Workshop: View {
         typealias Key = AppStorageKeys
         @State var ductwork: DuctTransition.DuctData
+        var url: URL
         @EnvironmentObject var state: DuctTransition.ModuleState
         @EnvironmentObject var appState: AppState
         @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -27,6 +28,7 @@ extension DuctTransition {
         @AppStorage(Key.bgB) var bgB: Double = 1.0
         @AppStorage(Key.bgImage) var bgImage: BackgroundImage = .shop
         @AppStorage(Key.autoSave) var autoSave: Bool = true
+        @AppStorage(Key.wantsNewUI) var wantsNewUI: Bool = false
         @State var tabSelected = 0
         @State var menuShown = false
         @State var saveCompleteShown = false
@@ -85,8 +87,10 @@ extension DuctTransition {
             })
         }
         
+        
+        
         var ductEditor: some View {
-            DuctTransition.DuctEditor(ductwork: $ductwork, faceHit: $faceHit, showSideFlatDialog: $showSideFlatDialog)
+            DuctTransition.DuctEditor(ductwork: $ductwork, url: url, faceHit: $faceHit, showSideFlatDialog: $showSideFlatDialog)
                 .tabItem {
                     Label("Workshop", systemImage: "hammer")
                 }
@@ -153,7 +157,10 @@ extension DuctTransition {
                 }
                 .tag(2)
         }
-        
+        var title: String {
+            let t = url.lastPathComponent
+            return String(t.prefix(t.count-".fieldfabdt".count))
+        }
         @ViewBuilder
         func renderTabView() -> some View {
             let ui = UIDevice.current.userInterfaceIdiom
@@ -207,29 +214,9 @@ extension DuctTransition {
                 }
             })
             .transition(.slide)
-            .navigationTitle(ductwork.name)
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .modifier(
-                DuctTransition.ModuleToolbar(
-                    cameraHelpShown: $state.cameraHelpShown,
-                    arCameraHelpShown: $state.arCameraHelpShown,
-                    generalHelpShown: $state.generalHelpShown,
-                    settingsViewShown: $state.settingsViewShown,
-                    airflowDataHelpShown: $state.airflowDataHelpShown,
-                    newSessionShown: Binding.constant(nil),
-                    newJobShown: Binding.constant(nil),
-                    newPresetShown: Binding.constant(nil)
-                )
-            )
             .toolbar {
-                if !autoSave {
-                    if ogDuctwork != ductwork {
-                        drawSaveBtn()
-                            .foregroundColor(Color.red)
-                    } else {
-                        drawSaveBtn()
-                    }
-                }
                 Menu(content: {
                     ShareLink("Share Link", item: generateShareLink())
                     ShareLink("Share PDF", item: renderPDF)
@@ -241,6 +228,9 @@ extension DuctTransition {
                     Toggle("Crossbrake", isOn: $crossBrake)
                     Toggle("Auto Save", isOn: $autoSave)
                     Toggle("Debug Info", isOn: $showDebugInfo)
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        Toggle("Use New UI", isOn: $wantsNewUI)
+                    }
                     Button(action: {Task {
                         state.settingsViewShown = true
                     }}) {

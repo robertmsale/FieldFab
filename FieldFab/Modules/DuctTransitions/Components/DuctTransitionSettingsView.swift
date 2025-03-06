@@ -79,7 +79,8 @@ extension DuctTransition {
              bgG,
              bgB,
              bgImage,
-             autoSave
+             autoSave,
+             wantsNewUI
     }
 }
 
@@ -110,6 +111,7 @@ extension DuctTransition {
         @AppStorage(Key.bgB) var bgB: Double = 1.0
         @AppStorage(Key.bgImage) var bgImage: BackgroundImage = .shop
         @AppStorage(Key.autoSave) var autoSave: Bool = true
+        @AppStorage(Key.wantsNewUI) var wantsNewUI: Bool = false
         
         func genSubText<Content: View>(message: String, @ViewBuilder content: () -> Content) -> some View {
             VStack {
@@ -181,6 +183,9 @@ extension DuctTransition {
                             bgG = Double(cg?.components?[1] ?? 0.0)
                             bgB = Double(cg?.components?[2] ?? 1.0)
                         }))
+                    }
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        Toggle("Use New Interface", isOn: $wantsNewUI)
                     }
                 }
                 Section("Debugging") {

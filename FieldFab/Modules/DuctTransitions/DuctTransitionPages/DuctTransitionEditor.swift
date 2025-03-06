@@ -59,10 +59,12 @@ extension DuctTransition {
         typealias DTF = DuctTransition.Face
         typealias Key = AppStorageKeys
         @Binding var ductwork: DuctTransition.DuctData
+        var url: URL
         @Environment(\.horizontalSizeClass) var horizontalSizeClass
         @Environment(\.verticalSizeClass) var verticalSizeClass
         @Environment(\.colorScheme) var colorScheme
         @EnvironmentObject var state: DuctTransition.ModuleState
+        @AppStorage(Key.wantsNewUI) var wantsNewUI: Bool = false
         @State var resetARSession: Bool = false
         @State var currentFace: FacesAndAll = .all
         @State var currentMeasurement: DuctTransition.UserMeasurement = .width
@@ -186,38 +188,40 @@ extension DuctTransition {
                         faceHit = s
                         showSideFlatDialog = true
                     }, resetARSession: $resetARSession, selectorShown: Binding.blank(false))
-                    VStack {
-                        HStack {
-                            Menu("Translation Mode") {
-                                Picker("Translation Mode", selection: $state.translationMode) {
-                                    ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
-                                        Text(tm.description).tag(tm)
+                    if !wantsNewUI {
+                        VStack {
+                            HStack {
+                                Menu("Translation Mode") {
+                                    Picker("Translation Mode", selection: $state.translationMode) {
+                                        ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
+                                            Text(tm.description).tag(tm)
+                                        }
                                     }
                                 }
-                            }
-                            Spacer()
-                            Menu("Flow Direction") {
-                                Picker("Flow Direction", selection: $state.flowDirection) {
-                                    ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
-                                        Text(fd.description).tag(fd)
+                                Spacer()
+                                Menu("Flow Direction") {
+                                    Picker("Flow Direction", selection: $state.flowDirection) {
+                                        ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
+                                            Text(fd.description).tag(fd)
+                                        }
                                     }
                                 }
+                                Spacer()
+                                Button(action: {
+                                    Task {
+                                        resetARSession = true
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.counterclockwise")
+                                }
+                                .font(.title)
+                            }
+                            .padding(.all)
+                            .background {
+                                BlurEffectView()
                             }
                             Spacer()
-                            Button(action: {
-                                Task {
-                                    resetARSession = true
-                                }
-                            }) {
-                                Image(systemName: "arrow.counterclockwise")
-                            }
-                            .font(.title)
                         }
-                        .padding(.all)
-                        .background {
-                            BlurEffectView()
-                        }
-                        Spacer()
                     }
                 }
             }
@@ -307,6 +311,9 @@ extension DuctTransition {
                     }
                 }.disabled(currentFace == .all)
                 Menu("Tab Presets") {
+                    Button("No Tabs") {
+                        ductwork.tabs = Array(repeating: nil, count: 16)
+                    }
                     Menu("Inch") {
                         Button(action: {
                             ductwork.tabs = Array(repeating: nil, count: 16)
@@ -537,11 +544,82 @@ extension DuctTransition {
             GeometryReader { g in
                 ZStack {
                     if verticalSizeClass == .compact || (ui == .pad && horizontalSizeClass != .compact) {
-                        HStack {
-                            drawContent(g)
+                        if wantsNewUI {
+                            TabView {
+                                HStack {
+                                    VStack {
+                                        drawSideViews(g)
+                                    }.frame(width: g.size.width/2)
+                                    VStack {
+                                        Form {
+                                            drawFacePicker()
+                                            drawMeasurements()
+                                            drawTabSelectors()
+                                            drawAirflowData()
+                                        }
+                                    }.frame(width: g.size.width/2)
+                                }
+                                .tabItem {
+                                    Label("Editor", systemImage: "compass.drawing")
+                                }
+                                .tag(0)
+                                ZStack {
+                                    duct3D
+                                    Form {
+                                        drawMeasurements()
+                                    }
+                                    .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                                    .frame(width: 300, height: 300)
+                                    .position(x: 200.0, y: 200.0)
+                                }
+                                .tabItem {
+                                    Label("3D", systemImage: "scale.3d")
+                                }
+                                .tag(1)
+                                ZStack {
+                                    ductAR
+                                    Form {
+                                        Section("Controls") {
+                                            Menu("Translation Mode") {
+                                                Picker("Translation Mode", selection: $state.translationMode) {
+                                                    ForEach(DuctTransition.ModuleState.TranslationMode.allCases) { tm in
+                                                        Text(tm.description).tag(tm)
+                                                    }
+                                                }
+                                            }
+                                            Menu("Flow Direction") {
+                                                Picker("Flow Direction", selection: $state.flowDirection) {
+                                                    ForEach(DuctTransition.ModuleState.FlowDirection.allCases) { fd in
+                                                        Text(fd.description).tag(fd)
+                                                    }
+                                                }
+                                            }
+                                            Button(action: {
+                                                Task {
+                                                    resetARSession = true
+                                                }
+                                            }) {
+                                                Label("Reset", systemImage: "arrow.counterclockwise")
+                                            }
+                                        }
+                                        drawMeasurements()
+                                    }
+                                    .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                                    .frame(width: 300, height: 300)
+                                    .position(x: 200.0, y: 200.0)
+                                }
+                                .tabItem {
+                                    Label("AR", systemImage: "camera.viewfinder")
+                                }
+                                .tag(2)
+                            }
+                        } else {
+                            HStack {
+                                drawContent(g)
+                            }
+                            .padding(.top)
+                            .border(Color.blue, width: debug ? 2 : 0)
                         }
-                        .padding(.top)
-                        .border(Color.blue, width: debug ? 2 : 0)
                     } else {
                         
                         VStack {
@@ -687,6 +765,10 @@ extension DuctTransition {
                         }
                     }
                 }
+            }
+            .onChange(of: ductwork) { d in
+                    let encoded = try! JSONEncoder().encode(d)
+                    try! encoded.write(to: url)
             }
             .eraseToAnyView()
         }
