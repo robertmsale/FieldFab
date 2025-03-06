@@ -232,3 +232,91 @@ struct Math {
         static let maxAzimuth: Float = .infinity
     }
 }
+
+// Calculate the area of a quadrilateral defined by 4 points
+func calculateQuadArea(_ points: [SCNVector3]) -> Float {
+    guard points.count == 4 else { return 0 }
+    
+    // Split into two triangles: 0-1-2 and 0-2-3
+    let v01 = points[1] - points[0]
+    let v02 = points[2] - points[0]
+    let v23 = points[3] - points[2]
+    
+    // Cross products for each triangle
+    let cross1 = v01.cross(v02)  // Triangle 0-1-2
+    let cross2 = v02.cross(v23)  // Triangle 0-2-3 (using 0-2 as base)
+    
+    // Area = half the magnitude of each cross product, summed
+    let area1 = 0.5 * cross1.length()
+    let area2 = 0.5 * cross2.length()
+    
+    return area1 + area2
+}
+
+// Helper: Extend SCNVector3 for vector operations
+extension SCNVector3 {
+    static func - (lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
+        return SCNVector3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z)
+    }
+    
+    func cross(_ other: SCNVector3) -> SCNVector3 {
+        return SCNVector3(
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
+        )
+    }
+    
+    func length() -> Float {
+        return sqrt(x * x + y * y + z * z)
+    }
+    
+    func normalized() -> SCNVector3 {
+        let mag = length()
+        guard mag > 0 else { return self }
+        return SCNVector3(x / mag, y / mag, z / mag)
+    }
+    
+    func dot(_ other: SCNVector3) -> Float {
+        return x * other.x + y * other.y + z * other.z
+    }
+}
+
+// Calculate normal of a quad (average of triangle normals)
+func calculateQuadNormal(_ points: [SCNVector3]) -> SCNVector3 {
+    guard points.count == 4 else { return SCNVector3(0, 0, 0) }
+    
+    let v01 = points[1] - points[0]
+    let v02 = points[2] - points[0]
+    let v23 = points[3] - points[2]
+    
+    let normal1 = v01.cross(v02).normalized()
+    let normal2 = v02.cross(v23).normalized()
+    
+    // Average the normals
+    return SCNVector3(
+        (normal1.x + normal2.x) / 2,
+        (normal1.y + normal2.y) / 2,
+        (normal1.z + normal2.z) / 2
+    ).normalized()
+}
+
+// Calculate spread angle between two planes
+func calculateSpreadAngle(plane1: [SCNVector3], plane2: [SCNVector3]) -> Float {
+    // Calculate areas
+    let area1 = calculateQuadArea(plane1)
+    let area2 = calculateQuadArea(plane2)
+    
+    // Calculate normals
+    let normal1 = calculateQuadNormal(plane1)
+    let normal2 = calculateQuadNormal(plane2)
+    
+    // Angle between normals (in radians)
+    let dotProduct = normal1.dot(normal2)
+    let angle = acos(min(max(dotProduct, -1.0), 1.0))  // Clamp to [-1, 1] for safety
+    
+    print("Area 1: \(area1), Area 2: \(area2)")
+    print("Normal 1: \(normal1), Normal 2: \(normal2)")
+    
+    return angle  // In radians; convert to degrees with * 180 / Float.pi if needed
+}

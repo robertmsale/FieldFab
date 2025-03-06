@@ -30,10 +30,16 @@ struct FieldFabApp: App {
                         guard let data = Data(base64Encoded: b64) else { return }
                         let decoder = JSONDecoder()
                         if let decoded = try? decoder.decode(DuctTransition.DuctData.self, from: data) {
-                            if Self.appState.navPath.count > 0 { Self.appState.navPath.removeLast(Self.appState.navPath.count) }
-                            Task(priority: .background) {
-                                Self.appState.navPath.append(decoded)
+                            let manager = FileManager.default
+                            var rootDirPath = try! manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                            rootDirPath = rootDirPath.appendingPathComponent("Duct Transitions")
+                            let hierarchy = ["Imported", decoded.name]
+                            for path in hierarchy {
+                                rootDirPath = rootDirPath.appendingPathComponent(path)
                             }
+                            rootDirPath = rootDirPath.appendingPathExtension("fieldfabdt")
+                            let encoded = try! JSONEncoder().encode(decoded)
+                            guard ((try? encoded.write(to: rootDirPath)) != nil) else { return }
                         }
                     }
                 })

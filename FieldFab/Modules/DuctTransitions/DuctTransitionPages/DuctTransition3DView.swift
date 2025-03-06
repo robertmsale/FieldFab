@@ -16,6 +16,7 @@ extension DuctTransition {
     class DuctSCNView: SCNView {
         var currentDuctwork: DuctTransition.DuctData? = nil
         var crossbrake: Bool = false
+        var particlePhysicsEnabled: Bool = false
     }
     
     class DuctARSCNView: ARSCNView {
@@ -53,6 +54,7 @@ extension DuctTransition {
         @AppStorage(AppKey.bgG) var bgG: Double = 0.0
         @AppStorage(AppKey.bgB) var bgB: Double = 1.0
         @AppStorage(AppKey.bgImage) var bgImage: BackgroundImage = .shop
+        @AppStorage(AppKey.particlePhysicsEnabled) var particlePhysicsEnabled: Bool = true
         var ductwork: DuctTransition.DuctData
         var ductSceneHitTest: (String) -> Void
         @Binding var selectorShown: Bool
@@ -64,6 +66,8 @@ extension DuctTransition {
         func energyUpdate(_ view: UIViewType) {
             if !energySaver {
                 view.antialiasingMode = .multisampling2X
+            } else {
+                view.antialiasingMode = .none
             }
             view.rendersContinuously = !energySaver
         }
@@ -88,6 +92,7 @@ extension DuctTransition {
                 node.geometry?.firstMaterial?.lightingModel = lighting.scn
             }
         }
+        
         func geometryUpdateAll(_ scene: SCNScene?) {
             ductNode(scene).removeFromParentNode()
             let dNode = SCNNode()
@@ -104,6 +109,56 @@ extension DuctTransition {
                     }
                 }
             }
+            
+            scene?.rootNode.childNode(withName: "air", recursively: false)?.removeFromParentNode()
+            if particlePhysicsEnabled {
+                let airParticles = SCNParticleSystem()
+                let plane = SCNBox(width: vdata[.fbr].x.cg, height: 0.00000001, length: vdata[.fbr].z.cg, chamferRadius: 0.0000001)
+                
+                airParticles.emitterShape = plane
+                
+                airParticles.birthRate = 2000
+                airParticles.birthRateVariation = 50
+                airParticles.particleLifeSpan = 2.0
+                
+                airParticles.particleSize = 0.00002
+                airParticles.particleSizeVariation = 0.01
+                airParticles.particleColor = UIColor.white.withAlphaComponent(0.3)
+                airParticles.particleColorVariation = SCNVector4(x: 0.1, y: 0.1, z: 0.1, w: 0.2)
+                
+                airParticles.speedFactor = 1.0
+                airParticles.particleVelocity = 2.0
+                airParticles.particleVelocityVariation = 0.5
+                airParticles.spreadingAngle = calculateSpreadAngle(plane1: [vdata[.fbl], vdata[.fbr], vdata[.bbr], vdata[.bbl]].map {$0.asSCNV3}, plane2: [vdata[.ftl], vdata[.ftr], vdata[.btr], vdata[.btl]].map { $0.asSCNV3 }).cg.deg / 2
+                airParticles.acceleration = SCNVector3(x: 0, y: 0.2, z: 0)
+                
+                airParticles.isAffectedByGravity = false
+                airParticles.isAffectedByPhysicsFields = true
+                airParticles.colliderNodes = dNode.childNodes
+                airParticles.dampingFactor = 0.1
+                airParticles.blendMode = .alpha
+                
+                let emitterNode = SCNNode()
+                emitterNode.addParticleSystem(airParticles)
+                emitterNode.name = "air"
+                
+                let avgBottom = [vdata[.fbl], vdata[.fbr], vdata[.bbl], vdata[.bbr]].reduce(simd_float3.zero) { (result, point) in
+                    result + point
+                } / 4.0
+                
+                emitterNode.position = (avgBottom * 1.1).asSCNV3
+                
+                let avgTop = [vdata[.ftl], vdata[.ftr], vdata[.btl], vdata[.btr]].reduce(simd_float3.zero) { (result, point) in
+                    result + point
+                } / 4.0
+                
+                let direction = avgTop - avgBottom
+                
+                airParticles.emittingDirection = direction.normalized.asSCNV3
+                
+                scene?.rootNode.addChildNode(emitterNode)
+            }
+            
             scene?.rootNode.addChildNode(dNode)
         }
         func helpersUpdate(_ scene: SCNScene?) {
@@ -173,11 +228,12 @@ extension DuctTransition {
         func updateUIView(_ uiView: UIViewType, context: Context) {
             bgTextureUpdate(uiView, uiView.scene)
             energyUpdate(uiView)
-            if ductwork != uiView.currentDuctwork || crossBrake != uiView.crossbrake {
+            if ductwork != uiView.currentDuctwork || crossBrake != uiView.crossbrake || particlePhysicsEnabled != uiView.particlePhysicsEnabled {
                 geometryUpdateAll(uiView.scene)
                 if ductwork != uiView.currentDuctwork {moveCamera(uiView)}
                 uiView.currentDuctwork = ductwork
                 uiView.crossbrake = crossBrake
+                uiView.particlePhysicsEnabled = particlePhysicsEnabled
             }
             materialUpdate(uiView.scene)
             helpersUpdate(uiView.scene)

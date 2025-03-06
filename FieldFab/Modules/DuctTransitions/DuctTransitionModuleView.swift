@@ -108,7 +108,7 @@ extension DuctTransition {
                 Button(action: {
                     if !nameAlreadyExists && !newName.isEmpty {
                         let manager = FileManager.default
-                        var rootDirPath = try! manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                        guard var rootDirPath = try? manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) else { return }
                         rootDirPath = rootDirPath.appendingPathComponent("Duct Transitions")
                         for path in pathComponents {
                             rootDirPath = rootDirPath.appendingPathComponent(path)
@@ -116,17 +116,37 @@ extension DuctTransition {
                         let newPath = rootDirPath.appendingPathComponent(newName)
                         switch editMode {
                         case .createDirectory:
-                            try! manager.createDirectory(at: newPath, withIntermediateDirectories: true)
+                            guard let _ = try? manager.createDirectory(at: newPath, withIntermediateDirectories: true) else {
+                                pathComponents = pathComponents
+                                editMode = nil
+                                return
+                            }
                         case .renameDirectory(let string): do {
                             let oldPath = rootDirPath.appendingPathComponent(string)
-                            try! manager.moveItem(at: oldPath, to: newPath)
+                            guard let _ = try? manager.moveItem(at: oldPath, to: newPath) else {
+                                pathComponents = pathComponents
+                                editMode = nil
+                                return
+                            }
                         }
                         case .createSession:
-                            let data = try! JSONEncoder().encode(DuctData())
-                            try! data.write(to: newPath.appendingPathExtension("fieldfabdt"))
+                            guard let data = try? JSONEncoder().encode(DuctData(name: newName)) else {
+                                pathComponents = pathComponents
+                                editMode = nil
+                                return
+                            }
+                            guard let _ = try? data.write(to: newPath.appendingPathExtension("fieldfabdt")) else {
+                                pathComponents = pathComponents
+                                editMode = nil
+                                return
+                            }
                         case .renameSession(let string): do {
-                            let oldSesh = rootDirPath.appendingPathComponent(string).appendingPathExtension("fieldfabdt")
-                            try! manager.moveItem(at: oldSesh, to: newPath)
+                            let oldSesh = rootDirPath.appendingPathComponent(string)
+                            guard let _ = try? manager.moveItem(at: oldSesh, to: newPath.appendingPathExtension("fieldfabdt")) else {
+                                pathComponents = pathComponents
+                                editMode = nil
+                                return
+                            }
                         }
                         case nil:
                             return
@@ -194,7 +214,9 @@ extension DuctTransition {
         var pathContents: ([String], [String]) {
             if currentPathIsDuctFile { return ([],[]) }
             let manager = FileManager.default
-            let contents = try! manager.contentsOfDirectory(at: currentPath, includingPropertiesForKeys: [.isDirectoryKey], options: .skipsHiddenFiles)
+            guard let contents = try? manager.contentsOfDirectory(at: currentPath, includingPropertiesForKeys: [.isDirectoryKey], options: .skipsHiddenFiles) else {
+                return ([],[])
+            }
             let pathStrings = contents.map { $0.path }
             let directories = pathStrings
                 .filter { path in
@@ -256,7 +278,7 @@ extension DuctTransition {
                             .swipeActions {
                                 Button("Delete", systemImage: "trash") {
                                     let manager = FileManager.default
-                                    try! manager.removeItem(atPath: currentPath.path() + "/" + dirName)
+                                    try? manager.removeItem(atPath: currentPath.path() + "/" + dirName)
                                     currentPathHierarchy = currentPathHierarchy
                                 }.tint(Color.red)
                                 Button("Rename", systemImage: "pencil") {
@@ -276,7 +298,7 @@ extension DuctTransition {
                                     if !moveSessionIsCurrentPath {
                                         Button(action: {
                                             let manager = FileManager.default
-                                            try! manager.copyItem(at: makePathURL(with: moveSessionHierarchy!), to: makePathURL(with: currentPathHierarchy + [moveSessionHierarchy!.last!]))
+                                            try? manager.copyItem(at: makePathURL(with: moveSessionHierarchy!), to: makePathURL(with: currentPathHierarchy + [moveSessionHierarchy!.last!]))
                                             currentPathHierarchy = currentPathHierarchy
                                             moveSessionHierarchy = nil
                                         }) {
@@ -323,7 +345,7 @@ extension DuctTransition {
                             .swipeActions {
                                 Button("Delete", systemImage: "trash") {
                                     let manager = FileManager.default
-                                    try! manager.removeItem(at: makePathURL(with: currentPathHierarchy + [file]))
+                                    try? manager.removeItem(at: makePathURL(with: currentPathHierarchy + [file]))
                                     currentPathHierarchy.append(file)
                                     let _ = currentPathHierarchy.popLast()
                                 }.tint(Color.red)
@@ -369,28 +391,6 @@ extension DuctTransition {
                         }
                 } else {
                     fileNavigator
-                }
-            }
-            .alert("FieldFab recently updated to a hierarchical session system. Would you like to migrate your sessions to the new system?", isPresented: Binding(get: { hasMigrated }, set: {
-                if !$0 {
-                    state.ductData = []
-                }
-            })) {
-                Button(role: .destructive) {
-                    state.ductData = []
-                } label: {
-                    Label("Clear Old Sessions", systemImage: "trash")
-                }
-                Button("Migrate") {
-                    let manager = FileManager.default
-                    let oldSessions = ["Old Sessions"]
-                    try! manager.createDirectory(at: makePathURL(with: oldSessions), withIntermediateDirectories: true)
-                    for (i, duct) in state.ductData.enumerated() {
-                        let encode = try! JSONEncoder().encode(duct)
-                        try? encode.write(to: makePathURL(with: oldSessions + [duct.name.camelize().capitalized + "\(i)"]).appendingPathExtension("fieldfabdt"))
-                    }
-                    currentPathHierarchy += oldSessions
-                    state.ductData = []
                 }
             }
             .sheet(isPresented: $state.airflowDataHelpShown) { AirflowDataHelpView() }

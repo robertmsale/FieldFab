@@ -29,6 +29,7 @@ extension DuctTransition {
         @AppStorage(Key.bgImage) var bgImage: BackgroundImage = .shop
         @AppStorage(Key.autoSave) var autoSave: Bool = true
         @AppStorage(Key.wantsNewUI) var wantsNewUI: Bool = false
+        @AppStorage(Key.particlePhysicsEnabled) var particlePhysicsEnabled: Bool = true
         @State var tabSelected = 0
         @State var menuShown = false
         @State var saveCompleteShown = false
@@ -68,24 +69,6 @@ extension DuctTransition {
             return url
         }
         
-        @ViewBuilder func drawSaveBtn() -> some View {
-            Button(action: {
-                Task {
-                    if let idx = state.ductData.firstIndex(where: { $0.id == ductwork.id }) {
-                        state.ductData[idx] = ductwork
-                    }
-                    saveCompleteShown = true
-                    ogDuctwork = ductwork
-                }
-            }) {
-                Image(systemName: "tray.and.arrow.down")
-            }
-            .alert("Ductwork Saved", isPresented: $saveCompleteShown, actions: {
-                Button(action: {Task {saveCompleteShown = false}}) {
-                    Text("Ok")
-                }
-            })
-        }
         
         
         
@@ -202,17 +185,6 @@ extension DuctTransition {
                 UITabBar.appearance().scrollEdgeAppearance = appearance
                 ogDuctwork = ductwork
             }
-            .onChange(of: ductwork, perform: { d in
-                if autoSave {
-                    Task {
-                        if let idx = state.ductData.firstIndex(where: { $0.id == ductwork.id }) {
-                            state.ductData[idx] = ductwork
-                        }
-                        saveCompleteShown = true
-                        ogDuctwork = ductwork
-                    }
-                }
-            })
             .transition(.slide)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
@@ -228,6 +200,7 @@ extension DuctTransition {
                     Toggle("Crossbrake", isOn: $crossBrake)
                     Toggle("Auto Save", isOn: $autoSave)
                     Toggle("Debug Info", isOn: $showDebugInfo)
+                    Toggle("Show Particle Physics", isOn: $particlePhysicsEnabled)
                     if UIDevice.current.userInterfaceIdiom == .pad {
                         Toggle("Use New UI", isOn: $wantsNewUI)
                     }

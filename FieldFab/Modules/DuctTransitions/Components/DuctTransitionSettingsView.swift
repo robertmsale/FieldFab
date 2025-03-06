@@ -80,7 +80,8 @@ extension DuctTransition {
              bgB,
              bgImage,
              autoSave,
-             wantsNewUI
+             wantsNewUI,
+             particlePhysicsEnabled
     }
 }
 
@@ -112,6 +113,7 @@ extension DuctTransition {
         @AppStorage(Key.bgImage) var bgImage: BackgroundImage = .shop
         @AppStorage(Key.autoSave) var autoSave: Bool = true
         @AppStorage(Key.wantsNewUI) var wantsNewUI: Bool = false
+        @AppStorage(Key.particlePhysicsEnabled) var particlePhysicsEnabled: Bool = true
         
         func genSubText<Content: View>(message: String, @ViewBuilder content: () -> Content) -> some View {
             VStack {

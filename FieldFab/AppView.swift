@@ -10,11 +10,12 @@ import SwiftUI
 import SceneKit
 import ARKit
 import AppReview
+import Disk
 
 struct AppView: View {
     enum AvailableModules: Int, CaseIterable, Hashable, Identifiable, Codable {
         case ductTransition,
-             ductFittings,
+//             ductFittings,
              balancePoint,
              intakeCalc
         var id: Int {
@@ -23,7 +24,7 @@ struct AppView: View {
         var txt: String {
             switch self {
             case .ductTransition: return "Build Duct Transition"
-            case .ductFittings: return "Duct Fittings"
+//            case .ductFittings: return "Duct Fittings"
             case .balancePoint: return "Balance Point Calculator"
             case .intakeCalc: return "Combustion Intake Calculator"
             }
@@ -31,7 +32,7 @@ struct AppView: View {
         var img: String {
             switch self {
             case .ductTransition: return "hammer"
-            case .ductFittings: return "doc.text"
+//            case .ductFittings: return "doc.text"
             case .balancePoint: return "chart.xyaxis.line"
             case .intakeCalc: return "flame"
             }
@@ -71,8 +72,8 @@ struct AppView: View {
                 navList()
             } else {
                 switch state.currentModule {
-                case .ductFittings:
-                    FittingIndex.ModuleView()
+//                case .ductFittings:
+//                    FittingIndex.ModuleView()
                 case .ductTransition:
                     DuctTransition.ModuleView()
                 case .balancePoint:
@@ -100,6 +101,21 @@ struct AppView: View {
             .onAppear {
                 AppReview.requestIf(days: 5)
             }
+            .onAppear {
+                guard let data = try? Disk.retrieve("ductData.json", from: .applicationSupport, as: [DuctTransition.DuctData].self) else {
+                    return
+                }
+                let manager = FileManager.default
+                var rootDirPath = try! manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                rootDirPath = rootDirPath.appendingPathComponent("Duct Transitions").appendingPathComponent("Old Ducts")
+                let i = 0
+                for duct in data {
+                    let newDuctPath = rootDirPath.appendingPathComponent(duct.name + "\(i)").appendingPathExtension("fieldfabdt")
+                    guard let encoded = try? JSONEncoder().encode(duct) else { continue }
+                    guard let _ = try? encoded.write(to: newDuctPath) else { continue }
+                }
+                try! Disk.clear(.applicationSupport)
+            }
             .sheet(isPresented: $changeLogShown) {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
@@ -108,13 +124,11 @@ struct AppView: View {
                         Spacer()
                     }
                     Spacer()
-                    Text("• Added auto save feature and made it the default behavior (can be changed in settings)")
-                    Text("• Fixed offsets producing inaccurate measurements")
-                    HStack(alignment: .top, spacing: 0) {
-                        Text("• Allow 2")
-                        Text("64").font(.footnote)
-                        Text(" larger numbers in balance point calculator")
-                    }
+                    Text("• Migrated to hierarchical navigation and storage of duct transitions")
+                    Text("• Added optional new UI for iPads")
+                    Text("• Added particle physics for observing airflow through the duct transition")
+                    Text("• Added pressure drop calculator based on airflow requirements")
+                    Text("• With new hierarchical navigation, you can now copy duct transition files as needed.")
                     Spacer()
                     HStack {
                         Spacer()
